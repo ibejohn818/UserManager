@@ -1,0 +1,50 @@
+<?php
+namespace UserManager\Model\Entity;
+
+use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
+
+/**
+ * UserAccount Entity.
+ */
+class UserAccount extends Entity
+{
+
+    /**
+     * Fields that can be mass assigned using newEntity() or patchEntity().
+     *
+     * @var array
+     */
+    protected $_accessible = [
+		'*'=>true,
+		'id'=>false
+    ];
+
+
+    public function loadCustomFields() {
+
+        $CustomFields = TableRegistry::get("UserManager.UserAccountCustomFields");
+
+        $fields = $CustomFields->find()
+                    ->contain([
+                        'UserValue'=>[
+                            'conditions'=>[
+                                'UserValue.user_account_id'=>$this->id
+                            ]
+                        ]
+                    ]);
+       
+
+        foreach ($fields as $k => $v) {
+            
+            if(!($v->user_value instanceof \UserManager\Model\Entity\UserAccountCustomFieldValue)) {
+                $v->user_value = new \UserManager\Model\Entity\UserAccountCustomFieldValue(['user_account_id'=>$this->id]);
+            }
+
+        }
+        
+        $this->custom_fields = $fields;
+
+    }
+
+}

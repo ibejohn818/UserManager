@@ -1,0 +1,73 @@
+<?php
+namespace UserManager\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+use UserManager\Model\Entity\UserAccountCustomField;
+
+/**
+ * UserAccountCustomFields Model
+ */
+class UserAccountCustomFieldsTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        $this->table('user_account_custom_fields');
+        $this->displayField('name');
+        $this->primaryKey('id');
+        $this->addBehavior('Timestamp');
+        $this->hasMany('UserAccountCustomFieldValues', [
+            'foreignKey' => 'user_account_custom_field_id',
+            'className' => 'UserManager.UserAccountCustomFieldValues'
+        ]);
+        $this->hasOne('UserValue',[
+            'className'=>'UserManager.UserAccountCustomFieldValues',
+            'foreignKey'=>'user_account_custom_field_id'
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('id', 'create');
+            
+        $validator
+            ->allowEmpty('name');
+            
+        $validator
+            ->allowEmpty('field_type');
+            
+        $validator
+            ->allowEmpty('field_options');
+            
+        $validator
+            ->add('active', 'valid', ['rule' => 'boolean'])
+            ->allowEmpty('active');
+            
+        $validator
+            ->add('display_weight', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('display_weight');
+            
+        $validator
+            ->add('visible', 'valid', ['rule' => 'boolean'])
+            ->allowEmpty('visible');
+
+        return $validator;
+    }
+}
