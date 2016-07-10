@@ -10,7 +10,7 @@ use Cake\Event\EventManager;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use UserManager\Lib\GoogleSdk;
-
+use UserManager\Lib\UserManagerConfig;
 
 class GoogleAuthenticate extends BaseAuthenticate {
 
@@ -23,19 +23,19 @@ class GoogleAuthenticate extends BaseAuthenticate {
 
     public function authenticate(Request $request,Response $response) {
 
-        if(!defined("GOOGLE_CLIENT_REDIRECT_URL")) {
+        if(!UserManagerConfig::googleLoginRedirectUrl()) {
             return false;
         }
 
-        $googleRedirectParts = parse_url(GOOGLE_CLIENT_REDIRECT_URL);
-        
+        $googleRedirectParts = parse_url(UserManagerConfig::googleLoginRedirectUrl());
+
         if($request->here != $googleRedirectParts['path']) {
             return false;
         }
 
         $this->googleData = $this->GoogleSdk()->handleLoginRedirect($request->query);
-        
-        //location the account
+
+        //locate the account
         $UserAccountForeignCredentials  = TableRegistry::get("UserManager.UserAccountForeignCredentials");
         $UserAccounts                   = TableRegistry::get("UserManager.UserAccounts");
 
@@ -55,9 +55,9 @@ class GoogleAuthenticate extends BaseAuthenticate {
                                 'param1'=>$this->googleData['user']->id
                             ],$ua,$uac);
 
-        
+
         $this->user = $credentials;
-       
+
         if($this->user) {
 
              $event = new Event("UserManager.Authenticate.success",$this,['google_token'=>$this->googleData['token']]);

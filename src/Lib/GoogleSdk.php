@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace UserManager\Lib;
 
 use Cake\Error\FatalErrorException;
+use UserManager\Config\Config;
 
 class GoogleSdk {
 
@@ -31,16 +32,16 @@ class GoogleSdk {
     }
 
     private function isSdkLoaded() {
-         
+
          if(!class_exists("Google_Client")) {
             return false;
-        } 
+        }
 
         return true;
     }
 
     private function isClientConfigured() {
-        if(!defined("GOOGLE_CLIENT_ID") || !defined("GOOGLE_CLIENT_SECRET")) {
+        if(!Config::is("googleClientId") || !Config::is("googleClientSecret")) {
             return false;
         }
 
@@ -48,7 +49,7 @@ class GoogleSdk {
     }
 
     private function isRedirectConfigured() {
-        if(!defined("GOOGLE_CLIENT_REDIRECT_URL")) {
+        if(!Config::googleLoginRedirectUrl()) {
             return false;
         }
 
@@ -58,12 +59,10 @@ class GoogleSdk {
     public function isGoogleLoginConfigured() {
 
         if(!$this->isSdkLoaded()) {
-
             return false;
         }
 
         if(!$this->isClientConfigured()) {
-            
             return false;
         }
 
@@ -90,10 +89,10 @@ class GoogleSdk {
 
         if(!$this->_client) {
             $client = new \Google_Client();
-            $client->setClientId(GOOGLE_CLIENT_ID);
-            $client->setClientSecret(GOOGLE_CLIENT_SECRET);
-            $client->setRedirectUri(GOOGLE_CLIENT_REDIRECT_URL);
-            $client->setScopes(GOOGLE_CLIENT_SCOPES);
+            $client->setClientId(Config::get("googleClientId"));
+            $client->setClientSecret(Config::get("googleClientSecret"));
+            $client->setRedirectUri(Config::googleLoginRedirectUrl());
+            $client->setScopes(Config::get("googleClientScopes"));
             $this->_client = $client;
         }
 
@@ -101,7 +100,7 @@ class GoogleSdk {
     }
 
     public function handleLoginRedirect(array $params = []) {
-        
+
         $client = $this->client();
 
         $client->authenticate($params['code']);
@@ -115,7 +114,7 @@ class GoogleSdk {
         $oauth = new \Google_Service_Oauth2($client);
 
         $user = $oauth->userinfo->get();
-        
+
         return ['user'=>$user,'token'=>$token];
     }
 

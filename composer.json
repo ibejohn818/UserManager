@@ -1,16 +1,13 @@
 {
-    "name": "ibejohn818/user-manager",
+    "name": "your-name-here/UserManager",
     "description": "UserManager plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.4.16",
-        "cakephp/cakephp": "~3.0",
-        "google/apiclient": "1.0.*@beta"
+        "cakephp/cakephp": "~3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "google/apiclient": "1.0.*@beta"
-
+        "phpunit/phpunit": "*"
     },
     "autoload": {
         "psr-4": {

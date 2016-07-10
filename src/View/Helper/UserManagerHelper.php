@@ -36,7 +36,18 @@ class UserManagerHelper extends Helper {
 
         return $this->request->session()->read($key);
 
-    }
+	}
+
+
+	public function authorizeBtn($type,$label,$uri,$ops = []) {
+		if(!isset($ops['class'])) {
+			$ops['class'] = '';
+		}
+		$ops['class'] = " btn  btn-{$type}";
+
+		return $this->authorizeLink($label,$uri,$ops);
+
+	}
 
     public function authorizeLink($label,$uri,$ops = []) {
 
@@ -45,6 +56,14 @@ class UserManagerHelper extends Helper {
         if(!$uri) {
             return;
         }
+
+
+		if(isset($ops['icon'])) {
+			$icon = "<i class='fa {$ops['icon']}'></i>";
+			$ops['escape'] = false;
+			$label = "{$icon} {$label}";
+			unset($ops['icon']);
+		}
 
         return $this->Html->link($label,$uri,$ops);
 

@@ -2,8 +2,8 @@
 </script>
 <?php
 
-$this->Html->addCrumb("User Manager Admin","/");
-$this->Html->addCrumb("User Accounts","/");
+$this->Html->addCrumb("User Manager Admin",['action'=>'index']);
+$this->Html->addCrumb("User Accounts");
 
 $this->Html->css(
     [
@@ -17,41 +17,34 @@ $this->Html->css(
  ?>
 
 <?php $this->start("page_header"); ?>
-
+User Accounts
 <?php $this->end("page_header"); ?>
 
-<?php if(!$this->request->is('ajax')): ?>
-    <div>
 
-        <ul class="nav nav-pills">
-            <li><?= $this->Html->link(__('New User Account'), ['action' => 'add']) ?></li>
-            <li><?= $this->Html->link(__('List User Account Custom Field Values'), ['controller' => 'UserAccountCustomFieldValues', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link(__('New User Account Custom Field Value'), ['controller' => 'UserAccountCustomFieldValues', 'action' => 'add']) ?></li>
-            <li><?= $this->Html->link(__('List User Account Foreign Credentials'), ['controller' => 'UserAccountForeignCredentials', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link(__('New User Account Foreign Credential'), ['controller' => 'UserAccountForeignCredentials', 'action' => 'add']) ?></li>
-            <li><?= $this->Html->link(__('List User Account Group Assignments'), ['controller' => 'UserAccountGroupAssignments', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link(__('New User Account Group Assignment'), ['controller' => 'UserAccountGroupAssignments', 'action' => 'add']) ?></li>
-            <li><?= $this->Html->link(__('List User Account Passwds'), ['controller' => 'UserAccountPasswds', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link(__('New User Account Passwd'), ['controller' => 'UserAccountPasswds', 'action' => 'add']) ?></li>
-            <li><?= $this->Html->link(__('List User Account Permissions'), ['controller' => 'UserAccountPermissions', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link(__('New User Account Permission'), ['controller' => 'UserAccountPermissions', 'action' => 'add']) ?></li>
-        </ul>
-    </div>
-<?php endif; ?>
-
-    <div class="container-fluid">
-		<?php echo $this->element("paginator-nav"); ?>
+    <div class="pagination-wrapper index" id="admin-user-accounts-index">
+		<div class="row">
+			<section class="col-md-6">
+				<?php echo $this->element("paginator-nav"); ?>
+			</section>
+			<section class="col-md-6">
+				<?php if(!$this->request->is('ajax')): ?>
+					<div class="btn-group pull-right">
+						<?php echo $this->UserManager->authorizeBtn("success","New User Account",['action'=>'add'],['icon'=>'fa-user']); ?>
+					</div>
+				<?php endif; ?>
+			</section>
+		</div>
         <div class="userAccounts index ">
         <table cellpadding="0" cellspacing="0" class='table table-stripped table-hover table-bordered'>
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
-                <th><?= $this->Paginator->sort('modified') ?></th>
+                <th class='hidden-xs hidden-sm'><?= $this->Paginator->sort('id') ?></th>
+                <th class='hidden-xs hidden-sm'><?= $this->Paginator->sort('created') ?></th>
+                <th class='hidden-xs hidden-sm'><?= $this->Paginator->sort('modified') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
-                <th><?= $this->Paginator->sort('first_name') ?></th>
-                <th><?= $this->Paginator->sort('last_name') ?></th>
-                <th><?= $this->Paginator->sort('middle_name') ?></th>
+                <th class='hidden-xs'><?= $this->Paginator->sort('first_name') ?></th>
+                <th class='hidden-xs'><?= $this->Paginator->sort('last_name') ?></th>
+                <th class='hidden-xs hidden-sm'><?= $this->Paginator->sort('middle_name') ?></th>
                 <th align='center'><?= $this->Paginator->sort('active') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -59,13 +52,13 @@ $this->Html->css(
         <tbody>
         <?php foreach ($userAccounts as $userAccount): ?>
             <tr>
-                <td><?= $this->Number->format($userAccount->id) ?></td>
-                <td><?= h($userAccount->created) ?></td>
-                <td><?= h($userAccount->modified) ?></td>
+                <td class='hidden-xs hidden-sm'><?= $this->Number->format($userAccount->id) ?></td>
+                <td class='hidden-xs hidden-sm'><?= h($userAccount->created) ?></td>
+                <td class='hidden-xs hidden-sm'><?= h($userAccount->modified) ?></td>
                 <td><?= h($userAccount->email) ?></td>
-                <td><?= h($userAccount->first_name) ?></td>
-                <td><?= h($userAccount->last_name) ?></td>
-                <td><?= h($userAccount->middle_name) ?></td>
+                <td class='hidden-xs'><?= h($userAccount->first_name) ?></td>
+                <td class='hidden-xs'><?= h($userAccount->last_name) ?></td>
+                <td class='hidden-xs hidden-sm'><?= h($userAccount->middle_name) ?></td>
                 <td align='center'>
                     <?php
                         switch ($userAccount->active) {

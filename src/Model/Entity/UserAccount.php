@@ -6,6 +6,16 @@ use Cake\ORM\TableRegistry;
 
 /**
  * UserAccount Entity.
+ * @property $id int
+ * @property $created DateTime
+ * @property $modified DateTime
+ * @property $first_name string
+ * @property $last_name string
+ * @property $email string
+ * @property $active bool
+ * @property $user_groups UserManager\Model\Entity\UserAccountGroup
+ * @property $user_account_profile_images UserManager\Model\Entity\UserAccountProfileImage
+ * @property $profile_image UserManager\Model\Eneityt\UserAccountProfileImage
  */
 class UserAccount extends Entity
 {

@@ -5,10 +5,11 @@ namespace UserManager\Controller;
 use UserManager\Controller\AppController;
 use Cake\Event\Event;
 use UserManager\Lib\GoogleSdk;
+use UserManager\Lib\FacebookSdk;
 use Cake\Mailer\MailerAwareTrait;
 use UserManager\Mailer\UserMailer;
 use UserManager\Model\Entity\UserAccount;
-
+use UserManager\Lib\GithubSdk;
 
 class LoginController extends AppController {
 
@@ -91,7 +92,7 @@ class LoginController extends AppController {
 
 				$this->Flash->success("Email has been dispatched to \"{$this->request->data['email']}\" with a link to reset your password");
 
-				$this->redirect($this->here);
+				$this->redirect("/");
 
 			}
 
@@ -108,11 +109,37 @@ class LoginController extends AppController {
 
 	public function register() {
 
-		$userAccount = new UserAccount();
+		$this->loadModel("UserManager.UserAccounts");
+
+		$userAccount = $this->UserAccounts->newEntity();
 
 		if($this->request->is(['post','put'])) {
 
+			$userAccount = $this->UserAccounts->patchEntity($userAccount,$this->request->data,[
+				'validate'=>'registration'
+			]);
 
+			if(!$userAccount->errors()) {
+
+				if(!$this->UserAccounts->handleAccountRegistration($userAccount, $this->request->data['passwd'])) {
+
+					$this->Flash->error("Fix errors");
+
+				} else {
+
+					$this->Flash->success("Account Created Sucessfully");
+
+					$this->redirect([
+						'plugin'=>'UserManager',
+						'controller'=>'Login',
+						'action'=>'index',
+						'prefix'=>null
+					]);
+
+				}
+			} else {
+				$this->Flash->error("Please fix the errors below");
+			}
 		}
 
 		$this->set(compact(
@@ -130,6 +157,22 @@ class LoginController extends AppController {
         $this->redirect($sdk->returnLoginUrl());
 
     }
+
+	public function facebook() {
+
+		$sdk = new FacebookSdk();
+
+		$this->redirect($sdk->getLoginUrl());
+
+	}
+
+	public function github() {
+
+		$sdk = new GithubSdk();
+
+		$this->redirect($sdk->authUrl());
+
+	}
 
     public function handleForeignLogin() {
 

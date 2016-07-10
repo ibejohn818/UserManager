@@ -73,9 +73,8 @@ class UserAccountPasswdResetRequestsTable extends Table
 
     public function validationResetpassword(Validator $validator) {
 
-
         $validator
-			->notEmpty("email","Email cannot be empty")
+			->notBlank("email","Email cannot be empty")
 			->add("email","valid",['rule'=>'email','message'=>'Invalid Email Address','last'=>true])
             ->add('email','custom',[
             'rule' => function ($value, $context) use($validator) {

@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 use UserManager\Model\Entity\UserAccount;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Error\FatalErrorException;
+use Cake\Utility\Inflector;
+
 /**
  * UserAccounts Model
  */
@@ -61,39 +63,16 @@ class UserAccountsTable extends Table
             'foreignKey' => 'user_account_id',
             'className' => 'UserManager.UserAccountPermissions'
         ]);
+		$this->belongsTo("UserAccountProfileImages",[
+			'className'=>'UserManager.UserAccountProfileImages',
+			'foriegnKey'=>'user_account_id'
+		]);
+		$this->hasOne("ProfileImage",[
+			'className'=>'UserManager.UserAccountProfileImages',
+			'foreignKey'=>'user_account_id'
+		]);
     }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create');
-
-        $validator
-            ->allowEmpty('first_name');
-
-        $validator
-            ->allowEmpty('last_name');
-
-        $validator
-            ->allowEmpty('middle_name');
-
-        // $validator
-        //     ->add('active', 'valid', ['rule' => 'boolean'])
-        //     ->allowEmpty('active');
-
-        $validator
-            ->add('email', 'valid', ['rule' => 'email'])
-            ->allowEmpty('email');
-
-        return $validator;
-    }
 
     /**
      * Returns a rules checker object that will be used for validating
@@ -104,7 +83,7 @@ class UserAccountsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email']));
+		$rules->add($rules->isUnique(['email'],'Email address already in use'));
         return $rules;
     }
 
@@ -178,6 +157,72 @@ class UserAccountsTable extends Table
 
     }
 
+	public function handleAccountRegistration(UserAccount $userAccount, $passwd = false) {
+
+        //get the default user groups
+
+        $defaultGroups = $this->UserAccountGroups->find()->where(['UserAccountGroups.default'=>1]);
+
+        if($defaultGroups->count()<=0) {
+            throw new FatalErrorException("There are no default Account Groups specified to create accounts");
+        }
+        $userAccount->user_account_groups = [];
+
+        foreach($defaultGroups as $k=>$v) {
+            $userAccount->user_account_groups[] = $v;
+        }
+
+		//create a profile url from their email address
+		$userAccount->profile_uri = $this->createProfileUri($userAccount);
+
+		//set the account active
+		$userAccount->active = 1;
+
+		if(($userAccount = $this->save($userAccount)) === false) {
+			return false;
+		}
+
+		//is there a password?
+		if($passwd) {
+			$this->updatePassword($userAccount->id,$passwd);
+		}
+
+		return $userAccount;
+
+
+	}
+
+
+	public function createProfileUri(UserAccount $userAccount,$attempts = 0) {
+
+		$uri = "{$userAccount->first_name} {$userAccount->last_name}";
+
+		$emailSplit = explode("@",$userAccount->email);
+
+		$uri = $emailSplit[0];
+
+		if($attempts>0) {
+			$uri .= " {$emailSplit[1]}";
+		}
+
+		//slug the URI
+		//$uri = Inflector::dasherize(Inflector::slug($uri));
+		$uri = Inflector::dasherize($uri);
+		$uri .= ".html";
+
+		$chk = $this->find()
+						->where(['profile_uri'=>$uri])
+						->count();
+
+		if($chk>0) {
+			return $this->createProfileUri($userAccount,($attempts+1));
+		}
+
+		return $uri;
+
+	}
+
+
     public function authenticateUser($conditions,$password = false,$options = [])
     {
 
@@ -188,6 +233,7 @@ class UserAccountsTable extends Table
                 'finder'=>'LoginPasswd'
             ],
             'UserAccountGroups',
+			'ProfileImage',
             'UserAccountForeignCredentials'=>[
                 'sort'=>[
                     'UserAccountForeignCredentials.id'=>'DESC'
@@ -218,7 +264,7 @@ class UserAccountsTable extends Table
             return $user;
         }
 
-        if($password && $userPassword && ($userPassword = (new DefaultPasswordHasher)->hash($password))) {
+        if($password && $userPassword && ((new DefaultPasswordHasher)->check($password,$userPassword))) {
             return $user;
         }
 
@@ -243,6 +289,41 @@ class UserAccountsTable extends Table
 
     }
 
+
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('id', 'create');
+
+        $validator
+			->add('first_name','valid',['rule'=>'notBlank',
+				'message'=>"First Name Cannot Be Empty"
+			]);
+
+        $validator
+			->add('last_name','valid',[
+				'rule'=>'notBlank',
+				'message'=>"Last Name Cannot Be Empty"
+			]);
+
+        $validator
+			->add('email','valid',[
+				'rule'=>'email',
+				'message'=>'EmailAddress is invalid'
+			]);
+
+
+        return $validator;
+    }
+
     public function confirmPassword($value, array $context) {
 
        if(!isset($context['data']['passwd'])) {
@@ -257,6 +338,7 @@ class UserAccountsTable extends Table
 
     }
 
+
     public function validationPassword(Validator $validator) {
 
         $validator
@@ -269,6 +351,57 @@ class UserAccountsTable extends Table
         return $validator;
 
     }
+
+	public function validationRegistration(Validator $validator) {
+
+		$validator = $this->validationDefault($validator);
+
+		$validator
+			->add("first_name","first_name",[
+				'rule'=>"notBlank",
+				'message'=>'First Name cannot be empty'
+			])
+			->add('last_name','last_name',[
+				'rule'=>'notBlank',
+				'message'=>'Last Name cannot be empty'
+			])
+			->add('email_confirm','email_confirm',[
+				'rule' => function ($value, $context) use($validator) {
+					if($value!=$context['data']['email']) {
+						return false;
+					}
+					return true;
+			},
+			'message'=>'Email addreses do not match'
+			]);
+
+		$validator = $this->validationPassword($validator);
+
+		return $validator;
+
+	}
+
+	public function validationAdminEdit(Validator $validator) {
+
+		$validator = $this->validationDefault($validator);
+
+		$validator
+				->add("profile_uri","valid",[
+					'rule'=>'confirmUniquieProfileUri',
+					'message'=>"Profile URI already In Use, One has been suggested",
+					'provider'=>'table'
+				]);
+
+
+		return $validator;
+	}
+
+	public function confirmUniqueProfileUri($value, $context = []) {
+
+		return true;
+
+
+	}
 
     public function updatePassword($UserAccountID, $password)
     {
@@ -296,21 +429,9 @@ class UserAccountsTable extends Table
 
     public function createForeignLoginAccount(UserAccount $userAccount) {
 
-        //get the default user groups
+		$userAccount = $this->handleAccountRegistration($userAccount);
 
-        $defaultGroups = $this->UserAccountGroups->find()->where(['UserAccountGroups.default'=>1]);
-
-        if($defaultGroups->count()<=0) {
-            throw new FatalErrorException("There are no default Account Groups specified to create accounts");
-        }
-        $userAccount->user_account_groups = [];
-        foreach($defaultGroups as $k=>$v) {
-            $userAccount->user_account_groups[] = $v;
-        }
-
-
-
-        return $this->save($userAccount);
+		return $userAccount;
 
     }
 

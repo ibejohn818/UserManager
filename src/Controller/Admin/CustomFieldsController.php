@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace UserManager\Controller\Admin;
 
@@ -17,8 +17,6 @@ class CustomFieldsController extends AppController {
 
     public function index() {
 
-        
-        
         $customFields = $this->paginate($this->UserAccountCustomFields);
 
         $this->set(compact("customFields"));

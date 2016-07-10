@@ -15,7 +15,6 @@ class UserAccountsController extends AppController
 
         parent::beforeFilter($event);
 
-        // $this->Auth->deny();
 
     }
 
@@ -24,11 +23,8 @@ class UserAccountsController extends AppController
      *
      * @return void
      */
-    public function index()
-    {
+    public function index()    {
 
-
-		$this->paginate['limit'] = 2;
 
         $this->set('userAccounts', $this->paginate($this->UserAccounts));
         $this->set('_serialize', ['userAccounts']);
@@ -116,7 +112,8 @@ class UserAccountsController extends AppController
                 'associated'=>[
                     'UserAccountCustomFieldValues',
                     'UserAccountGroups'
-                ]
+				],
+				'validation'=>'AdminEdit'
             ]);
             // die(pr($userAccount));
             if ($this->UserAccounts->save($userAccount)) {

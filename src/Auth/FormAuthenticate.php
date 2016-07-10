@@ -9,6 +9,7 @@ use Cake\Network\Response;
 use Cake\Event\EventManager;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use UserManager\Config\Config;
 
 class FormAuthenticate extends BaseAuthenticate {
 
@@ -46,7 +47,6 @@ class FormAuthenticate extends BaseAuthenticate {
             ]
         ));
 
-        
         $this->user = TableRegistry::get("UserManager.UserAccounts")->authenticateUser(
                             [
                                 $this->config('fields')['username']=>$request->data($this->config('fields')['username'])
@@ -55,6 +55,17 @@ class FormAuthenticate extends BaseAuthenticate {
                         );
         
         if($this->user) {
+
+			//check to see if we are expiring passwords
+			$pwExpire = Config::get("passwordExpireDays");
+
+			//if($pwExpireDays>0 && (new DateTime("-{$pwExpire} Days"))) {
+
+				
+
+			//}
+
+
 
             $event = new Event("UserManager.Authenticate.success",$this);
 
@@ -70,7 +81,7 @@ class FormAuthenticate extends BaseAuthenticate {
 
     }
 
-    
+   
 
 
 

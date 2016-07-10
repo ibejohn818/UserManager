@@ -22,6 +22,7 @@
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
+                <th><?= $this->Paginator->sort('default') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -33,9 +34,10 @@
                     <?php echo $this->Time->nice($userAccountGroup->created) ?>
                 </td>
                 <td><?= h($userAccountGroup->name) ?></td>
+				<td><?php echo $userAccountGroup->default; ?></td>
                 <td class="actions">
                 <?php 
-                    $editUrl = $this->Url->build(__('Edit'), ['action' => 'edit', $userAccountGroup->id]);
+                    $editUrl = $this->Url->build(['action' => 'edit', $userAccountGroup->id]);
                  ?>
                     <a href="<?php echo $editUrl ?>" class="btn btn-primary btn-sm">
                         <i class="fa fa-edit"></i> Edit

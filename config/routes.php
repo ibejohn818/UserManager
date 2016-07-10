@@ -1,40 +1,6 @@
 <?php
 use Cake\Routing\Router;
-
-## Login Url
-Router::connect("/login",[
-	'plugin'=>'UserManager',
-	'controller'=>'Login',
-	'action'=>'index'
-]);
-
-#Register
-
-Router::connect("/register",[
-	'plugin'=>'UserManager',
-	'controller'=>'Login',
-	'action'=>'register'
-]);
-
-#Forgot Password
-Router::connect("/forgot-password",[
-	'plugin'=>'UserManager',
-	'controller'=>'Login',
-	'action'=>'forgotPassword'
-]);
-
-
-#Profile 
-Router::connect("/profile/:uri",
-	[
-		'plugin'=>'UserManager',
-		'controller'=>'Profile',
-		'action'=>'view'
-	],
-	[
-		'uri'=>"[a-z\-]{2,}.html"
-	]
-);
+use UserManager\Config\Config;
 
 Router::plugin('UserManager',["path"=>"/user-manager"], function ($routes) {
 
@@ -72,9 +38,9 @@ Router::prefix("admin",function($routes) {
 
 });
 
-if(defined("GOOGLE_CLIENT_REDIRECT_URL")) {
+if(Config::googleLoginRedirectUrl()) {
 
-    $googleRedirectParts = parse_url(GOOGLE_CLIENT_REDIRECT_URL);
+    $googleRedirectParts = parse_url(Config::googleLoginRedirectUrl());
 
     Router::connect($googleRedirectParts['path'],[
         "plugin"=>"UserManager",
@@ -82,3 +48,54 @@ if(defined("GOOGLE_CLIENT_REDIRECT_URL")) {
         "action"=>"handleForeignLogin"
     ]);
 }
+
+if(Config::facebookLoginRedirectUrl()) {
+
+    $facebookRedirect = parse_url(Config::facebookLoginRedirectUrl());
+
+    Router::connect($facebookRedirect['path'],[
+        "plugin"=>"UserManager",
+        "controller"=>"Login",
+        "action"=>"handleForeignLogin"
+    ]);
+}
+Router::connect(Config::get("githubRedirectUrl"),[
+	'plugin'=>'UserManager',
+	'controller'=>'Login',
+	'action'=>'handleForeignLogin'
+]);
+
+## Login Url
+Router::connect("/login",[
+	'plugin'=>'UserManager',
+	'controller'=>'Login',
+	'action'=>'index'
+]);
+
+#Register
+
+Router::connect("/register",[
+	'plugin'=>'UserManager',
+	'controller'=>'Login',
+	'action'=>'register'
+]);
+
+#Forgot Password
+Router::connect("/forgot-password",[
+	'plugin'=>'UserManager',
+	'controller'=>'Login',
+	'action'=>'forgotPassword'
+]);
+
+
+#Profile 
+Router::connect("/profile/:uri",
+	[
+		'plugin'=>'UserManager',
+		'controller'=>'Profile',
+		'action'=>'view'
+	],
+	[
+		'uri'=>"[a-z\-\.]{2,}.html"
+	]
+);

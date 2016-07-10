@@ -1,24 +1,23 @@
-<div class="page-header">
-    <h1>
-        Edit User Permissions
-    </h1>
+<?php $this->start("page_header"); ?>
+Edit Permission
+<?php $this->end("page_header"); ?>
+
+<div class="row">
+	<section class="col-md-12">
+		<div class="btn-group">
+			<a href="<?php echo $this->UserManager->authorizeUri(['action'=>'index']); ?>" class="btn btn-primary">
+				<i class="fa fa-arrow-circle-left"></i>
+				Back to Index
+				</a>
+			<a href="<?php echo $this->UserManager->authorizeUri(['action'=>'add']); ?>" class="btn btn-success">
+				<i class="fa fa-plus"></i>
+				Create new permission
+			</a>
+		</div>
+	</section>
 </div>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="nav nav-pills">
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $userAccountPermission->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $userAccountPermission->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List User Account Permissions'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List User Account Groups'), ['controller' => 'UserAccountGroups', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New User Account Group'), ['controller' => 'UserAccountGroups', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List User Accounts'), ['controller' => 'UserAccounts', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New User Account'), ['controller' => 'UserAccounts', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="index container-fluid">
+<hr>
+<div class=" edit">
     <?= $this->Form->create($userAccountPermission) ?>
     <?php
         echo $this->Form->input('allowed');
@@ -29,6 +28,9 @@
         echo $this->Form->input('controller');
         echo $this->Form->input('action');
     ?>
-    <?= $this->Form->button(__('Submit')) ?>
+		<button type="button" class="btn btn-success">
+			<i class="fa fa-floppy-o"></i>
+			Save
+		</button>
     <?= $this->Form->end() ?>
 </div>

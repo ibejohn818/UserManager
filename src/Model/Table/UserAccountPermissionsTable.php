@@ -87,7 +87,7 @@ class UserAccountPermissionsTable extends Table
         return $this->parseUserPermission($User,$request->params['controller'],
                                                 $request->params['action'],
                                                 $request->params['plugin'],
-                                                $request->params['prefix']);
+                                                (isset($request->params['prefix'])) ? $request->params['prefix']:false);
 
     }
 

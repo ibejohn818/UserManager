@@ -86,22 +86,21 @@ class UserAccountForeignCredentialsTable extends Table
                     ->where($conditions)
                     ->first();
 
+        if(!isset($account->id)) {
 
-
-        if(!$account->id) {
-            
             $account = $this->UserAccounts->locateForeignAccount($userAccount->email,$userAccount);
 
             $userAccountCredential->set('user_account_id',$account->id);
 
             $userAccountCredential = $this->save($userAccountCredential);
-            
+
             return $this->locateAccount($conditions,$account,$userAccountCredential);
 
         }
 
         //update the users foreign credential data
         $userAccountCredential->set("id",$account->id);
+
         $this->save($userAccountCredential);
 
         return $this->UserAccounts->authenticateUser(['UserAccounts.id'=>$account->user_account_id]);

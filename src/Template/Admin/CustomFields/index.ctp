@@ -3,24 +3,30 @@
     font-size:16px;
 }
 </style>
-<?php 
+<?php
+
+$this->Html->addCrumb("User Manager");
+$this->Html->addCrumb("Custom Fields");
+
 use UserManager\Model\Entity\UserAccountCustomField;
 ?>
-<div class="container-fluid">
-    <div class="page-header">
-        <h1>
+<?php $this->start("page_header"); ?>
             User Custom Fields
-        </h1>
-    </div>
-    <ul class="nav nav-pills">
-        <li>
-            <a href="<?php echo $this->Url->build(['plugin'=>'UserManager','controller'=>'CustomFields','action'=>'add']) ?>">
-                Create New Field
-            </a>
-        </li>
-    </ul>
-    <?php echo $this->element("paginator-nav") ?>
-    <div class="index">
+<?php $this->end("page_header"); ?>
+<div class="pagination-wrapper index">
+	<div class="row">
+		<div class="col-md-6">
+			<?php echo $this->element("paginator-nav") ?>
+		</div>
+		<div class="col-md-6">
+			<div class="btn-group pull-right">
+				<a class='btn btn-success'  href="<?php echo $this->Url->build(['plugin'=>'UserManager','controller'=>'CustomFields','action'=>'add']) ?>">
+					<i class="fa fa-plus"></i>
+					Create New Field
+				</a>
+			</div>
+		</div>
+	</div>
         <table cellspacing="0" class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -91,5 +97,4 @@ use UserManager\Model\Entity\UserAccountCustomField;
                 <?php endforeach ?>
             </tbody>
         </table>
-    </div>
 </div>
