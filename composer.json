@@ -1,5 +1,5 @@
 {
-    "name": "ibejohn818/UserManager",
+    "name": "ibejohn818/user-manager",
     "description": "UserManager plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
