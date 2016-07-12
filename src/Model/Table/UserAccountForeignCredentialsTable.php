@@ -44,19 +44,19 @@ class UserAccountForeignCredentialsTable extends Table
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create');
-            
+
         $validator
             ->allowEmpty('service_name');
-            
+
         $validator
             ->allowEmpty('param1');
-            
+
         $validator
             ->allowEmpty('param2');
-            
+
         $validator
             ->allowEmpty('param3');
-            
+
         $validator
             ->allowEmpty('param4');
 

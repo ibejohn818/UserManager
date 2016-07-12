@@ -28,19 +28,67 @@ class FacebookAuthenticate extends BaseAuthenticate {
 				return false;
 			}
 
-			$me = $fb->apiGet("/me",['fields'=>'id,name,email']);
-
-			die(pr($me));
-
 			$em = EventManager::instance();
+
+			$me = $fb->get("/me",['fields'=>'id,name,email']);
+
+			if(!$me) {
+
+				$event = new Event("UserManager.Authenticate.failed",$this,[
+					'request'=>$request,
+					'response'=>$response,
+					'FacebookSdk'=>$fb
+				]);
+
+				$em->dispatch($event);
+
+				return false;
+			}
+
 
 			//locate the account
 			$UserAccountForeignCredentials  = TableRegistry::get("UserManager.UserAccountForeignCredentials");
 			$UserAccounts                   = TableRegistry::get("UserManager.UserAccounts");
 
+			$nameArr = explode(" ",$me['name']);
+			$first_name = "";
+			$last_name = "";
 
-			
+			if(count($nameArr)<=0) {
+				$first_name = $me['name'];
+			} else {
+				foreach($nameArr as $k=>$v) {
+					if($k==0) {
+						$first_name = $v;
+					} else {
+						$last_name = $v." ";
+					}
+				}
 
+				$last_name = rtrim($last_name);
+			}
+
+
+			$uac = $UserAccountForeignCredentials->newEntity([
+									'service_name'=>'facebook',
+									'param1'=>$me['id'],
+								]);
+			$ua = $UserAccounts->newEntity([
+									'email'=>$me['email'],
+									'first_name'=>$first_name,
+									'last_name'=>$last_name
+								]);
+			//var_dump($me);
+			//var_dump($ua);
+			//var_dump($uac);
+			//die();
+			$credentials = $UserAccountForeignCredentials->locateAccount([
+									'service_name'=>'facebook',
+									'param1'=>$me['id']
+								],$ua,$uac);
+
+
+			return $credentials;
 
 		}
 

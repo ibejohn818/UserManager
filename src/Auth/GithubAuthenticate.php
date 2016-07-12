@@ -21,9 +21,11 @@ class GithubAuthenticate extends BaseAuthenticate {
 
 		if($request->here == $url && isset($_GET['code'])) {
 
-			EventManager::instance(
+			$em = EventManager::instance();
+
+			$em->dispatch(
 							new Event(
-								"UserManager.GithubAuthenticate.beforeAuthenticate",
+								"UserManager.Authenticate.beforeAuthenticate",
 								$this,
 								compact(
 									"request",
@@ -38,9 +40,9 @@ class GithubAuthenticate extends BaseAuthenticate {
 
 			if(!$token) {
 
-				EventManager::instance()->dispatch(
+				$em->dispatch(
 							new Event(
-								"UserManager.GithubAuthenticate.failed",
+								"UserManager.Authenticate.failed",
 								$this,
 								[
 									'request'=>$request,
@@ -63,7 +65,7 @@ class GithubAuthenticate extends BaseAuthenticate {
 			$first_name = "";
 			$last_name = "";
 			if(count($nameArr)<=0) {
-				$first_name = $GithubUser['name'];
+				$first_name = $githubuser['name'];
 			} else {
 				foreach($nameArr as $k=>$v) {
 					if($k==0) {
@@ -92,9 +94,9 @@ class GithubAuthenticate extends BaseAuthenticate {
 									'param1'=>$GithubUser['id']
 								],$ua,$uac);
 
-			EventManager::instance()->dispatch(
+			$em->dispatch(
 				new Event(
-					"UserManager.GithubAuthenticate.success",
+					"UserManager.Authenticate.success",
 					$this,
 					[
 						'request'=>$request,
@@ -110,6 +112,7 @@ class GithubAuthenticate extends BaseAuthenticate {
 
 		}
 
+		return false;
 
 	}
 

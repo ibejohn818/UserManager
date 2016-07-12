@@ -73,4 +73,18 @@ class Config {
 		return "http://{$host}/user-manager/auth-callback/facebook";
 
 	}
+
+
+	public static function twitterLoginRedirectUrl() {
+
+		$host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST']:false;
+
+		if(!$host) {
+			return false;
+		}
+
+		return "http://{$host}/user-manager/auth-callback/twitter";
+
+	}
+
 }

@@ -59,6 +59,19 @@ if(Config::facebookLoginRedirectUrl()) {
         "action"=>"handleForeignLogin"
     ]);
 }
+
+
+if(Config::twitterLoginRedirectUrl()) {
+
+    $twitterRedirect = parse_url(Config::twitterLoginRedirectUrl());
+
+    Router::connect($twitterRedirect['path'],[
+        "plugin"=>"UserManager",
+        "controller"=>"Login",
+        "action"=>"handleForeignLogin"
+    ]);
+}
+
 Router::connect(Config::get("githubRedirectUrl"),[
 	'plugin'=>'UserManager',
 	'controller'=>'Login',

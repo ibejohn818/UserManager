@@ -83,9 +83,27 @@
 				"default":"user:email"
 			},
 			"githubRedirectUrl":{
-				"help":"Github permissions scopes user will be asked to grant your application access to",
+				"help":"Github OAUTH Redirect URL. If you do not use the default, then make sure you update the routes",
 				"default":"/user-manager/auth-callback/github"
 			}
 		}
+	},
+	"TwitterLogin": {
+		"help":"",
+		"settings":{
+			"twitterConsumerKey":{
+				"help":"Twitter Registered App ClientID Used for github.com login",
+				"default":""
+			},
+			"twitterConsumerSecret":{
+				"help":"Twitter registered App Client Secret Used for github.com login",
+				"default":""
+			},
+			"twitterRedirectUrl":{
+				"help":"Twitter permissions scopes user will be asked to grant your application access to",
+				"default":"/user-manager/auth-callback/twitter"
+			}
+		}
 	}
+
 }

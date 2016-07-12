@@ -71,8 +71,27 @@ class UserAccountsTable extends Table
 			'className'=>'UserManager.UserAccountProfileImages',
 			'foreignKey'=>'user_account_id'
 		]);
+
+		$this->eventManager()->on("Model.beforeSave",function($event) {
+			if(empty($event->data['entity']->id)) {
+				$event->data['entity']->id = $this->generateId();
+			}
+		});
     }
 
+	public function generateId() {
+
+		$id = mt_rand(100000,99999999);
+
+		$chk = $this->find()->select(['id'])->where(['id'=>$id])->count();
+
+		if($chk>0) {
+			return $this->generateId();
+		}
+
+		return $id;
+
+	}
 
     /**
      * Returns a rules checker object that will be used for validating
@@ -308,11 +327,6 @@ class UserAccountsTable extends Table
 				'message'=>"First Name Cannot Be Empty"
 			]);
 
-        $validator
-			->add('last_name','valid',[
-				'rule'=>'notBlank',
-				'message'=>"Last Name Cannot Be Empty"
-			]);
 
         $validator
 			->add('email','valid',[

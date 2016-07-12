@@ -10,6 +10,7 @@ use Cake\Mailer\MailerAwareTrait;
 use UserManager\Mailer\UserMailer;
 use UserManager\Model\Entity\UserAccount;
 use UserManager\Lib\GithubSdk;
+use UserManager\Lib\TwitterSdk;
 
 class LoginController extends AppController {
 
@@ -172,6 +173,14 @@ class LoginController extends AppController {
 
 		$this->redirect($sdk->authUrl());
 
+	}
+
+	public function twitter() {
+
+		$sdk = new TwitterSdk($this->request);
+		$url = $sdk->getLoginUrl();
+
+		$this->redirect($url);
 	}
 
     public function handleForeignLogin() {

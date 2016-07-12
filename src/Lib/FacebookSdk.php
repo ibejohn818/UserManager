@@ -14,6 +14,8 @@ class FacebookSdk {
 
 	protected $_accessToken;
 
+	protected $_error = [];
+
 	public function client() {
 
 		if(!$this->_sdk) {
@@ -89,7 +91,7 @@ class FacebookSdk {
 	}
 
 
-	public function apiGet($endPoint,$data = [], $options = []) {
+	public function get($endPoint,$data = [], $options = []) {
 
 		$client = new \Cake\Network\Http\Client();
 
@@ -101,8 +103,17 @@ class FacebookSdk {
 
 		$json = json_decode($res->body(),true);
 
+		if(isset($json['error'])) {
+			$this->_error = $json;
+			return false;
+		}
+
 		return $json;
 
+	}
+
+	public function getError() {
+		return $this->_error;
 	}
 
 	public function _getLoginUrl() {
