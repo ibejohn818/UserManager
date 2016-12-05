@@ -1,6 +1,6 @@
 {
 	"General":{
-		"help":"",
+		"help":"General Settings",
 		"settings":{
 			"emailTransport":{
 				"help":"The email transport to use for sending emails from the usermanager plugin",
@@ -21,8 +21,12 @@
 		}
 	},
 	"GoogleLogin":{
-		"help":"",
+		"help":"Enable and config Google Login and API",
 		"settings":{
+			"googleLoginEnable":{
+				"help":"Enable Google Login. 0=OFF, 1=ON",
+				"default":"0"
+			},
 			"googleApiKey":{
 				"help":"The Google API: Google Login API Key",
 				"default":""
@@ -46,8 +50,12 @@
 		}
 	},
 	"FacebookLogin":{
-		"help":"",
+		"help":"Enable and configure Facebook login and API",
 		"settings":{
+			"facebookLoginEnable":{
+				"help":"Enable Facebook Login. 0=OFF, 1=ON",
+				"default":"0"
+			},
 			"facebookApiSecret":{
 				"help":"Facebook App API Secret for Facebook Login",
 				"default":""
@@ -68,8 +76,12 @@
 		}
 	},
 	"GithubLogin": {
-		"help":"",
+		"help":"Enable and configure Github login and API",
 		"settings":{
+			"githubLoginEnable":{
+				"help":"Enable Github Login. 0=OFF, 1=ON",
+				"default":"0"
+			},
 			"githubClientId":{
 				"help":"Github Registered App ClientID Used for github.com login",
 				"default":""
@@ -85,12 +97,20 @@
 			"githubRedirectUrl":{
 				"help":"Github OAUTH Redirect URL. If you do not use the default, then make sure you update the routes",
 				"default":"/user-manager/auth-callback/github"
+			},
+			"githubApiCacheConfig":{
+				"help":"CakePHP Cache Config for caching API Calls using the ETAG Header",
+				"default":""
 			}
 		}
 	},
 	"TwitterLogin": {
-		"help":"",
+		"help":"Enable and configure Twitter login and API",
 		"settings":{
+			"twitterLoginEnable":{
+				"help":"Enable Twitter Login. 0=OFF, 1=ON",
+				"default":"0"
+			},
 			"twitterConsumerKey":{
 				"help":"Twitter Registered App ClientID Used for github.com login",
 				"default":""

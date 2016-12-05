@@ -74,7 +74,9 @@ class UserAccountGroupsController extends AppController
     public function edit($id = null)
     {
         $userAccountGroup = $this->UserAccountGroups->get($id, [
-            'contain' => []
+			'contain' => [
+				'UserAccountPermissions'
+			]
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $userAccountGroup = $this->UserAccountGroups->patchEntity($userAccountGroup, $this->request->data);

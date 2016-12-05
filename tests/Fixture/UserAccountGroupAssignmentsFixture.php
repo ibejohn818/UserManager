@@ -38,8 +38,13 @@ class UserAccountGroupAssignmentsFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
+            'user_account_id' => 73777934,
+            'user_account_group_id' => 5000
+        ],
+        [
+            'id' => 3,
             'user_account_id' => 1,
-            'user_account_group_id' => 1
+            'user_account_group_id' => 9999
         ],
     ];
 }

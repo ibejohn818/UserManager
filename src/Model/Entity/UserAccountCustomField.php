@@ -15,14 +15,8 @@ class UserAccountCustomField extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
-        'field_type' => true,
-        'field_options' => true,
-        'active' => true,
-        'display_weight' => true,
-        'visible' => true,
-        'user_account_custom_field_values' => true,
-        'user_value' => true
+		'*'=>true,
+		'id'=>false
     ];
 
     protected static $_fieldTypes = [

@@ -11,10 +11,12 @@ use Cake\ORM\TableRegistry;
 use UserManager\Config\Config;
 use UserManager\Lib\FacebookSdk;
 
-class FacebookAuthenticate extends BaseAuthenticate {
+class FacebookAuthenticate extends BaseAuthenticate 
+{
 
 
-	public function authenticate(Request $request, Response $response) {
+	public function authenticate(Request $request, Response $response) 
+	{
 
 		$url = Config::get("facebookApiRedirectUrl");
 

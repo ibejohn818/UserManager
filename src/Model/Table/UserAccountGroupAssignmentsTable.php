@@ -31,7 +31,8 @@ class UserAccountGroupAssignmentsTable extends Table
         $this->belongsTo('UserAccountGroups', [
             'foreignKey' => 'user_account_group_id',
             'className' => 'UserManager.UserAccountGroups'
-        ]);
+		]);
+
     }
 
     /**

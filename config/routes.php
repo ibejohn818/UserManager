@@ -1,6 +1,7 @@
 <?php
 use Cake\Routing\Router;
 use UserManager\Config\Config;
+use App\Routing\Route;
 
 Router::plugin('UserManager',["path"=>"/user-manager"], function ($routes) {
 

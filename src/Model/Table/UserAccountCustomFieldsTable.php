@@ -46,24 +46,24 @@ class UserAccountCustomFieldsTable extends Table
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create');
-            
+
         $validator
             ->allowEmpty('name');
-            
+
         $validator
             ->allowEmpty('field_type');
-            
+
         $validator
             ->allowEmpty('field_options');
-            
+
         $validator
             ->add('active', 'valid', ['rule' => 'boolean'])
             ->allowEmpty('active');
-            
+
         $validator
             ->add('display_weight', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('display_weight');
-            
+
         $validator
             ->add('visible', 'valid', ['rule' => 'boolean'])
             ->allowEmpty('visible');

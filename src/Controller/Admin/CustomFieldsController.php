@@ -24,12 +24,12 @@ class CustomFieldsController extends AppController {
     }
 
     public function add()
-    {   
-        
+    {
+
         $customField = new UserAccountCustomField();
 
         if ($this->request->is(["post","put"])) {
-            
+
             $customField = $this->UserAccountCustomFields->patchEntity($customField,$this->request->data);
 
             if($this->UserAccountCustomFields->save($customField)) {
@@ -53,14 +53,14 @@ class CustomFieldsController extends AppController {
 
     public function edit($id = false)
     {
-        
+
         $customField = $this->UserAccountCustomFields->get($id);
 
         if ($this->request->is(["post","put"])) {
 
              $customField = $this->UserAccountCustomFields->patchEntity($customField,$this->request->data);
 
-            
+
             if($this->UserAccountCustomFields->save($customField)) {
 
                 $this->Flash->success("CustomField updated successfully!");

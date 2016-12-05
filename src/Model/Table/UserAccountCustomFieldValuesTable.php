@@ -53,6 +53,23 @@ class UserAccountCustomFieldValuesTable extends Table
         return $validator;
     }
 
+	public function validationAdminEdit(Validator $v)
+	{
+
+		$v->add('field_value','custom',[
+			'rule'=>function($field,$context) {
+				return true;
+			},
+			'message'=>'Tesing'
+		]);
+
+
+
+		return $v;
+
+	}
+
+
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.

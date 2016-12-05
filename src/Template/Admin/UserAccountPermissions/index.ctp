@@ -1,15 +1,31 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="nav nav-pills">
+<?php
 
-        <li><?= $this->Html->link(__('New User Account Permission'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List User Account Groups'), ['controller' => 'UserAccountGroups', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New User Account Group'), ['controller' => 'UserAccountGroups', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List User Accounts'), ['controller' => 'UserAccounts', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New User Account'), ['controller' => 'UserAccounts', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="index container-fluid">
-    <h3><?= __('User Account Permissions') ?></h3>
+$this->Html->addCrumb("User Manager");
+$this->Html->addCrumb("User Permissions");
+
+
+$addNewPermUrl = $this->Url->build([
+	'action'=>'add'
+]);
+
+?>
+<?php $this->start("page_header"); ?>
+User Permissions
+<?php $this->end("page_header"); ?>
+<div class="pagination-wrapper index" id="admin-user-permissions">
+	<div class="row">
+		<div class="col-md-6">
+			<?php echo $this->element("paginator-nav"); ?>
+		</div>
+		<div class="col-md-6">
+			<div class="btn-group pull-right">
+			<a href="<?= $addNewPermUrl; ?>" class="btn btn-success">
+				<i class="fa fa-plus-sign"></i>
+				Add New Permission
+			</a>
+			</div>
+		</div>
+	</div>
     <table cellpadding="0" cellspacing="0" class='table table-striped table-bordered table-hover'>
         <thead>
             <tr>
@@ -42,12 +58,4 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-        </ul>
-        <p><?= $this->Paginator->counter() ?></p>
-    </div>
 </div>

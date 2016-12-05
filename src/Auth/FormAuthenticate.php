@@ -32,7 +32,8 @@ class FormAuthenticate extends BaseAuthenticate {
 
     public $user = null;
 
-    public function authenticate(Request $request,Response $response) {
+   public function authenticate(Request $request,Response $response) 
+   {
         
         if(!isset($request->data[$this->config('fields')['username']]) || !isset($request->data[$this->config('fields')['password']])) {
             return false; 

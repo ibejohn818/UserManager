@@ -53,19 +53,19 @@ class GithubAuthenticate extends BaseAuthenticate {
 				return false;
 			}
 
-			$GithubUser = $sdk->get("/user");
+			$GithubUser = $sdk->get("/user",[],[],false);
 
 
 			//locate the account
 			$UserAccountForeignCredentials  = TableRegistry::get("UserManager.UserAccountForeignCredentials");
 			$UserAccounts                   = TableRegistry::get("UserManager.UserAccounts");
 
-			$nameArr = explode(" ",$GithubUser['name']);
+			$nameArr = explode(" ",$GithubUser['content']['name']);
 
 			$first_name = "";
 			$last_name = "";
 			if(count($nameArr)<=0) {
-				$first_name = $githubuser['name'];
+				$first_name = $GithubUser['content']['name'];
 			} else {
 				foreach($nameArr as $k=>$v) {
 					if($k==0) {
@@ -80,18 +80,19 @@ class GithubAuthenticate extends BaseAuthenticate {
 
 			$uac = $UserAccountForeignCredentials->newEntity([
 									'service_name'=>'github',
-									'param1'=>$GithubUser['id'],
-									'param2'=>$GithubUser['login']
+									'param1'=>$GithubUser['content']['id'],
+									'param2'=>$GithubUser['content']['login'],
+									'oauth_token'=>$token
 								]);
 			$ua = $UserAccounts->newEntity([
-									'email'=>$GithubUser['email'],
+									'email'=>$GithubUser['content']['email'],
 									'first_name'=>$first_name,
 									'last_name'=>$last_name
 								]);
 
 			$credentials = $UserAccountForeignCredentials->locateAccount([
 									'service_name'=>'github',
-									'param1'=>$GithubUser['id']
+									'param1'=>$GithubUser['content']['id']
 								],$ua,$uac);
 
 			$em->dispatch(

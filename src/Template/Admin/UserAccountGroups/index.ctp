@@ -1,21 +1,25 @@
-<div class="container-fluid">
-    <div class="page-header">
-        <h1>
-            User Account Groups
-        </h1>
-    </div>
-    <div class="">
-        
-        <ul class="nav nav-pills">
-            <li><?= $this->Html->link(__('New User Account Group'), ['action' => 'add']) ?></li>
-            <li><?= $this->Html->link(__('List User Account Group Assignments'), ['controller' => 'UserAccountGroupAssignments', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link(__('New User Account Group Assignment'), ['controller' => 'UserAccountGroupAssignments', 'action' => 'add']) ?></li>
-            <li><?= $this->Html->link(__('List User Account Permissions'), ['controller' => 'UserAccountPermissions', 'action' => 'index']) ?></li>
-            <li><?= $this->Html->link(__('New User Account Permission'), ['controller' => 'UserAccountPermissions', 'action' => 'add']) ?></li>
-        </ul>
-    </div>
-    <?php echo $this->element('paginator-nav') ?>
-    <div class=" index">
+<?php
+$this->Html->addCrumb("User Manager");
+$this->Html->addCrumb("User Groups");
+$newGroupUrl = $this->Url->build([
+	'action'=>'add'
+]);
+
+?>
+<?php $this->start("page_header"); ?>
+User Account Groups
+<?php $this->end("page_header"); ?>
+<div class="pagination-wrapper index">
+	<div class="row">
+		<div class="col-md-6">
+				<?php echo $this->element('paginator-nav') ?>
+		</div>
+		<div class="col-md-6">
+			<div class="btn-group pull-right">
+			<a href="<?php echo $newGroupUrl; ?>" class="btn btn-success">Add New Group</a>
+			</div>
+		</div>
+	</div>
         <table cellpadding="0" cellspacing="0" class='table table-bordered table-striped table-hover'>
         <thead>
             <tr>
@@ -29,7 +33,7 @@
         <tbody>
         <?php foreach ($userAccountGroups as $userAccountGroup): ?>
             <tr>
-                <td><?= $this->Number->format($userAccountGroup->id) ?></td>
+                <td><?= $userAccountGroup->id ?></td>
                 <td>
                     <?php echo $this->Time->nice($userAccountGroup->created) ?>
                 </td>
@@ -48,7 +52,4 @@
         <?php endforeach; ?>
         </tbody>
         </table>
-    <?php echo $this->element('paginator-nav') ?>
-    </div>
-
 </div>

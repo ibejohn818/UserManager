@@ -17,6 +17,7 @@
     "autoload-dev": {
         "psr-4": {
             "UserManager\\Test\\": "tests",
+            "UserManager\\Test\\Fixture": "tests/Fixture",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }

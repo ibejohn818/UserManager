@@ -30,9 +30,9 @@ class TwitterSdk {
 	protected $_accessTokenUrl  = "https://api.twitter.com/oauth/access_token";
 	protected $_apiEndpoint		= "https://api.twitter.com/1.1";
 
-	protected $_oauthToken = null;
-	protected $_oauthSecret = null;
-	protected $_oauthVerifier = null;
+	protected $_oauthToken		= null;
+	protected $_oauthSecret		= null;
+	protected $_oauthVerifier	= null;
 
 	protected $_requestSessionKey = "Twitter.OAuthReqeust";
 	protected $_accessSessionKey  = "Twitter.OAuthAccess";

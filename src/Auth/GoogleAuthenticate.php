@@ -10,7 +10,7 @@ use Cake\Event\EventManager;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use UserManager\Lib\GoogleSdk;
-use UserManager\Lib\UserManagerConfig;
+use UserManager\Config\Config;
 
 class GoogleAuthenticate extends BaseAuthenticate {
 
@@ -23,54 +23,57 @@ class GoogleAuthenticate extends BaseAuthenticate {
 
     public function authenticate(Request $request,Response $response) {
 
-        if(!UserManagerConfig::googleLoginRedirectUrl()) {
-            return false;
-        }
+		$url = Config::get("googleAuthRedirectUrl");
 
-        $googleRedirectParts = parse_url(UserManagerConfig::googleLoginRedirectUrl());
+		if(empty($url)) {
+			return false;
+		}
 
-        if($request->here != $googleRedirectParts['path']) {
-            return false;
-        }
-
-        $this->googleData = $this->GoogleSdk()->handleLoginRedirect($request->query);
-
-        //locate the account
-        $UserAccountForeignCredentials  = TableRegistry::get("UserManager.UserAccountForeignCredentials");
-        $UserAccounts                   = TableRegistry::get("UserManager.UserAccounts");
-
-        $uac = $UserAccountForeignCredentials->newEntity([
-                                'service_name'=>'google',
-                                'param1'=>$this->googleData['user']->id,
-                                'param2'=>$this->googleData['user']->picture
-                            ]);
-        $ua = $UserAccounts->newEntity([
-                                'email'=>$this->googleData['user']->email,
-                                'first_name'=>$this->googleData['user']->givenName,
-                                'last_name'=>$this->googleData['user']->familyName
-                            ]);
-
-        $credentials = $UserAccountForeignCredentials->locateAccount([
-                                'service_name'=>'google',
-                                'param1'=>$this->googleData['user']->id
-                            ],$ua,$uac);
+		if($request->here = $url && isset($_GET['code'])) {
 
 
-        $this->user = $credentials;
+			$this->googleData = $this->GoogleSdk()->handleLoginRedirect($request->query);
 
-        if($this->user) {
+			//locate the account
+			$UserAccountForeignCredentials  = TableRegistry::get("UserManager.UserAccountForeignCredentials");
+			$UserAccounts                   = TableRegistry::get("UserManager.UserAccounts");
 
-             $event = new Event("UserManager.Authenticate.success",$this,['google_token'=>$this->googleData['token']]);
+			$uac = $UserAccountForeignCredentials->newEntity([
+									'service_name'=>'google',
+									'param1'=>$this->googleData['user']->id,
+									'param2'=>$this->googleData['user']->picture
+								]);
+			$ua = $UserAccounts->newEntity([
+									'email'=>$this->googleData['user']->email,
+									'first_name'=>$this->googleData['user']->givenName,
+									'last_name'=>$this->googleData['user']->familyName
+								]);
 
-        } else {
+			$credentials = $UserAccountForeignCredentials->locateAccount([
+									'service_name'=>'google',
+									'param1'=>$this->googleData['user']->id
+								],$ua,$uac);
 
-            $event = new Event("UserManager.Authenticate.failed",$this);
 
-        }
+			$this->user = $credentials;
 
-        EventManager::instance()->dispatch($event);
+			if($this->user) {
 
-        return $this->user;
+				$event = new Event("UserManager.Authenticate.success",$this,['google_token'=>$this->googleData['token']]);
+
+			} else {
+
+				$event = new Event("UserManager.Authenticate.failed",$this);
+
+			}
+
+			EventManager::instance()->dispatch($event);
+
+			return $this->user;
+		}
+
+		return false;
+
 
     }
 

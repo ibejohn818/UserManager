@@ -39,6 +39,7 @@ $this->Html->css(
 
                 <?php echo $this->Form->input("id") ?>
                 <?php echo $this->Form->input("name") ?>
+                <?php echo $this->Form->input("slug") ?>
                 <?php echo $this->Form->input("field_type",['options'=>UserAccountCustomField::fieldTypes()]) ?>
                 <?php echo $this->Form->input("field_options") ?>
                 <?php echo $this->Form->input("active",["data-on-text"=>"Active","data-off-text"=>"Disabled",'label'=>false]) ?>    

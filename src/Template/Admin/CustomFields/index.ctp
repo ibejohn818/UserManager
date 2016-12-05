@@ -52,6 +52,9 @@ use UserManager\Model\Entity\UserAccountCustomField;
                         <?php echo $this->Paginator->sort("field_type") ?>
                     </th>
                     <th>
+                        <?php echo $this->Paginator->sort("slug") ?>
+                    </th>
+                    <th>
                         -
                     </th>
                 </tr>
@@ -88,6 +91,7 @@ use UserManager\Model\Entity\UserAccountCustomField;
                     </td>
                     <td><?php echo $v->name; ?></td>
                     <td><?php echo UserAccountCustomField::fieldTypes()[$v->field_type]; ?></td>
+					<td><?= $v->slug; ?></td>
                     <td class='actions'>
                         <a href="<?php echo $this->Url->build(["plugin"=>"UserManager","controller"=>"CustomFields","action"=>"edit",$v->id]); ?>" class="btn btn-primary btn-xs">
                             <i class="fa fa-edit"></i> Edit

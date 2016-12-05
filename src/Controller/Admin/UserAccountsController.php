@@ -110,12 +110,14 @@ class UserAccountsController extends AppController
             $userAccount->user_account_groups = [];
             $userAccount = $this->UserAccounts->patchEntity($userAccount, $this->request->data,[
                 'associated'=>[
-                    'UserAccountCustomFieldValues',
+					'UserAccountCustomFieldValues'=>[
+						'validate'=>'AdminEdit'
+					],
                     'UserAccountGroups'
 				],
-				'validation'=>'AdminEdit'
+				'validate'=>'AdminEdit'
             ]);
-            // die(pr($userAccount));
+
             if ($this->UserAccounts->save($userAccount)) {
                 $this->Flash->success(__('The user account has been saved.'));
                 return $this->redirect(['action' => 'index']);

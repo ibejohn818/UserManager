@@ -27,7 +27,8 @@ class UserAccount extends Entity
      */
     protected $_accessible = [
 		'*'=>true,
-		'id'=>false
+		'id'=>false,
+		'custom_fields'=>true
     ];
 
 

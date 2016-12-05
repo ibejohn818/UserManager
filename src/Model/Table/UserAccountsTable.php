@@ -77,6 +77,7 @@ class UserAccountsTable extends Table
 				$event->data['entity']->id = $this->generateId();
 			}
 		});
+
     }
 
 	public function generateId() {
@@ -401,11 +402,10 @@ class UserAccountsTable extends Table
 
 		$validator
 				->add("profile_uri","valid",[
-					'rule'=>'confirmUniquieProfileUri',
+					'rule'=>'confirmUniqueProfileUri',
 					'message'=>"Profile URI already In Use, One has been suggested",
 					'provider'=>'table'
 				]);
-
 
 		return $validator;
 	}

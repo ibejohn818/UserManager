@@ -54,7 +54,7 @@ class UserManagerHelper extends Helper {
         $uri = $this->authorizeUri($uri);
 
         if(!$uri) {
-            return;
+            return false;
         }
 
 
@@ -115,6 +115,13 @@ class UserManagerHelper extends Helper {
 
         $html="";
 
+		$field_value = $value->field_value;
+
+		if(isset($this->request->data['user_account_custom_field_values'][$index]['field_value'])) {
+			$field_value = $this->request->data['user_account_custom_field_values'][$index]['field_value'];
+		}
+
+
         switch($field->field_type) {
             case "select":
                 $options = [];
@@ -123,16 +130,16 @@ class UserManagerHelper extends Helper {
                     $vals = explode(":", $v);
                     $options[$vals[0]] = $vals[1];
                 }
-                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",["options"=>$options,"label"=>$field->name,"selected"=>$value->field_value]);
+                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",["options"=>$options,"label"=>$field->name,"selected"=>$field_value]);
             break;
             case "text":
-                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",["value"=>$value->field_value,"label"=>$field->name,'type'=>'text']);
+                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",["value"=>$field_value,"label"=>$field->name,'type'=>'text']);
             break;
             case "checkbox":
-                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",['type'=>'checkbox','label'=>$field->name,'checked'=>$value->field_value]);
+                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",['type'=>'checkbox','label'=>$field->name,'checked'=>$field_value]);
             break;
             case "textarea":
-                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",['type'=>'textarea','label'=>$field->name,'value'=>$value->field_value]);
+                $html = $this->Form->input("user_account_custom_field_values{$key}field_value",['type'=>'textarea','label'=>$field->name,'value'=>$field_value]);
             break;
         }
 
@@ -142,7 +149,8 @@ class UserManagerHelper extends Helper {
         } else {
             $html .= $this->Form->input("user_account_custom_field_values{$key}id",['type'=>'hidden','value'=>$value->id]);
         }
-        
+
+		$html .= $this->Form->input("user_account_custom_field_values{$key}slug",['type'=>'hidden','value'=>$field->slug]);
 
         return $html;
 

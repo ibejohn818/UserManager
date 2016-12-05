@@ -12,6 +12,7 @@ use UserManager\Model\Entity\UserAccountCustomField;
     <?php echo $this->Form->create($customField); ?>
     <div class="form create">
         <?php echo $this->Form->input("name") ?>
+        <?php echo $this->Form->input("slug") ?>
         <?php echo $this->Form->input('field_type',['options'=>UserAccountCustomField::fieldTypes()]) ?>
         <?php echo $this->Form->input('active',['type'=>'hidden','value'=>0]) ?>
     </div>
