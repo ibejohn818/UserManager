@@ -4,7 +4,9 @@
     "type": "cakephp-plugin",
     "require": {
         "php":">=5.4",
-        "cakephp/cakephp": "~3.0"
+        "cakephp/cakephp": "~3.0",
+        "google/apiclient": "1.0.*@beta",
+        "facebook/graph-sdk": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
@@ -20,5 +22,9 @@
             "UserManager\\Test\\Fixture": "tests/Fixture",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
+    },
+    "scripts": {
+        "post-install-cmd": "UserManager\\Console\\Installer::postInstall"
     }
+
 }

@@ -5,8 +5,9 @@
     $.extend({
        UserAccountsModal: function (options) {
 
-		   var that = this;
-
+			var that = this;
+			var User = {};
+			var Users = [];
 			var _defaults = {
 
 				onUserSelect:function() { },
@@ -15,6 +16,7 @@
 			};
 
 			that.opts = $.extend({},_defaults,options);
+
 
 			var modalHTML = '<div id="UserAccountsModal" class="modal fade" tabindex="-1" role="dialog">'+
 								'<div class="modal-dialog modal-xlarge">'+
@@ -99,7 +101,7 @@
 
 						that.$modal.find('.modal-body').css('opacity','1');
 						that.$modal.find('a[rel=select-user]').unbind('click').bind('click',function(e) { 
-							that.opts.onUserSelect.call($(this),that);
+							that.opts.onUserSelect.call(this,$(this).data("user"));
 							that.close();
 							return false;
 						});

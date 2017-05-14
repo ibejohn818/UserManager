@@ -63,13 +63,16 @@ class UserAccountsTable extends Table
             'foreignKey' => 'user_account_id',
             'className' => 'UserManager.UserAccountPermissions'
         ]);
-		$this->belongsTo("UserAccountProfileImages",[
+		$this->hasMany("UserAccountProfileImages",[
 			'className'=>'UserManager.UserAccountProfileImages',
 			'foriegnKey'=>'user_account_id'
 		]);
 		$this->hasOne("ProfileImage",[
 			'className'=>'UserManager.UserAccountProfileImages',
-			'foreignKey'=>'user_account_id'
+			'foreignKey'=>'user_account_id',
+			'conditions'=>[
+				'ProfileImage.active'=>1
+			]
 		]);
 
 		$this->eventManager()->on("Model.beforeSave",function($event) {
@@ -411,10 +414,19 @@ class UserAccountsTable extends Table
 	}
 
 	public function confirmUniqueProfileUri($value, $context = []) {
-
+		$query = $this->find();
+		$query->select([
+			'total'=>$query->func()->count("*")
+		]);
+		$query->where([
+			'profile_uri'=>$value,
+			"id != {$context['data']['id']}"
+		]);
+		$result = $query->first();
+		if($result->total>0) {
+			return false;
+		}
 		return true;
-
-
 	}
 
     public function updatePassword($UserAccountID, $password)

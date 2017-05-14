@@ -6,11 +6,21 @@ class Config {
 
 	protected static $_config = false;
 
-	public static function get($key) {
+	public static function loadConfig() {
 
 		if(!static::$_config) {
+			if(!file_exists(CONFIG."user-manager.conf.json")) {
+				throw new \Exception("Configuration not found! \n Please run confguration shell: bin/cake UserManager.config");
+			}
 			static::$_config = json_decode(file_get_contents(CONFIG."user-manager.conf.json"),true);
 		}
+
+	}
+
+
+	public static function get($key) {
+
+		static::loadConfig();
 
 		if(!isset(static::$_config[$key])) {
 			return null;

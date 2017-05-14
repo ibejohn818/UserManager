@@ -75,6 +75,7 @@ User Accounts
                 <td class="actions">
 					<?php if($this->request->is('ajax')): ?>
 					<a href="" class="btn btn-success btn-xs" rel='select-user'
+						data-user='<?= json_encode($userAccount); ?>'
 						data-user-id='<?php echo $userAccount->id; ?>'
 						data-user-email='<?php echo $userAccount->email; ?>'
 						data-user-first-name='<?php echo $userAccount->first_name; ?>'

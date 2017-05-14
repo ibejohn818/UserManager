@@ -41,7 +41,7 @@ class UserAccountsController extends AppController
         foreach($customSchema as $k=>$v) {
              $sortSchema[] = (!preg_match('/(\.)/',$v)) ? "`{$v}`":$v;
         }
-
+die(pr($sortSchema));
         $this->paginate = [
             'sortWhitelist'=> $sortSchema
         ];
@@ -101,12 +101,14 @@ class UserAccountsController extends AppController
         $userAccount = $this->UserAccounts->get($id, [
             'contain' => [
                 'UserAccountCustomFieldValues',
-                'UserAccountGroups'
+				'UserAccountGroups',
+				'UserAccountForeignCredentials',
+				'UserAccountProfileImages'
+
             ]
         ]);
         $userAccount->loadCustomFields();
         if ($this->request->is(['patch', 'post', 'put'])) {
-            // die(pr($this->request->data));
             $userAccount->user_account_groups = [];
             $userAccount = $this->UserAccounts->patchEntity($userAccount, $this->request->data,[
                 'associated'=>[
@@ -117,13 +119,14 @@ class UserAccountsController extends AppController
 				],
 				'validate'=>'AdminEdit'
             ]);
-
-            if ($this->UserAccounts->save($userAccount)) {
-                $this->Flash->success(__('The user account has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
+			if($userAccount->errors()) {
                 $this->Flash->error(__('The user account could not be saved. Please, try again.'));
-            }
+			} else {
+				if ($this->UserAccounts->save($userAccount)) {
+					$this->Flash->success(__('The user account has been saved.'));
+					return $this->redirect(['action' => 'index']);
+				}
+			}
         }
         $this->selects();
         $this->set(compact('userAccount'));

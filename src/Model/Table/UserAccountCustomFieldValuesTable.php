@@ -59,11 +59,17 @@ class UserAccountCustomFieldValuesTable extends Table
 		$v->add('field_value','custom',[
 			'rule'=>function($field,$context) {
 				return true;
+				switch($context['data']['slug']) {
+					case 'gender':
+						return 'FUCK';
+					break;
+				}
+				return true;
 			},
 			'message'=>'Tesing'
 		]);
 
-
+		$v->allowEmpty('field_value');
 
 		return $v;
 

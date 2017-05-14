@@ -14,9 +14,13 @@
 				"help":"",
 				"default":0
 			},
+			"profileImageServerPath": {
+				"help":"Path on the server profile images will be saved to",
+				"default":"/mnt/profile-images"
+			},
 			"profileImageWwwPath": {
 				"help":"The path relative to the webroot that profile images will be upload and serverd from. Ensure this directory is writable",
-				"default":"profile-images"
+				"default":"/profile-images"
 			}
 		}
 	},
@@ -26,10 +30,6 @@
 			"googleLoginEnable":{
 				"help":"Enable Google Login. 0=OFF, 1=ON",
 				"default":"0"
-			},
-			"googleApiKey":{
-				"help":"The Google API: Google Login API Key",
-				"default":""
 			},
 			"googleClientId":{
 				"help":"Google API Google Login Client ID",

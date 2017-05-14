@@ -46,6 +46,12 @@ class LoginController extends AppController {
 
         $userAccount = $this->UserAccounts->newEntity();
 
+		if($this->request->getQuery("redirect")) {
+
+			$this->request->session()->write("Login.redirect",$this->request->getQuery("redirect"));
+
+		}
+
         if ($this->request->is("post")) {
 
             $user = $this->Auth->identify();
@@ -171,6 +177,7 @@ class LoginController extends AppController {
 
 		$sdk = new GithubSdk();
 
+
 		$this->redirect($sdk->authUrl());
 
 	}
@@ -191,7 +198,14 @@ class LoginController extends AppController {
 
             $this->Auth->setUser($user);
 
-            $this->redirect($this->Auth->redirectUrl());
+			if($this->request->session()->check("Login.redirect")) {
+				$url =  $this->request->session()->read("Login.redirect");
+				$this->request->session()->delete("Login.redirect");
+			} else {
+				$url = $this->Auth->redirectUrl();
+			}
+
+            $this->redirect($url);
 
         }
     }

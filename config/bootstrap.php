@@ -7,8 +7,6 @@ use Cake\Cache\Cache;
 
 $http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST']:'';
 
-//ADMIN USER ACCOUNT GROUP ID
-define('USER_ACCOUNT_ADMIN_ACCOUNT_GROUP',9999);
 // $CacheEngine = "File";
 // $CacheEngine = "Memcached";
 $CacheEngine = "Redis";

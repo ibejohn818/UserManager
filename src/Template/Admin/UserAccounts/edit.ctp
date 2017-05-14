@@ -43,12 +43,9 @@ $(document).ready(function($) {
 <?= $this->Form->create($userAccount) ?>
     <div class="row">
         <div class="col-md-6">
-                        <fieldset>
-                            <legend>Account Status</legend>
                               <?php
                                 echo $this->Form->input('active',['label'=>false,'data-on-text'=>'Active','data-off-text'=>'Off','data-on-color'=>'success']);
                                ?>
-                        </fieldset>
             <?php
 
                     echo $this->Form->input('first_name');
@@ -70,6 +67,23 @@ $(document).ready(function($) {
                 ?>
                     <?php echo $this->Form->input("user_account_groups.{$k}.id",['type'=>'checkbox','hiddenField'=>false,'value'=>$k,'label'=>$v,'checked'=>$selected]) ?>
                 <?php endforeach; ?>
+				<h3> Foreign Credenaitls</h3>
+				<?php foreach($userAccount->user_account_foreign_credentials as $k=>$v): ?>
+					<div class="well">
+						<div>
+							<strong>Service Name:</strong>
+							<?= $v->service_name ?>
+						</div>
+						<div>
+							<strong>ID:</strong>
+							<?= $v->param1 ?>
+						</div>
+						<div>
+							<strong>Created:</strong>
+							<?= $v->created ?>
+						</div>
+					</div>
+				<?php endforeach; ?>
         </div>
         <div class="col-md-6">
             <h3>Custom Fields</h3>
