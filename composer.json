@@ -5,8 +5,8 @@
     "require": {
         "php":">=5.4",
         "cakephp/cakephp": "~3.0",
-        "google/apiclient": "2.*",
-        "facebook/graph-sdk": "*"
+        "google/apiclient": "~2",
+        "facebook/graph-sdk": "~5"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
