@@ -4,6 +4,7 @@ namespace UserManager\Controller;
 
 use App\Controller\AppController as BaseController;
 use Cake\Event\EventManager;
+use Cake\Core\Configure;
 
 class AppController extends BaseController {
 
@@ -18,6 +19,18 @@ class AppController extends BaseController {
         EventManager::instance()->on("UserManager.Authenticate.success",function($event) {
 
         });
+
+		if(!Configure::check("UserManager.bootstrap")) {
+			throw new \Cake\Error\FatalErrorException(<<<EOT
+				UserManager Plugin Error: UserManager/config/bootstrap.php not loaded!
+				Ensure your Plugin::load() has bootstrap setting enabled in your config/boostra.php.
+				Plugin::load("UserManager",[
+					'boostrap'=>true,
+					'routes'=>true
+				]);
+EOT
+			);
+		}
 
     }
 

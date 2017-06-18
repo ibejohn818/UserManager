@@ -69,7 +69,6 @@ class ConfigShell extends Shell {
 		if(!$this->_config) {
 			$this->loadConfig();
 		}
-
 		return $this->_config[$setting];
 
 	}
@@ -97,7 +96,7 @@ class ConfigShell extends Shell {
 			$this->out("<info>Current:</info> {$currentValue}");
 			$this->hr();
 			$this->out("1 ) Keep Current Value");
-			$this->out("2 ) Clear Value");
+			$this->out("2 ) Use Default");
 			$this->out("3 ) New Value");
 			$this->hr();
 			$opt = $this->in("Select an Option",[1,2,3]);
@@ -107,7 +106,7 @@ class ConfigShell extends Shell {
 					$value = $currentValue;
 					break;
 				case 2:
-					$value = "";
+					$value = $v['default'];
 					break;
 				case 3:
 					$value = $this->in("Declare new value");
@@ -136,9 +135,9 @@ class ConfigShell extends Shell {
 			return;
 		}
 
-		$path = CONFIG.'user-manager.conf.json';
+		$path = CONFIG.'user-manager.conf.php';
 
-		file_put_contents($path,json_encode($this->_config));
+		file_put_contents($path,"<?php return ".var_export($this->_config,true).";");
 
 		$this->_config = false;
 
@@ -146,29 +145,28 @@ class ConfigShell extends Shell {
 
 	}
 
-	protected function loadTemplate() {
+	protected function loadTemplate()
+	{
 
 		if(!$this->_template) {
-			$template = file_get_contents(realpath(__DIR__)."/../../config/config.template.json");
-
-			$this->_template = json_decode($template,true);
+			$this->_template = require (realpath(__DIR__)."/../../config/config.template.php");
 		}
+
 		return $this->_template;
 
 	}
 
-	private function loadConfig() {
-
-		$path = CONFIG.'user-manager.conf.json';
+	private function loadConfig()
+	{
+		$path = CONFIG.'user-manager.conf.php';
 
 		if(!file_exists($path)) {
 			$this->writeDefaults();
+			return $this->loadConfig();
 		}
 
 		if(!$this->_config) {
-			$conf = file_get_contents($path);
-
-			$this->_config = json_decode($conf,true);
+			$this->_config = require $path;
 		}
 
 		$this->loadTemplate();
@@ -184,12 +182,6 @@ class ConfigShell extends Shell {
 		foreach($defs as $key=>$def) {
 			if(!array_key_exists($key,$this->_config)) {
 				$this->_config[$key] = $def;
-			}
-		}
-
-		foreach($this->_config as $k=>$v) {
-			if(!in_array($k,$defs)) {
-				unset($this->_config[$k]);
 			}
 		}
 
@@ -209,7 +201,7 @@ class ConfigShell extends Shell {
 			}
 		}
 
-		file_put_contents(CONFIG."user-manager.conf.json",json_encode($settings));
+		file_put_contents(CONFIG."user-manager.conf.php","<?php return ".var_export($settings,true).";");
 
 	}
 

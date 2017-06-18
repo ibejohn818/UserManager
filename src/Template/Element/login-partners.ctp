@@ -1,33 +1,29 @@
 <?php
 
-use UserManager\Config\Config;
+use Cake\Core\Configure;
 
+
+$providers = [
+	'Google',
+	'Github',
+	'Facebook',
+	'Twitter',
+	'Yahoo'
+];
 ?>
-
-<?php if(Config::get("googleLoginEnable")): ?>
-	<a href="" class="btn btn-default">
-		<i class="fa fa-google"></i>
-		Login With Google
-	</a>
-<?php endif; ?>
-
-<?php if(Config::get("facebookLoginEnable")): ?>
-	<a href="" class="btn btn-default">
-		<i class="fa fa-facebook"></i>
-		Login With Facebook
-	</a>
-<?php endif; ?>
-
-<?php if(Config::get("githubLoginEnable")): ?>
-	<a href="" class="btn btn-default">
-		<i class="fa fa-github"></i>
-		Login With Github
-	</a>
-<?php endif; ?>
-
-<?php if(Config::get("twitterLoginEnable")): ?>
-	<a href="" class="btn btn-default">
-		<i class="fa fa-twitter"></i>
-		Login With Twitter
-	</a>
-<?php endif; ?>
+<div class='login-providers'>
+<?php foreach($providers as $k=>$v):
+	$url = $this->Url->build([
+		'action'=>'provider',
+		$v
+	]);
+	if(Configure::read("UserManager.{$v}LoginEnable")):
+?>
+	<div class='login-provider <?= $v ?>'>
+		<a href="<?= $url; ?>" class="btn btn-default">
+			<i class="fa fa-<?= $v ?>"></i>
+			<?= ucfirst($v) ?>
+		</a>
+	</div>
+<?php endif; endforeach; ?>
+</div>

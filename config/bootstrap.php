@@ -2,6 +2,7 @@
 
 use Cake\Mailer\Email;
 use Cake\Cache\Cache;
+use Cake\Core\Configure;
 
 //configuration
 
@@ -24,3 +25,13 @@ Cache::config('user-manager-1min',[
 	'server'=>$Servers,
 	'port'=>$Port
 ]);
+
+
+if(!$settings = @include_once CONFIG."user-manager.conf.php") {
+
+	throw new \Cake\Error\FatalErrorException("UserManager Plugin: config\user-manager.conf.php NOT FOUND! Run shell command 'UserManager.config' to generate configuration");
+}
+
+Configure::write("UserManager",$settings);
+
+Configure::write("UserManager.bootstrap",true);

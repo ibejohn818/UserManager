@@ -32,7 +32,7 @@ class UserAccount extends Entity
     ];
 
 
-    public function loadCustomFields() {
+    public function loadCustomFields(array $conditions = []) {
 
         $CustomFields = TableRegistry::get("UserManager.UserAccountCustomFields");
 
@@ -44,18 +44,18 @@ class UserAccount extends Entity
                             ]
                         ]
                     ]);
-       
+
+		if(count($conditions)>0) {
+			$fields->where($conditions);
+		}
 
         foreach ($fields as $k => $v) {
-            
             if(!($v->user_value instanceof \UserManager\Model\Entity\UserAccountCustomFieldValue)) {
                 $v->user_value = new \UserManager\Model\Entity\UserAccountCustomFieldValue(['user_account_id'=>$this->id]);
             }
-
         }
-        
-        $this->custom_fields = $fields;
 
+        $this->custom_fields = $fields;
     }
 
 }

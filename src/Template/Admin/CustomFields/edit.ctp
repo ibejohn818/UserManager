@@ -1,3 +1,4 @@
+<?php $this->start("bottom_script"); ?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
     
@@ -6,7 +7,16 @@ jQuery(document).ready(function($) {
 
 });
 </script>
+<?php $this->end("bottom_script"); ?>
+<?php $this->start("heading"); ?>
+Edit Custom Field
+<?php $this->end("heading"); ?>
 <?php 
+
+$this->Breadcrumbs->add("User Manager");
+$this->Breadcrumbs->add("Custom Fields",['action'=>'index']);
+$this->Breadcrumbs->add("Edit Field: {$customField->name}");
+
 use UserManager\Model\Entity\UserAccountCustomField;
 
 $this->Html->css(
@@ -18,19 +28,15 @@ $this->Html->css(
     ]
 );
 
+
 ?>
-<div class="container-fluid">
-    <div class="page-header">  
-        <h1>
-            Edit Custom Field 
-
-        </h1>
-
-    </div>
-    <div>
+<?php $this->start("heading_action"); ?>
         <a href="<?php echo $this->Url->build(["action"=>"index"]) ?>" class="btn btn-primary btn-sm">
            <i class="fa fa-arrow-circle-left"></i> Browse
         </a>
+<?php $this->end("heading_action"); ?>
+<div class="container-fluid">
+    <div>
     </div>
     <?php echo $this->Form->create($customField) ?>
     <div class="edit form">
@@ -42,8 +48,8 @@ $this->Html->css(
                 <?php echo $this->Form->input("slug") ?>
                 <?php echo $this->Form->input("field_type",['options'=>UserAccountCustomField::fieldTypes()]) ?>
                 <?php echo $this->Form->input("field_options") ?>
-                <?php echo $this->Form->input("active",["data-on-text"=>"Active","data-off-text"=>"Disabled",'label'=>false]) ?>    
-                <?php echo $this->Form->input("visible",["data-on-text"=>"Visible","data-off-text"=>"Hidden",'label'=>false]) ?>
+                <?php echo $this->Form->input("active",["data-on-text"=>"Active","data-off-text"=>"Disabled",]) ?>    
+                <?php echo $this->Form->input("visible",["data-on-text"=>"Visible","data-off-text"=>"Hidden",]) ?>
             </div>
         </div>
         <div class="form-actions">

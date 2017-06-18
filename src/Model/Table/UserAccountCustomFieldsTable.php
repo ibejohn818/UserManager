@@ -69,5 +69,42 @@ class UserAccountCustomFieldsTable extends Table
             ->allowEmpty('visible');
 
         return $validator;
+	}
+
+	public function validationCreate(Validator $v)
+	{
+
+		$v->requirePresence("slug")
+			->notEmpty("slug","Slug cannot be left emtpy");
+
+		$v->requirePresence("name")
+			->notEmpty("name","Name cannot be left emtpy");
+
+		return $v;
+
+	}
+
+	/**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+		$rules->add($rules->isUnique(['slug'],'Slug already in use'));
+        return $rules;
     }
+
+	public function delete(\Cake\Datasource\EntityInterface $field, $options = [])
+	{
+
+		$this->UserValue->deleteAll(['user_account_custom_field_id'=>$field->id]);
+
+		return parent::delete($field);
+
+
+	}
+
 }

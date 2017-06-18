@@ -42,9 +42,9 @@ class UserAccountsTable extends Table
             'foreignKey' => 'user_account_id',
             'className' => 'UserManager.UserAccountCustomFieldValues'
         ]);
-        $this->hasMany('UserAccountForeignCredentials', [
+        $this->hasMany('UserAccountLoginProviderData', [
             'foreignKey' => 'user_account_id',
-            'className' => 'UserManager.UserAccountForeignCredentials'
+            'className' => 'UserManager.UserAccountLoginProviderData'
         ]);
         // $this->hasMany('UserAccountGroupAssignments', [
         //     'foreignKey' => 'user_account_id',
@@ -77,13 +77,15 @@ class UserAccountsTable extends Table
 
 		$this->eventManager()->on("Model.beforeSave",function($event) {
 			if(empty($event->data['entity']->id)) {
-				$event->data['entity']->id = $this->generateId();
+				$event->data['entity']->accessible('id',true);
+				$event->data['entity']->set('id',$this->generateId());
 			}
 		});
 
     }
 
-	public function generateId() {
+	public function generateId()
+	{
 
 		$id = mt_rand(100000,99999999);
 
@@ -122,7 +124,8 @@ class UserAccountsTable extends Table
 
     }
 
-    public function findUsersCustomFields(Query $q,array $options) {
+	public function findUsersCustomFields(Query $q,array $options)
+	{
 
         $UserAccountCustomFields = TableRegistry::get("UserManager.UserAccountCustomFields");
 
@@ -180,11 +183,12 @@ class UserAccountsTable extends Table
 
     }
 
-	public function handleAccountRegistration(UserAccount $userAccount, $passwd = false) {
+	public function handleAccountRegistration(UserAccount $userAccount, $passwd = false)
+	{
 
         //get the default user groups
 
-        $defaultGroups = $this->UserAccountGroups->find()->where(['UserAccountGroups.default'=>1]);
+        $defaultGroups = $this->UserAccountGroups->find()->where(['UserAccountGroups.default_group'=>1]);
 
         if($defaultGroups->count()<=0) {
             throw new FatalErrorException("There are no default Account Groups specified to create accounts");
@@ -216,7 +220,8 @@ class UserAccountsTable extends Table
 	}
 
 
-	public function createProfileUri(UserAccount $userAccount,$attempts = 0) {
+	public function createProfileUri(UserAccount $userAccount,$attempts = 0)
+	{
 
 		$uri = "{$userAccount->first_name} {$userAccount->last_name}";
 
@@ -257,9 +262,9 @@ class UserAccountsTable extends Table
             ],
             'UserAccountGroups',
 			'ProfileImage',
-            'UserAccountForeignCredentials'=>[
+            'UserAccountLoginProviderData'=>[
                 'sort'=>[
-                    'UserAccountForeignCredentials.id'=>'DESC'
+                    'UserAccountLoginProviderData.provider'=>'ASC'
                 ]
             ]
         ]);
@@ -342,7 +347,8 @@ class UserAccountsTable extends Table
         return $validator;
     }
 
-    public function confirmPassword($value, array $context) {
+	public function confirmPassword($value, array $context)
+	{
 
        if(!isset($context['data']['passwd'])) {
             return false;
@@ -399,7 +405,8 @@ class UserAccountsTable extends Table
 
 	}
 
-	public function validationAdminEdit(Validator $validator) {
+	public function validationAdminEdit(Validator $validator)
+	{
 
 		$validator = $this->validationDefault($validator);
 
@@ -413,7 +420,8 @@ class UserAccountsTable extends Table
 		return $validator;
 	}
 
-	public function confirmUniqueProfileUri($value, $context = []) {
+	public function confirmUniqueProfileUri($value, $context = [])
+	{
 		$query = $this->find();
 		$query->select([
 			'total'=>$query->func()->count("*")
@@ -441,7 +449,8 @@ class UserAccountsTable extends Table
 
     }
 
-    public function locateForeignAccount($email,UserAccount $userAccount) {
+	public function locateForeignAccount($email,UserAccount $userAccount)
+	{
 
         $account = $this->findByEmail($email)->contain(false)->first();
 
@@ -453,7 +462,8 @@ class UserAccountsTable extends Table
 
     }
 
-    public function createForeignLoginAccount(UserAccount $userAccount) {
+	public function createForeignLoginAccount(UserAccount $userAccount)
+	{
 
 		$userAccount = $this->handleAccountRegistration($userAccount);
 
@@ -461,5 +471,82 @@ class UserAccountsTable extends Table
 
     }
 
+	public function locateLoginProviderAccount($email,UserAccount $userAccount)
+	{
+
+        $account = $this->findByEmail($email)->contain(false)->first();
+
+        if(!$account) {
+            $account = $this->createForeignLoginAccount($userAccount);
+		} else {
+			$userAccount->id = $account->id;
+			$this->save($userAccount);
+		}
+
+        return $account;
+
+    }
+
+	public function createLoginProviderAccount(UserAccount $userAccount)
+	{
+
+		$userAccount = $this->handleAccountRegistration($userAccount);
+
+		return $userAccount;
+
+    }
+
+
+	public function delete(\Cake\Datasource\EntityInterface $userAccount, $options = [])
+	{
+
+		$groups = $this->UserAccountGroups->UserAccountGroupAssignments->find()
+					->where([
+						'user_account_id'=>$userAccount->id
+					]);
+		foreach($groups as $group) {
+			$this->UserAccountGroups->UserAccountGroupAssignments->delete($group);
+		}
+
+		$pwds = $this->UserAccountPasswds->find()
+					->where([
+						'user_account_id'=>$userAccount->id
+					]);
+		foreach($pwds as $pwd) {
+			$this->UserAccountPasswds->delete($pwd);
+		}
+
+		$creds = $this->UserAccountForeignCredentials->find()
+					->where([
+						'user_account_id'=>$userAccount->id
+					]);
+
+		foreach($creds as $cred) {
+			$this->UserAccountForeignCredentials->delete($cred);
+		}
+
+		$perms = $this->UserAccountPermissions->find()
+					->where([
+						'user_account_id'=>$userAccount->id
+					]);
+
+		foreach($perms as $perm) {
+			$this->UserAccountPermissions->delete($perm);
+		}
+
+		$imgs = $this->UserAccountProfileImages->find()
+					->where([
+						'user_account_id'=>$userAccount->od
+					]);
+
+		foreach($imgs as $img) {
+			$this->UserAccountProfileImages->delete($img);
+		}
+
+		return parent::delete($userAccount);
+
+
+
+	}
 
 }

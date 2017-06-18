@@ -4,13 +4,11 @@ namespace UserManager\Controller;
 
 use UserManager\Controller\AppController;
 use Cake\Event\Event;
-use UserManager\Lib\GoogleSdk;
-use UserManager\Lib\FacebookSdk;
 use Cake\Mailer\MailerAwareTrait;
 use UserManager\Mailer\UserMailer;
 use UserManager\Model\Entity\UserAccount;
-use UserManager\Lib\GithubSdk;
-use UserManager\Lib\TwitterSdk;
+use Cake\Core\Configure;
+use Cake\Network\Exception\NotFoundException;
 
 class LoginController extends AppController {
 
@@ -21,7 +19,6 @@ class LoginController extends AppController {
     public function initialize(array $options = []) {
 
         parent::initialize($options);
-
     }
 
     public function beforeFilter(Event $event) {
@@ -153,6 +150,26 @@ class LoginController extends AppController {
 			"userAccount"
 		));
 
+	}
+
+	public function provider($type)
+	{
+
+		$type = ucfirst($type);
+
+		$chk = Configure::read("UserManager.{$type}LoginEnable");
+
+		if(!$chk) {
+			throw new NotFoundException("Provider: {$type}. Not Enabled");
+		}
+
+		//$cls = '\UserManager\Lib'.'\\'.ucfirst($type).'Sdk';
+
+		$cls = "\UserManager\Auth\Provider\\".$type;
+
+		$provider = new $cls;
+
+		$this->redirect($provider->getLoginUrl());
 	}
 
     public function google() {

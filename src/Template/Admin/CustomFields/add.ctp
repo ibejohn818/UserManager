@@ -2,13 +2,20 @@
 
 use UserManager\Model\Entity\UserAccountCustomField;
 
- ?>
+?>
+<?php $this->start("heading"); ?>
+	Create new custom field
+<?php $this->end("heading"); ?>
+<?php
+
+	$this->Breadcrumbs->add("UserManager");
+	$this->Breadcrumbs->add("Custom Fields",[
+		'action'=>'index'
+	]);
+	$this->Breadcrumbs->add("Create New Field");
+
+?>
 <div class="container-fluid">
-    <div class="page-header">
-        <h1>
-            Create New Custom Field
-        </h1>
-    </div>
     <?php echo $this->Form->create($customField); ?>
     <div class="form create">
         <?php echo $this->Form->input("name") ?>

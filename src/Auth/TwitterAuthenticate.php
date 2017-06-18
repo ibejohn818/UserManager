@@ -8,15 +8,15 @@ use Cake\Network\Response;
 use Cake\ORM\TableRegistry;
 use Cake\Event\EventManager;
 use Cake\Event\Event;
-use UserManager\Config\Config;
 use UserManager\Lib\TwitterSdk;
+use Cake\Core\Configure;
 
 
 class TwitterAuthenticate extends BaseAuthenticate {
 
 	public function authenticate(Request $req, Response $res) {
 
-		$url = Config::get("twitterRedirectUrl");
+		$url = Configure::read("UserManager.TwitterRedirectUrl");
 
 		if($req->here == $url && (isset($_GET['oauth_token']) && isset($_GET['oauth_verifier']))) {
 

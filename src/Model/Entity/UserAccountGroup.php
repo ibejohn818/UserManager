@@ -15,9 +15,7 @@ class UserAccountGroup extends Entity
      * @var array
      */
     protected $_accessible = [
-        "id" => true,
-        'name' => true,
-        'user_account_group_assignments' => true,
-        'user_account_permissions' => true,
+        "id" => false,
+		"*"=>true
     ];
 }

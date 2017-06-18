@@ -1,12 +1,13 @@
 <?php
 use Cake\Routing\Router;
-use UserManager\Config\Config;
 use App\Routing\Route;
+use Cake\Core\Configure;
+use Cake\Core\App;
 
 Router::plugin('UserManager',["path"=>"/user-manager"], function ($routes) {
 
     $routes->connect("/",[
-        "controller"=>"UserAccounts",
+        "controller"=>"Accounts",
         "action"=>"index"
     ]);
 
@@ -25,7 +26,7 @@ Router::prefix("admin",function($routes) {
     $routes->plugin("UserManager",["path"=>"/user-manager"],function($routes) {
 
         $routes->connect("/",[
-            "controller"=>"UserAccounts",
+            "controller"=>"Accounts",
             "action"=>"index"
         ]);
 
@@ -39,45 +40,36 @@ Router::prefix("admin",function($routes) {
 
 });
 
-if(Config::googleLoginRedirectUrl()) {
 
-    $googleRedirectParts = parse_url(Config::googleLoginRedirectUrl());
+$path = App::path("Auth/Provider","UserManager");
 
-    Router::connect($googleRedirectParts['path'],[
-        "plugin"=>"UserManager",
-        "controller"=>"Login",
-        "action"=>"handleForeignLogin"
-    ]);
+$providers = [];
+
+foreach(scandir($path[0]) as $v)
+{
+	if(in_array($v,['.','..']) 
+		|| !preg_match('/\.php$/',$v) 
+		|| preg_match('/ProviderBase/',$v)
+	) {
+		continue;
+	}
+
+	$providers[] = preg_replace('/(.*)(\.php$)/','$1',$v);
+
 }
 
-if(Config::facebookLoginRedirectUrl()) {
+foreach($providers as $v) {
 
-    $facebookRedirect = parse_url(Config::facebookLoginRedirectUrl());
+	if(Configure::read("UserManager.{$v}LoginEnable")) {
 
-    Router::connect($facebookRedirect['path'],[
-        "plugin"=>"UserManager",
-        "controller"=>"Login",
-        "action"=>"handleForeignLogin"
-    ]);
+		Router::connect(Configure::read("UserManager.{$v}AuthRedirectUrl"),[
+			"plugin"=>"UserManager",
+			"controller"=>"Login",
+			"action"=>"handleForeignLogin"
+		]);
+	}
+
 }
-
-
-if(Config::twitterLoginRedirectUrl()) {
-
-    $twitterRedirect = parse_url(Config::twitterLoginRedirectUrl());
-
-    Router::connect($twitterRedirect['path'],[
-        "plugin"=>"UserManager",
-        "controller"=>"Login",
-        "action"=>"handleForeignLogin"
-    ]);
-}
-
-Router::connect(Config::get("githubRedirectUrl"),[
-	'plugin'=>'UserManager',
-	'controller'=>'Login',
-	'action'=>'handleForeignLogin'
-]);
 
 ## Login Url
 Router::connect("/login",[
@@ -102,7 +94,7 @@ Router::connect("/forgot-password",[
 ]);
 
 
-#Profile 
+#Profile
 Router::connect("/profile/:uri",
 	[
 		'plugin'=>'UserManager',

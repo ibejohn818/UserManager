@@ -62,7 +62,6 @@ $this->Html->css(
 </div>
 
 
-<?php echo GOOGLE_CLIENT_REDIRECT_URL; ?>
 <div>
     <?php pr($this->request->session()->read()); ?>
 <?php pr($_SERVER); ?>

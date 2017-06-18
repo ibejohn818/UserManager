@@ -1,33 +1,29 @@
-<style type="text/css">
-.index span.label {
-    font-size:16px;
-}
-</style>
 <?php
 
 $this->Html->addCrumb("User Manager");
 $this->Html->addCrumb("Custom Fields");
 
 use UserManager\Model\Entity\UserAccountCustomField;
+$this->Breadcrumbs->add('User Accounts');
+$this->Breadcrumbs->add('Custom Fields');
 ?>
-<?php $this->start("page_header"); ?>
-            User Custom Fields
-<?php $this->end("page_header"); ?>
-<div class="pagination-wrapper index">
-	<div class="row">
-		<div class="col-md-6">
+<?php $this->start("heading"); ?>
+            User Account Custom Fields
+<?php $this->end("heading"); ?>
+<?php $this->start("heading_action"); ?>
+<?php echo $this->UserManager->authorizeBtn("primary","Create new fields",[
+	'controller'=>'CustomFields',
+	'action'=>'add',
+	'plugin'=>'UserManager',
+	'prefix'=>'admin'
+],[
+	'icon'=>'fa-plus'
+]);
+?>
+<?php $this->end("heading_action"); ?>
 			<?php echo $this->element("paginator-nav") ?>
-		</div>
-		<div class="col-md-6">
-			<div class="btn-group pull-right">
-				<a class='btn btn-success'  href="<?php echo $this->Url->build(['plugin'=>'UserManager','controller'=>'CustomFields','action'=>'add']) ?>">
-					<i class="fa fa-plus"></i>
-					Create New Field
-				</a>
-			</div>
-		</div>
-	</div>
-        <table cellspacing="0" class="table table-striped table-bordered table-hover">
+<div class="pagination-wrapper table-responsive index">
+        <table cellspacing="0" class="table table-striped">
             <thead>
                 <tr>
                     <th>
@@ -63,8 +59,8 @@ use UserManager\Model\Entity\UserAccountCustomField;
                 <?php foreach ($customFields as $k => $v): ?>
                 <tr>
                     <td><?php echo $v->id ?></td>
-                    <td><?php echo $this->Time->nice($v->created) ?></td>
-                    <td><?php echo $this->Time->nice($v->modified) ?></td>
+                    <td style='white-space: nowrap; width: 1%'><?php echo $this->Time->nice($v->created) ?></td>
+                    <td  style='white-space: nowrap; width: 1%'><?php echo $this->Time->nice($v->modified) ?></td>
                     <td class='text-center'>
                         <?php 
                             switch($v->active) {
@@ -96,6 +92,7 @@ use UserManager\Model\Entity\UserAccountCustomField;
                         <a href="<?php echo $this->Url->build(["plugin"=>"UserManager","controller"=>"CustomFields","action"=>"edit",$v->id]); ?>" class="btn btn-primary btn-xs">
                             <i class="fa fa-edit"></i> Edit
                         </a>
+						<?= $this->Form->postLink("Delete",['action'=>'delete',$v->id],['method'=>'delete','class'=>'btn btn-danger btn-xs','confirm'=>"Are you sure you want to delete: {$v->name}?"]) ?>
                     </td>
                 </tr>
                 <?php endforeach ?>

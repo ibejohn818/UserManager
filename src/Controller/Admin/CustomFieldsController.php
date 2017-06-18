@@ -30,7 +30,9 @@ class CustomFieldsController extends AppController {
 
         if ($this->request->is(["post","put"])) {
 
-            $customField = $this->UserAccountCustomFields->patchEntity($customField,$this->request->data);
+			$customField = $this->UserAccountCustomFields->patchEntity($customField,$this->request->data,[
+				'validate'=>'create'
+			]);
 
             if($this->UserAccountCustomFields->save($customField)) {
 
@@ -78,5 +80,25 @@ class CustomFieldsController extends AppController {
         $this->set(compact("customField"));
 
     }
+
+	public function delete($id = false)
+	{
+
+		if($this->request->is(['post','delete','put']) && $id && ($field = $this->UserAccountCustomFields->findById($id)->first())) {
+
+			if($this->UserAccountCustomFields->delete($field)) {
+				$this->Flash->success("Custom Field Deleted!");
+			} else {
+				$this->Flash->error("Error deleting custom field");
+			}
+
+			$this->redirect(['action'=>'index']);
+
+		} else {
+			throw new NotFoundException("Invlaid URL");
+		}
+
+	}
+
 
 }

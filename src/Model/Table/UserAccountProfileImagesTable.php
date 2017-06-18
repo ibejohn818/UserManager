@@ -6,7 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use UserManager\Model\Entity\UserAccountProfileImage;
-use UserManager\Config\Config;
+use Cake\Core\Configure;
 
 /**
  * UserAccountProfileImages Model
@@ -84,7 +84,7 @@ class UserAccountProfileImagesTable extends Table
 		$account = $this->UserAccounts->get($UserAccountID);
 
 		//ensure the path to the image exists
-		$path = WWW_ROOT.DS.Config::get('profileImageWwwPath').DS.$account->id;
+		$path = WWW_ROOT.DS.Configure::read('UserManager.profileImageWwwPath').DS.$account->id;
 
 		if(!is_dir($path)) {
 			mkdir($path,0777,true);
