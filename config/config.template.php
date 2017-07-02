@@ -105,6 +105,35 @@ return [
 			],
 		]
 	],
+	'BitbucketLogin'=>[
+		'help'=>'Enable and configure Bitbucket login and API',
+		'settings'=>[
+			'BitbucketLoginEnable'=>[
+				'help'=>'Enable Bitbucket Login. 0=OFF, 1=ON',
+				'default'=>'0'
+			],
+			'BitbucketClientKey'=>[
+				'help'=>'Bitbucket Registered App ClientID Used for github.com login',
+				'default'=>''
+			],
+			'BitbucketClientSecret'=>[
+				'help'=>'Bitbucket registered App Client Secret Used for github.com login',
+				'default'=>''
+			],
+			'BitbucketApiScopes'=>[
+				'help'=>'Bitbucket permissions scopes user will be asked to grant your application access to',
+				'default'=>'user:email'
+			],
+			'BitbucketAuthRedirectUrl'=>[
+				'help'=>'Github OAUTH Redirect URL. If you do not use the default, then make sure you update the routes',
+				'default'=>'/user-manager/auth-callback/bitbucket'
+			],
+			'BitbucketApiCacheConfig'=>[
+				'help'=>'CakePHP Cache Config for caching API Calls using the ETAG Header',
+				'default'=>'default'
+			],
+		]
+	],
 	'YahooLogin'=>[
 		'help'=>'Enable and configure Github login and API',
 		'settings'=>[

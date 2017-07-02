@@ -16,7 +16,7 @@ $this->Breadcrumbs->add("User Accounts",[
 $this->Breadcrumbs->add("Edit Account ID: {$userAccount->id}");
 
 ?>
-<?= $this->Form->create($userAccount) ?>
+<?= $this->Form->create($userAccount,['class'=>'animated fadeInUp']) ?>
     <div class="row">
         <div class="col-md-6">
 			<div class="ibox float-e-margins">

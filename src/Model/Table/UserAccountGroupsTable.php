@@ -48,7 +48,7 @@ class UserAccountGroupsTable extends Table
             ->allowEmpty('id', 'create');
             
         $validator
-            ->allowEmpty('name');
+            ->notEmpty('name');
 
         return $validator;
     }

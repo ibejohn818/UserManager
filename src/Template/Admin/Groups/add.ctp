@@ -27,6 +27,7 @@ Create New User Group
 	</div>
 	<?php
 		echo $this->Form->input('name');
+		echo $this->Form->input("active");
 		echo $this->Form->input("default_group");
 	?>
 <div class="form-actions">

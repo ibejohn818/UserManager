@@ -71,28 +71,6 @@ foreach($providers as $v) {
 
 }
 
-## Login Url
-Router::connect("/login",[
-	'plugin'=>'UserManager',
-	'controller'=>'Login',
-	'action'=>'index'
-]);
-
-#Register
-
-Router::connect("/register",[
-	'plugin'=>'UserManager',
-	'controller'=>'Login',
-	'action'=>'register'
-]);
-
-#Forgot Password
-Router::connect("/forgot-password",[
-	'plugin'=>'UserManager',
-	'controller'=>'Login',
-	'action'=>'forgotPassword'
-]);
-
 
 #Profile
 Router::connect("/profile/:uri",

@@ -6,6 +6,10 @@ use Cake\Core\Configure;
 
 //configuration
 
+$dir = realpath(__DIR__);
+
+require "{$dir}/functions.php";
+
 $http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST']:'';
 
 // $CacheEngine = "File";
@@ -35,3 +39,5 @@ if(!$settings = @include_once CONFIG."user-manager.conf.php") {
 Configure::write("UserManager",$settings);
 
 Configure::write("UserManager.bootstrap",true);
+
+userManagerGetProviders();

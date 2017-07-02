@@ -57,7 +57,6 @@ class UserManagerHelper extends Helper {
             return false;
         }
 
-
 		if(isset($ops['icon'])) {
 			$icon = "<i class='fa {$ops['icon']}'></i>";
 			$ops['escape'] = false;

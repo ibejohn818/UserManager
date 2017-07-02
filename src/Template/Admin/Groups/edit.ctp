@@ -1,19 +1,18 @@
 <?php
 
-$this->Html->addCrumb("User Manager");
-$this->Html->addCrumb("User Groups",['action'=>'index']);
-
-
+$this->Breadcrumbs->add("User Manager");
+$this->Breadcrumbs->add("User Groups",['action'=>'index']);
 
 ?>
-<?php $this->start("page_header"); ?>
+<?php $this->start("heading"); ?>
 Edit User Group
-<?php $this->end("page_header"); ?>
+<?php $this->end("heading"); ?>
 <div class="edit">
 	<div class="row">
 		<div class="col-md-12">
 			<?= $this->Form->create($userAccountGroup) ?>
 				<?php echo $this->Form->input("name"); ?>
+				<?php echo $this->Form->input("active"); ?>
 				<?php echo $this->Form->input("default_group"); ?>
 			<div class="form-actions">
 				<button class="btn btn-primary" type='submit'>
@@ -25,4 +24,3 @@ Edit User Group
 		</div>
 	</div>
 </div>
-<?php pr($userAccountGroup); ?>
