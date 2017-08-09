@@ -30,7 +30,15 @@
     </listeners>
 
     <!-- Prevent coverage reports from looking in tests and vendors -->
-    <filter>
+	<filter>
+	<whitelist processUncoveredFilesFromWhitelist="true">
+	    <directory suffix=".php">./</directory>
+	    <exclude>
+	      <directory suffix=".php">./tests/</directory>
+	      <directory suffix=".php">./vendor/</directory>
+	      <directory suffix=".php">./config/</directory>
+	    </exclude>
+	  </whitelist>
         <blacklist>
             <directory suffix=".php">./vendor/</directory>
             <directory suffix=".ctp">./vendor/</directory>

@@ -4,10 +4,10 @@ namespace UserManager\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * UserAccountLoginProviderDataFixture
+ * UserAccountProfileImagesFixture
  *
  */
-class UserAccountLoginProviderDataFixture extends TestFixture
+class UserAccountProfileImagesFixture extends TestFixture
 {
 
     /**
@@ -20,16 +20,16 @@ class UserAccountLoginProviderDataFixture extends TestFixture
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'provider' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'key_name' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'key_value' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'active' => ['type' => 'boolean', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        'file_name' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'image_source' => ['type' => 'string', 'length' => 64, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'user_account_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
-            'collation' => 'latin1_swedish_ci'
+            'collation' => 'utf8_general_ci'
         ],
     ];
     // @codingStandardsIgnoreEnd
@@ -42,11 +42,11 @@ class UserAccountLoginProviderDataFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:42:05',
-            'modified' => '2017-08-05 05:42:05',
-            'provider' => 'Lorem ipsum dolor sit amet',
-            'key_name' => 'Lorem ipsum dolor sit amet',
-            'key_value' => 'Lorem ipsum dolor sit amet',
+            'created' => '2017-08-05 05:43:42',
+            'modified' => '2017-08-05 05:43:42',
+            'active' => 1,
+            'file_name' => 'Lorem ipsum dolor sit amet',
+            'image_source' => 'Lorem ipsum dolor sit amet',
             'user_account_id' => 1
         ],
     ];

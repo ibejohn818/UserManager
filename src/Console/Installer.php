@@ -38,7 +38,6 @@ class Installer
 
         $rootDir = dirname(dirname(__DIR__));
 
-		print_r($io);
 
     }
 }

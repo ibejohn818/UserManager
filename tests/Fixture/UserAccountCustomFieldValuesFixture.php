@@ -4,10 +4,10 @@ namespace UserManager\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * UserAccountLoginProviderDataFixture
+ * UserAccountCustomFieldValuesFixture
  *
  */
-class UserAccountLoginProviderDataFixture extends TestFixture
+class UserAccountCustomFieldValuesFixture extends TestFixture
 {
 
     /**
@@ -20,16 +20,15 @@ class UserAccountLoginProviderDataFixture extends TestFixture
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'provider' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'key_name' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'key_value' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'user_account_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'user_account_custom_field_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'field_value' => ['type' => 'text', 'length' => 16777215, 'null' => true, 'default' => null, 'collate' => 'utf8_unicode_ci', 'comment' => '', 'precision' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
-            'collation' => 'latin1_swedish_ci'
+            'collation' => 'utf8_unicode_ci'
         ],
     ];
     // @codingStandardsIgnoreEnd
@@ -42,12 +41,11 @@ class UserAccountLoginProviderDataFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:42:05',
-            'modified' => '2017-08-05 05:42:05',
-            'provider' => 'Lorem ipsum dolor sit amet',
-            'key_name' => 'Lorem ipsum dolor sit amet',
-            'key_value' => 'Lorem ipsum dolor sit amet',
-            'user_account_id' => 1
+            'created' => '2017-08-05 05:42:23',
+            'modified' => '2017-08-05 05:42:23',
+            'user_account_id' => 1,
+            'user_account_custom_field_id' => 1,
+            'field_value' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
         ],
     ];
 }

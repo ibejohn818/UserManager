@@ -4,10 +4,10 @@ namespace UserManager\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * UserAccountLoginProviderDataFixture
+ * UserAccountPasswdsFixture
  *
  */
-class UserAccountLoginProviderDataFixture extends TestFixture
+class UserAccountPasswdsFixture extends TestFixture
 {
 
     /**
@@ -19,17 +19,14 @@ class UserAccountLoginProviderDataFixture extends TestFixture
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'provider' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'key_name' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'key_value' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'passwd' => ['type' => 'string', 'length' => 128, 'null' => true, 'default' => null, 'collate' => 'utf8_unicode_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'user_account_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
-            'collation' => 'latin1_swedish_ci'
+            'collation' => 'utf8_unicode_ci'
         ],
     ];
     // @codingStandardsIgnoreEnd
@@ -42,11 +39,8 @@ class UserAccountLoginProviderDataFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:42:05',
-            'modified' => '2017-08-05 05:42:05',
-            'provider' => 'Lorem ipsum dolor sit amet',
-            'key_name' => 'Lorem ipsum dolor sit amet',
-            'key_value' => 'Lorem ipsum dolor sit amet',
+            'created' => '2017-08-05 05:41:43',
+            'passwd' => 'Lorem ipsum dolor sit amet',
             'user_account_id' => 1
         ],
     ];
