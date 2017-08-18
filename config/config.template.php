@@ -51,6 +51,31 @@ return [
 			],
 		]
 	],
+	'LinkedinLogin'=>[
+		'help'=>'Enable and config Linked-In Login and API',
+		'settings'=>[
+			'LinkedinLoginEnable'=>[
+				'help'=>'Enable Linked-In Login. 0=OFF, 1=ON',
+				'default'=>'0'
+			],
+			'LinkedinClientId'=>[
+				'help'=>'Linked-In API Client ID',
+				'default'=>''
+			],
+			'LinkedinClientSecret'=>[
+				'help'=>'Linked-In API Client Secre',
+				'default'=>''
+			],
+			'LinkedinClientScopes'=>[
+				'help'=>'Linked-In Login Permission Scopes. Seperate scopes by a space. \'email\' and \'profile\' are required',
+				'default'=>'email profile'
+			],
+			'LinkedinAuthRedirectUrl'=>[
+				'help'=>'Google OAUTH Redirect URL. Do not put the host, only the URI. This must be registered in your app settings on google',
+				'default'=>'/user-manager/auth-callback/linkedin'
+			],
+		]
+	],
 	'FacebookLogin'=>[
 		'help'=>'Enable and configure Facebook login and API',
 		'settings'=>[
