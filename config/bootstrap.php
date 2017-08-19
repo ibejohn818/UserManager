@@ -14,7 +14,7 @@ $http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST']:'';
 
 // $CacheEngine = "File";
 // $CacheEngine = "Memcached";
-$CacheEngine = "Redis";
+$CacheEngine = "Memcached";
 
 $Port = 6379;
 
