@@ -82,7 +82,7 @@ class Github extends ProviderBase
 
 
 			$conditions = [
-				'service_name'=>'github',
+				'provider'=>'github',
 				'key_name'=>"id",
 				'key_value'=>$GithubUser['content']['id']
 			];
@@ -109,6 +109,7 @@ class Github extends ProviderBase
 
 			$credentials = $this->UserAccountLoginProviderData
 									->locateAccount($conditions,$ua,$ld);
+
 			return $credentials;
 
 	}

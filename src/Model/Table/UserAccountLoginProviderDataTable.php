@@ -118,10 +118,13 @@ class UserAccountLoginProviderDataTable extends Table
 			throw new FatalErrorException("userAccount->email must be set!");
 		}
 
-		if(!($account_id = $this->find()
-							->select(['user_account_id'])
-							->where($conditions)
-							->first()->user_account_id)
+		$account = $this->find()
+						->select(['user_account_id'])
+						->where($conditions)
+						->first();
+
+		if(!isset($account->user_account_id)
+			|| !($account_id = $account->user_account_id)
 		) {
 			$account_id = $this->UserAccounts->locateLoginProviderAccount(
 				$userAccount->email,
