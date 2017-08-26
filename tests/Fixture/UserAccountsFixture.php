@@ -54,6 +54,17 @@ class UserAccountsFixture extends TestFixture
             'email' => 'Lorem ipsum dolor sit amet',
             'profile_uri' => 'Lorem ipsum dolor sit amet',
             'username' => 'Lorem ipsum dolor sit amet'
+        ],[
+            'id' => 2,
+            'created' => '2017-08-05 05:38:12',
+            'modified' => '2017-08-05 05:38:12',
+            'first_name' => 'Lorem ipsum dolor sit amet',
+            'last_name' => 'Lorem ipsum dolor sit amet',
+            'middle_name' => 'Lorem ipsum dolor sit amet',
+            'active' => 1,
+            'email' => 'Lorem ipsum dolor sit amet',
+            'profile_uri' => 'Lorem ipsum dolor sit amet',
+            'username' => 'Lorem ipsum dolor sit amet'
         ],
     ];
 }

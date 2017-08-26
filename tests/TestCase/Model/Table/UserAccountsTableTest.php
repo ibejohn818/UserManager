@@ -82,7 +82,7 @@ class UserAccountsTableTest extends TestCase
 		$this->assertTrue(is_int($id));
 
 		$this->assertTrue(($id>0));
-		print_r($this->UserAccountsTable->find()->all()->toArray());
+
     }
 
     /**
@@ -95,16 +95,6 @@ class UserAccountsTableTest extends TestCase
 
         $this->markTestIncomplete('Not implemented yet.');
 
-    }
-
-    /**
-     * Test getLoginUser method
-     *
-     * @return void
-     */
-    public function testGetLoginUser()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
     }
 
     /**
@@ -124,7 +114,11 @@ class UserAccountsTableTest extends TestCase
      */
     public function testCustomFieldsSchema()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+		$schema = $this->UserAccountsTable->customFieldsSchema();
+
+		$this->assertTrue(in_array('Gender',$schema));
+
     }
 
     /**

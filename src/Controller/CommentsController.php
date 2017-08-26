@@ -32,6 +32,8 @@ class CommentsController extends AppController
 
 			$userComment = $this->UserComments->newEntity($this->request->data());
 
+			$userComment->user_account_id = $this->Auth->user("id");
+
 			if($this->UserComments->createComment($userComment)) {
 
 				$this->Flash->success("Comment added successfully");

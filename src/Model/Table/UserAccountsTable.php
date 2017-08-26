@@ -113,17 +113,6 @@ class UserAccountsTable extends Table
     }
 
 
-    public function getLoginUser($email,$passwdHash)
-    {
-
-        $q = $this->find()
-            ->contain([
-                'UserAccountGroups',
-
-            ]);
-
-    }
-
 	public function findUsersCustomFields(Query $q,array $options)
 	{
 

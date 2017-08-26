@@ -47,13 +47,14 @@ class UserAccountCustomFieldsFixture extends TestFixture
             'id' => 1,
             'created' => '2017-08-05 05:42:20',
             'modified' => '2017-08-05 05:42:20',
-            'name' => 'Lorem ipsum dolor sit amet',
-            'field_type' => 'Lorem ipsum dolor sit amet',
-            'field_options' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+            'name' => 'Gender',
+            'field_type' => 'checkbox',
+			'field_options' => 'male:Male
+								female:Female',
             'active' => 1,
             'display_weight' => 1,
             'visible' => 1,
-            'slug' => 'Lorem ipsum dolor sit amet'
-        ],
+            'slug' => 'gender'
+        ]
     ];
 }
