@@ -11,7 +11,7 @@
 			var _defaults = {
 
 				onUserSelect:function() { },
-				closeOnUserSelect:true
+				closeOnUserSelect:false
 
 			};
 
@@ -19,7 +19,7 @@
 
 
 			var modalHTML = '<div id="UserAccountsModal" class="modal fade" tabindex="-1" role="dialog">'+
-								'<div class="modal-dialog modal-xlarge">'+
+								'<div class="modal-dialog modal-full">'+
 									'<div class="modal-content">'+
 											'<div class="modal-header">'+
 												'<button type="button" class="close x-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
@@ -76,7 +76,7 @@
 
 				} else {
 
-					var url = "/admin/user-manager/user-accounts";
+					var url = "/admin/user-manager/accounts";
 
 				}
 
@@ -92,7 +92,9 @@
 
 							var href = $(this).attr("href");
 
-							loadUsers(href);
+                            if(href.length>0) {
+                                loadUsers(href);
+                            }
 
 							return false;
 
@@ -101,8 +103,11 @@
 
 						that.$modal.find('.modal-body').css('opacity','1');
 						that.$modal.find('a[rel=select-user]').unbind('click').bind('click',function(e) { 
-							that.opts.onUserSelect.call(this,$(this).data("user"));
-							that.close();
+                            e.preventDefault()
+							that.opts.onUserSelect.call(that,$(this).data("user"));
+                            if(that.opts.closeOnUserSelect) {
+                                that.close();
+                            }
 							return false;
 						});
 

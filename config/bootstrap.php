@@ -16,9 +16,9 @@ $http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST']:'';
 // $CacheEngine = "Memcached";
 $CacheEngine = "Memcached";
 
-$Port = 6379;
+$Port = 11211;
 
-$Servers = '127.0.0.1';
+$Servers = ['memcache'];
 
 Cache::config('user-manager-1min',[
 	'className' => $CacheEngine,
@@ -26,7 +26,7 @@ Cache::config('user-manager-1min',[
 	'path' => CACHE . 'misc/',
 	'serialize' => 'php',
 	'duration' => '+1 minutes',
-	'server'=>$Servers,
+	'servers'=>$Servers,
 	'port'=>$Port
 ]);
 
