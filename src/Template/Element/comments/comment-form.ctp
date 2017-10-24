@@ -11,14 +11,15 @@ echo $this->Form->create(new \UserManager\Model\Entity\UserComment(),[
 		'controller'=>'Comments',
 		'action'=>'create',
 		'prefix'=>false
-		]
+    ],
+    'class'=>'comment-form'
 	]);
 ?>
 <?php
 	echo $this->Form->input("return_uri",['type'=>'hidden','value'=>$return_uri]);
 	echo $this->Form->input("model",['type'=>'hidden','value'=>$model]);
 	echo $this->Form->input("foreign_key",['type'=>'hidden','value'=>$foreign_key]);
-	if(isset($parent_id)) {
+	if(isset($parent_id) && $parent_id) {
 		echo $this->Form->input("parent_id",['type'=>'hidden','value'=>$parent_id]);
 	}
 
@@ -37,3 +38,8 @@ echo $this->Form->create(new \UserManager\Model\Entity\UserComment(),[
 <?php
 	echo $this->Form->end();
 ?>
+<script type="text/javascript">
+	$("form.comment-form textarea.form-control").bind('keyup',function(e) {
+		$(this).height(0).height(this.scrollHeight);
+	})
+</script>

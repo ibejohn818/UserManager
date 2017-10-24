@@ -155,6 +155,31 @@ class UserManagerHelper extends Helper {
 
     }
 
+    public function commentFormAjaxUri($model, $foreignKey, $returnUri, array $options = [])
+    {
+
+        $query = [
+            'model'=>$model,
+            'foreign_key'=>$foreignKey,
+            'return_uri'=>$returnUri
+        ];
+
+        if(isset($options['parent_id'])) {
+            $query['parent_id'] = $options['parent_id'];
+        }
+
+        $uri = $this->Url->build([
+            'plugin'=>'UserManager',
+            'controller'=>'Comments',
+            'action'=>'form',
+            'prefix'=>false,
+            '?'=>$query
+        ],['escape'=>false]);
+
+        return $uri;
+
+    }
+
     public function beforeRender(Event $event) {
         
     }

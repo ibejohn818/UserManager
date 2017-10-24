@@ -7,10 +7,9 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 use Cake\Routing\DispatcherFactory;
 
-//require __DIR__."/../../../config/bootstrap.php";
 //require '/var/www/johnchardy.com/vendor/autoload.php';
-require __DIR__."/../vendor/autoload.php";
-
+//require __DIR__."/../vendor/autoload.php";
+require __DIR__."/../../../config/bootstrap.php";
 
 // Path constants to a few helpful things.
 define('ROOT', dirname(__DIR__) . DS);

@@ -14,6 +14,8 @@ $providers = [
 <div class='login-providers'>
 <?php foreach($providers as $k=>$v):
 	$url = $this->Url->build([
+        'plugin'=>'UserManager',
+        'controller'=>'Login',
 		'action'=>'provider',
 		$v
 	]);
