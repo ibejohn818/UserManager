@@ -1,30 +1,29 @@
 {
-    "name": "ibejohn818/user-manager",
-    "description": "UserManager plugin for CakePHP",
-    "type": "cakephp-plugin",
-    "require": {
-        "php":">=5.4",
-        "cakephp/cakephp": "~3.0",
-        "google/apiclient": "~2",
-        "facebook/graph-sdk": "~5",
-        "erusev/parsedown": "^1.6",
-        "phpunit/phpunit": "*"
-
-    },
+    "name": "ibejohn818/user-manager", 
     "require-dev": {
         "phpunit/phpunit": "*"
-    },
+    }, 
+    "require": {
+        "cakephp/cakephp": "~3.0", 
+        "facebook/graph-sdk": "~5", 
+        "google/apiclient": "~2", 
+        "phpunit/phpunit": "*", 
+        "erusev/parsedown": "^1.6", 
+        "php": ">=5.4"
+    }, 
     "autoload": {
         "psr-4": {
             "UserManager\\": "src"
         }
-    },
+    }, 
+    "version": "0.1.1", 
     "autoload-dev": {
         "psr-4": {
-            "UserManager\\Test\\": "./tests",
-            "UserManager\\Test\\Fixture\\": "./tests/Fixture",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "UserManager\\Test\\Fixture\\": "./tests/Fixture", 
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests", 
+            "UserManager\\Test\\": "./tests"
         }
-    }
-
+    }, 
+    "type": "cakephp-plugin", 
+    "description": "UserManager plugin for CakePHP"
 }

@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+import json
+import sys
+
+
+def bump(level='rev'):
+
+    filename = "composer.json"
+
+    with open(filename, "r") as jdata:
+        d = json.load(jdata)
+
+    version = d['version'].split('.')
+
+    major = int(version[0])
+    minor = int(version[1])
+    rev = int(version[2])
+
+    if level == 'major':
+        major += 1
+        minor = 0
+        rev = 0
+    if level == 'minor':
+        minor += 1
+        rev = 0
+    if level == 'rev':
+        rev += 1
+
+    version = '{0}.{1}.{2}'.format(major, minor, rev)
+
+    d['version'] = version
+
+    jdata.close()
+
+    with open(filename, "w") as jdata:
+        json.dump(d, jdata, indent=4)
+    jdata.close()
+
+    return version
+
+if __name__ == '__main__':
+
+    levels = ['major', 'minor', 'rev']
+
+    if len(sys.argv) <= 1 or sys.argv[1] not in  levels:
+        level = 'rev'
+    else:
+        level = sys.argv[1]
+
+
+    bump(level)

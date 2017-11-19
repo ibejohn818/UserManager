@@ -15,7 +15,7 @@ coverage:
 	vendor/bin/phpunit --coverage-html=/tmp/coverage/ tests/
 
 docker-test-install:
-	docker run --rm -it -v $(shell pwd):/code -w /code ibejohn818/php:php71w-build /usr/bin/composer install
+	docker run --rm -it -v $(shell pwd):/code -w /code ibejohn818/php:php71w-build /bin/bash -c '/usr/bin/composer update && /usr/bin/composer install'
 
 docker-test:
 	docker run --rm -it -v $(shell pwd):/code -w /code ibejohn818/php:php71w-build /bin/bash -c 'vendor/bin/phpunit tests'
