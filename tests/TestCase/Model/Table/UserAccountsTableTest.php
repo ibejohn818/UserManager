@@ -512,13 +512,5 @@ class UserAccountsTableTest extends TestCase
         $this->assertTrue($res);
     }
 
-    public function testFailure()
-    {
-
-        $r = false;
-
-        $this->assertTrue($r);
-
-    }
 
 }
