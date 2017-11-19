@@ -10,4 +10,7 @@ before_install:
   - docker run --rm -it -v $(pwd):/code -w /code ibejohn818/php:php71w-build  /bin/bash -c '/usr/bin/composer update && /usr/bin/composer install'
 
 script:
-  - docker run --rm -it -v $(pwd):/code -w /code ibejohn818/php:php71w-build /bin/bash -c 'vendor/bin/phpunit tests'
+  - docker run --rm -it -v $(pwd):/code -w /code ibejohn818/php:php71w-build /bin/bash -c 'vendor/bin/phpunit tests --coverage-clover=coverage.xml'
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
