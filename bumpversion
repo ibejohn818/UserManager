@@ -20,19 +20,14 @@ def git_tag(version):
 
     e = subprocess.call(cmd, shell=True)
 
-    print(e)
-
     cmd  = 'git tag {0}'.format(version)
 
     e = subprocess.call(cmd, shell=True)
-
-    print(e)
 
     cmd = 'git push origin {0}'.format(version)
 
     e = subprocess.call(cmd, shell=True)
 
-    print(e)
 
 def bump(level='rev'):
 
