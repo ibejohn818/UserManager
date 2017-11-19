@@ -34,4 +34,9 @@ class GoogleProviderTest extends TestCase
         parent::tearDown();
     }
 
+    public function testInit()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
 }
