@@ -185,7 +185,33 @@ class UserAccountPermissionsTableTest extends TestCase
      */
     public function testParseUserPermission()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        //test group deny
+        $user = [
+            'id'=>10,
+            'user_account_groups'=>[
+                [
+                    'id'=>0
+                ]
+            ]
+        ];
+
+
+        $c = "UserAccounts";
+        $a = "edit";
+        $pl = "UserManager";
+        $pr = "admin";
+
+        $res = $this->UserAccountPermissions->parseUserPermission(
+            $user,
+            $c,
+            $a,
+            $pl,
+            $pr
+        );
+
+        $this->assertFalse($res);
+
     }
 
     /**
@@ -215,18 +241,18 @@ class UserAccountPermissionsTableTest extends TestCase
      *
      * @return void
      */
-    public function testCheckUserPermission()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+    //public function testCheckUserPermission()
+    //{
+        //$this->markTestIncomplete('Not implemented yet.');
+    //}
 
     /**
      * Test getPermissionRows method
      *
      * @return void
      */
-    public function testGetPermissionRows()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+    //public function testGetPermissionRows()
+    //{
+        //$this->markTestIncomplete('Not implemented yet.');
+    //}
 }
