@@ -107,7 +107,22 @@ class UserAccountPasswdResetRequestsTableTest extends TestCase
      */
     public function testCheckEmailAddress()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $em = "jhardy@test.com";
+        $c = [
+                'data'=>[]
+            ];
+
+        $res = $this->UserAccountPasswdResetRequests->checkEmailAddress($em, $c);
+
+        $this->assertTrue($res);
+
+        $em = "not@here.com";
+
+        $res = $this->UserAccountPasswdResetRequests->checkEmailAddress($em, $c);
+
+        $this->assertFalse($res);
+
     }
 
     /**
@@ -117,6 +132,18 @@ class UserAccountPasswdResetRequestsTableTest extends TestCase
      */
     public function testHandlePasswordReset()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $em = "jhardy@test.com";
+
+        $res = $this->UserAccountPasswdResetRequests->handlePasswordReset($em);
+
+        $this->assertTrue(($res instanceof \UserManager\Model\Entity\UserAccountPasswdResetRequest));
+
+        $em = "not@here.com";
+
+        $res = $this->UserAccountPasswdResetRequests->handlePasswordReset($em);
+
+        $this->assertFalse($res);
+
     }
 }

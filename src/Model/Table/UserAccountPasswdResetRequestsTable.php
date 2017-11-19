@@ -69,7 +69,7 @@ class UserAccountPasswdResetRequestsTable extends Table
 
         $find = $this->UserAccounts->find()
                 ->select(["id","email"])
-                ->contain(["UserAccountPasswds","UserAccountForeignCredentials"])
+                ->contain(false)
                 ->where(["email"=>$value])
                 ->first();
 
