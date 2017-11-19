@@ -365,6 +365,7 @@ class UserAccountsTableTest extends TestCase
         $this->assertFalse($res);
     }
 
+
     /**
      * Test validationAdminEdit method
      *
@@ -510,4 +511,14 @@ class UserAccountsTableTest extends TestCase
 
         $this->assertTrue($res);
     }
+
+    public function testFailure()
+    {
+
+        $r = false;
+
+        $this->assertTrue($r);
+
+    }
+
 }
