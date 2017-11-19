@@ -37,28 +37,6 @@ class UserAccountPasswdResetRequestsTable extends Table
     }
 
     /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault__(Validator $validator)
-    {
-        $validator
-            ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create');
-
-        $validator
-            ->add('expires', 'valid', ['rule' => 'datetime'])
-            ->allowEmpty('expires');
-
-        $validator
-            ->allowEmpty('sha1hash');
-
-        return $validator;
-    }
-
-    /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *
@@ -75,29 +53,35 @@ class UserAccountPasswdResetRequestsTable extends Table
 
         $validator
 			->notBlank("email","Email cannot be empty")
-			->add("email","valid",['rule'=>'email','message'=>'Invalid Email Address','last'=>true])
-            ->add('email','custom',[
-            'rule' => function ($value, $context) use($validator) {
-
-                $find = $this->UserAccounts->find()
-                        ->select(["id","email"])
-                        ->contain(["UserAccountPasswds","UserAccountForeignCredentials"])
-                        ->where(["email"=>$value])
-                        ->first();
-
-			   if(isset($find->id)) {
-				   return true;
-			   }
-
-               return false;
-
-            },
-            'message'=>"Email address not associated with a valid account"
+			->add("email","valid_email",['rule'=>'email','message'=>'Invalid Email Address','last'=>true])
+            ->add('email','check_email',[
+                'rule' => 'checkEmailAddress',
+                'message'=>"Email address not associated with a valid account",
+                'provider'=>'table'
         ]);
 
         return $validator;
 
     }
+
+    public function checkEmailAddress($value, array $context)
+    {
+
+        $find = $this->UserAccounts->find()
+                ->select(["id","email"])
+                ->contain(["UserAccountPasswds","UserAccountForeignCredentials"])
+                ->where(["email"=>$value])
+                ->first();
+
+        if(isset($find->id)) {
+            return true;
+        }
+
+        return false;
+
+
+    }
+
 
 	public function handlePasswordReset($EmailAddress,$minutesActive = 90) {
 

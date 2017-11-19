@@ -79,13 +79,6 @@ class Google extends ProviderBase
 
 		$googleData = $this->handleLoginRedirect($request->query);
 
-		//locate the account
-		$uac = $this->UserAccountForeignCredentials->newEntity([
-								'service_name'=>'google',
-								'param1'=>$googleData['user']->id,
-								'param2'=>$googleData['user']->picture
-							]);
-
 		$conditions = [
 			'provider'=>"google",
 			'key_name'=>"id",
