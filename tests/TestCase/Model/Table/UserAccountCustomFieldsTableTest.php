@@ -3,6 +3,7 @@ namespace UserManager\Test\TestCase\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use Cake\ORM\RulesChecker;
 use UserManager\Model\Table\UserAccountCustomFieldsTable;
 
 /**
@@ -82,7 +83,15 @@ class UserAccountCustomFieldsTableTest extends TestCase
 
         $this->assertEquals($res->field("active")->rules()['valid']->get("rule"), "boolean");
 
+        $this->assertEquals($res->field("visible")->rules()['valid']->get("rule"), "boolean");
+
         $this->assertEquals($res->field("display_weight")->rules()['valid']->get("rule"), "numeric");
+
+        $this->assertTrue(($res->field("name") instanceof \Cake\Validation\ValidationSet));
+
+        $this->assertTrue(($res->field("field_type") instanceof \Cake\Validation\ValidationSet));
+
+        $this->assertTrue(($res->field("field_options") instanceof \Cake\Validation\ValidationSet));
 
     }
 
@@ -93,7 +102,13 @@ class UserAccountCustomFieldsTableTest extends TestCase
      */
     public function testValidationCreate()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $v = new \Cake\Validation\Validator();
+
+        $res = $this->UserAccountCustomFields->validationCreate($v);
+
+        $this->assertTrue(($res->field("slug") instanceof \Cake\Validation\ValidationSet));
+
+        $this->assertTrue(($res->field("name") instanceof \Cake\Validation\ValidationSet));
     }
 
     /**
@@ -103,7 +118,12 @@ class UserAccountCustomFieldsTableTest extends TestCase
      */
     public function testBuildRules()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $r = new RulesChecker();
+
+        $r = $this->UserAccountCustomFields->buildRules($r);
+
+        $this->assertTrue(($r instanceof RulesChecker));
+
     }
 
     /**
@@ -113,6 +133,10 @@ class UserAccountCustomFieldsTableTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $e = $this->UserAccountCustomFields->find()->where(['id'=>1])->first();
+
+        $res = $this->UserAccountCustomFields->delete($e);
+
+        $this->assertTrue($res);
     }
 }
