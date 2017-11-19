@@ -1,8 +1,6 @@
 {
     "name": "ibejohn818/user-manager", 
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    }, 
+    "type": "cakephp-plugin", 
     "require": {
         "cakephp/cakephp": "~3.0", 
         "facebook/graph-sdk": "~5", 
@@ -16,7 +14,7 @@
             "UserManager\\": "src"
         }
     }, 
-    "version": "0.1.1", 
+    "version": "0.1.2", 
     "autoload-dev": {
         "psr-4": {
             "UserManager\\Test\\Fixture\\": "./tests/Fixture", 
@@ -24,6 +22,8 @@
             "UserManager\\Test\\": "./tests"
         }
     }, 
-    "type": "cakephp-plugin", 
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }, 
     "description": "UserManager plugin for CakePHP"
 }
