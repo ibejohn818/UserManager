@@ -6,7 +6,7 @@ use UserManager\Auth\Provider\Google;
 use Cake\TestSuite\TestCase;
 use Cake\Core\Configure;
 
-class GoogleProviderTest extends TestCase
+class GoogleTest extends TestCase
 {
 
 
@@ -35,6 +35,27 @@ class GoogleProviderTest extends TestCase
         parent::tearDown();
     }
 
+    public function testGetLoginUrl()
+    {
+
+
+        $mock = $this->getMockBuilder("\Google_Client")
+                        ->getMock();
+
+        $mock->expects($this->once())
+                ->method("createAuthUrl")
+                ->will($this->returnValue("http://authurl.com"));
+
+        $g = new Google();
+
+        $g->setClient($mock);
+
+
+        $url = $g->getLoginUrl();
+
+        $this->assertEquals($url, "http://authurl.com");
+
+    }
 
     public function testSetClient()
     {

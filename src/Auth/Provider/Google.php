@@ -14,17 +14,6 @@ class Google extends ProviderBase
     private $_client = false;
 	private $_token = false;
 
-	private function isSdkLoaded()
-	{
-
-         if(!class_exists("Google_Client")) {
-            return false;
-        }
-
-        return true;
-    }
-
-
 	public function getLoginUrl()
 	{
 
