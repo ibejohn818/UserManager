@@ -36,6 +36,13 @@ class Google extends ProviderBase
 
     }
 
+    public function setClient(\Google_Client $client)
+    {
+
+        $this->_client = $client;
+
+    }
+
 	public function client()
 	{
 
@@ -50,7 +57,7 @@ class Google extends ProviderBase
             $client->setClientSecret(Configure::read("UserManager.GoogleClientSecret"));
             $client->setRedirectUri($redirect);
             $client->setScopes(Configure::read("UserManager.GoogleClientScopes"));
-            $this->_client = $client;
+            $this->setClient($client);
         }
 
         return $this->_client;

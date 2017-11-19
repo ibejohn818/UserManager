@@ -104,6 +104,8 @@ class UserAccountProfileImagesTableTest extends TestCase
                                 'id'=>2
                             ])->first();
 
+        $this->assertFalse($img->active);
+
         $res = $this->UserAccountProfileImages->setAsDisplay($img);
 
         $this->assertTrue($res->active);
