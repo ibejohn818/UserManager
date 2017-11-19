@@ -274,10 +274,10 @@ class UserAccountsTableTest extends TestCase
      *
      * @return void
      */
-    public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+    //public function testValidationDefault()
+    //{
+        //$this->markTestIncomplete('Not implemented yet.');
+    //}
 
     /**
      * Test confirmPassword method
