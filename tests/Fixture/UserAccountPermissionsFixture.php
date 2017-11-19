@@ -75,5 +75,27 @@ class UserAccountPermissionsFixture extends TestFixture
             'controller' => '*',
             'action' => '*'
         ],
+        [        //deny user 2 Admin::UserManager::UserAccounts::edit
+            'id' => 4,
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 0,
+            'user_account_group_id' => 0,
+            'user_account_id' => 10,
+            'prefix' => 'admin',
+            'plugin' => 'UserManager',
+            'controller' => 'UserAccounts',
+            'action' => 'edit'
+        ],
+        [         //deny usergroup 1 Admin:UserManager::UserAccounts::edit
+            'id' => 5,
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 0,
+            'user_account_group_id' => 1,
+            'user_account_id' => 0,
+            'prefix' => 'admin',
+            'plugin' => 'UserManager',
+            'controller' => 'UserAccounts',
+            'action' => 'edit'
+        ],
     ];
 }

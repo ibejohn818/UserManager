@@ -49,7 +49,7 @@ class UserAccountGroupAssignmentsFixture extends TestFixture
         [
             'id' => 3,
             'user_account_id' => 10,
-            'user_account_group_id' => 1
+            'user_account_group_id' => 2
         ],
     ];
 }
