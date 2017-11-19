@@ -84,15 +84,15 @@ class UserAccountsTable extends Table
 
     }
 
-	public function generateId()
+	public function generateId($min = 100000, $max= 99999999)
 	{
 
-		$id = mt_rand(100000,99999999);
+		$id = mt_rand($min, $max); 
 
 		$chk = $this->find()->select(['id'])->where(['id'=>$id])->count();
 
 		if($chk>0) {
-			return $this->generateId();
+			return $this->generateId($min, $max);
 		}
 
 		return $id;
@@ -181,6 +181,7 @@ class UserAccountsTable extends Table
 
         if($defaultGroups->count()<=0) {
             throw new FatalErrorException("There are no default Account Groups specified to create accounts");
+
         }
         $userAccount->user_account_groups = [];
 
@@ -214,24 +215,31 @@ class UserAccountsTable extends Table
 
 		$uri = "{$userAccount->first_name} {$userAccount->last_name}";
 
-		$emailSplit = explode("@",$userAccount->email);
-
-		$uri = $emailSplit[0];
 
 		if($attempts>0) {
-			$uri .= " {$emailSplit[1]}";
-		}
+            $emailSplit = explode("@",$userAccount->email);
+            $uri = $emailSplit[0];
+        }
+
+        if($attempts>1) {
+            $uri .= "-{$attempts}";
+        }
 
 		//slug the URI
-		//$uri = Inflector::dasherize(Inflector::slug($uri));
-		$uri = Inflector::dasherize($uri);
+        $uri = Inflector::dasherize(Inflector::slug($uri));
+		//$uri = Inflector::dasherize($uri);
 		$uri .= ".html";
 
 		$chk = $this->find()
-						->where(['profile_uri'=>$uri])
-						->count();
+                        ->where([
+                            'profile_uri'=>$uri,
+                        ]);
 
-		if($chk>0) {
+        if(!empty($userAccount->id)) {
+            $chk->where(['id !='=>$userAccount->id]);
+        }
+
+		if($chk->count()>0) {
 			return $this->createProfileUri($userAccount,($attempts+1));
 		}
 
@@ -269,7 +277,7 @@ class UserAccountsTable extends Table
 		$user = $user->toArray();
 
 
-        if($password && $user['user_account_passwds'][0]) {
+        if($password && isset($user['user_account_passwds'][0])) {
             $userPassword = $user['user_account_passwds'][0]['passwd'];
         } else {
             $userPassword = false;
@@ -293,12 +301,10 @@ class UserAccountsTable extends Table
 
         $find = $this->find()
                 ->contain([
-                    'UserAccountPasswd'=>[
+                    'UserAccountPasswds'=>[
                         'finder'=>'LoginPasswd'
                     ],
-                    'UserAccountGroupAssignments'=>[
-                        'UserAccountGroups'
-                    ]
+                    'UserAccountGroups'
                 ])
                 ->where($conditions);
 
@@ -351,6 +357,20 @@ class UserAccountsTable extends Table
 
     }
 
+    public function confirmEmailMatch($value, array $context)
+    {
+
+        if(!isset($context['data']['email'])) {
+                return false;
+        }
+
+        if($value != $context['data']['email']) {
+            return false;
+        }
+
+        return true;
+
+    }
 
     public function validationPassword(Validator $validator) {
 
@@ -379,13 +399,9 @@ class UserAccountsTable extends Table
 				'message'=>'Last Name cannot be empty'
 			])
 			->add('email_confirm','email_confirm',[
-				'rule' => function ($value, $context) use($validator) {
-					if($value!=$context['data']['email']) {
-						return false;
-					}
-					return true;
-			},
-			'message'=>'Email addreses do not match'
+                'rule' => 'confirmEmailMatch',
+                'message'=>'Emails do not match',
+                'provider'=>'table'
 			]);
 
 		$validator = $this->validationPassword($validator);
@@ -438,35 +454,35 @@ class UserAccountsTable extends Table
 
     }
 
-	public function locateForeignAccount($email,UserAccount $userAccount)
+    //public function locateForeignAccount($email,UserAccount $userAccount)
+    //{
+
+        //$account = $this->findByEmail($email)->contain(false)->first();
+
+        //if(!$account) {
+            //$account = $this->createForeignLoginAccount($userAccount);
+        //}
+
+        //return $account;
+
+    //}
+
+    //public function createForeignLoginAccount(UserAccount $userAccount)
+    //{
+
+        //$userAccount = $this->handleAccountRegistration($userAccount);
+
+        //return $userAccount;
+
+    //}
+
+	public function locateLoginProviderAccount($email, UserAccount $userAccount)
 	{
 
         $account = $this->findByEmail($email)->contain(false)->first();
 
-        if(!$account) {
-            $account = $this->createForeignLoginAccount($userAccount);
-        }
-
-        return $account;
-
-    }
-
-	public function createForeignLoginAccount(UserAccount $userAccount)
-	{
-
-		$userAccount = $this->handleAccountRegistration($userAccount);
-
-		return $userAccount;
-
-    }
-
-	public function locateLoginProviderAccount($email,UserAccount $userAccount)
-	{
-
-        $account = $this->findByEmail($email)->contain(false)->first();
-
-        if(!$account) {
-            $account = $this->createForeignLoginAccount($userAccount);
+        if(is_null($account)) {
+            $account = $this->createLoginProviderAccount($userAccount);
 		} else {
 			$userAccount->id = $account->id;
 			$this->save($userAccount);
@@ -505,14 +521,14 @@ class UserAccountsTable extends Table
 			$this->UserAccountPasswds->delete($pwd);
 		}
 
-		$creds = $this->UserAccountForeignCredentials->find()
-					->where([
-						'user_account_id'=>$userAccount->id
-					]);
+		//$creds = $this->UserAccountForeignCredentials->find()
+					//->where([
+						//'user_account_id'=>$userAccount->id
+					//]);
 
-		foreach($creds as $cred) {
-			$this->UserAccountForeignCredentials->delete($cred);
-		}
+		//foreach($creds as $cred) {
+			//$this->UserAccountForeignCredentials->delete($cred);
+		//}
 
 		$perms = $this->UserAccountPermissions->find()
 					->where([
@@ -525,7 +541,7 @@ class UserAccountsTable extends Table
 
 		$imgs = $this->UserAccountProfileImages->find()
 					->where([
-						'user_account_id'=>$userAccount->od
+						'user_account_id'=>$userAccount->id
 					]);
 
 		foreach($imgs as $img) {

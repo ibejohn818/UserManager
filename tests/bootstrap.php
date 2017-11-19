@@ -7,9 +7,11 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 use Cake\Routing\DispatcherFactory;
 
+// copy over default config
+copy(__DIR__."/../config/config.template.php", __DIR__."/../config/user-manager.conf.php");
 //require '/var/www/johnchardy.com/vendor/autoload.php';
-//require __DIR__."/../vendor/autoload.php";
-require __DIR__."/../../../config/bootstrap.php";
+require __DIR__."/../vendor/autoload.php";
+//require __DIR__."/../config/bootstrap.php";
 
 // Path constants to a few helpful things.
 define('ROOT', dirname(__DIR__) . DS);
@@ -26,7 +28,9 @@ define('CONFIG', APP . 'config' . DS);
 define('CACHE', TMP);
 define('LOGS', TMP);
 
+
 require_once CORE_PATH . 'config/bootstrap.php';
+
 
 $loader = new \Cake\Core\ClassLoader;
 $loader->register();

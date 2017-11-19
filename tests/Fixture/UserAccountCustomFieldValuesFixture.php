@@ -41,11 +41,19 @@ class UserAccountCustomFieldValuesFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:42:23',
-            'modified' => '2017-08-05 05:42:23',
+            'created' => '2017-11-16 18:11:25',
+            'modified' => '2017-11-16 18:11:25',
             'user_account_id' => 1,
             'user_account_custom_field_id' => 1,
-            'field_value' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
+            'field_value' => 'male'
+        ],
+        [
+            'id' => 2,
+            'created' => '2017-11-16 18:11:25',
+            'modified' => '2017-11-16 18:11:25',
+            'user_account_id' => 1,
+            'user_account_custom_field_id' => 2,
+            'field_value' => 'hideme'
         ],
     ];
 }

@@ -40,9 +40,16 @@ class UserAccountGroupsFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:42:37',
-            'name' => 'Lorem ipsum dolor sit amet',
+            'created' => '2017-11-16 18:11:34',
+            'name' => 'Default',
             'default_group' => 1,
+            'active' => 1
+        ],
+        [
+            'id' => 2,
+            'created' => '2017-11-16 18:11:34',
+            'name' => 'Root',
+            'default_group' => 0,
             'active' => 1
         ],
     ];

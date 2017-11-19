@@ -42,12 +42,21 @@ class UserAccountProfileImagesFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:43:42',
-            'modified' => '2017-08-05 05:43:42',
+            'created' => '2017-11-16 18:13:49',
+            'modified' => '2017-11-16 18:13:49',
             'active' => 1,
             'file_name' => 'Lorem ipsum dolor sit amet',
             'image_source' => 'Lorem ipsum dolor sit amet',
             'user_account_id' => 1
+        ],
+        [
+            'id' => 2,
+            'created' => '2017-11-16 18:13:49',
+            'modified' => '2017-11-16 18:13:49',
+            'active' => 1,
+            'file_name' => 'Lorem ipsum dolor sit amet',
+            'image_source' => 'Lorem ipsum dolor sit amet',
+            'user_account_id' => 10
         ],
     ];
 }

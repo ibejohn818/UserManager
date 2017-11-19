@@ -35,46 +35,6 @@ class UserAccountCustomFieldValuesTable extends Table
         ]);
     }
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create');
-            
-        $validator
-            ->allowEmpty('field_value');
-
-        return $validator;
-    }
-
-	public function validationAdminEdit(Validator $v)
-	{
-
-		$v->add('field_value','custom',[
-			'rule'=>function($field,$context) {
-				return true;
-				switch($context['data']['slug']) {
-					case 'gender':
-						return 'FUCK';
-					break;
-				}
-				return true;
-			},
-			'message'=>'Tesing'
-		]);
-
-		$v->allowEmpty('field_value');
-
-		return $v;
-
-	}
-
 
     /**
      * Returns a rules checker object that will be used for validating

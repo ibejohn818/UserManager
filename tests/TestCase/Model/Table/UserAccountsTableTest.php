@@ -3,7 +3,9 @@ namespace UserManager\Test\TestCase\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use Cake\Error\FatalErrorException;
 use UserManager\Model\Table\UserAccountsTable;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * UserManager\Model\Table\UserAccountsTable Test Case
@@ -17,7 +19,7 @@ class UserAccountsTableTest extends TestCase
      * @var \UserManager\Model\Table\UserAccountsTable
      */
     public $UserAccountsTable;
-
+    public $fa_id = false;
     /**
      * Fixtures
      *
@@ -60,42 +62,17 @@ class UserAccountsTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test generateId method
      *
      * @return void
      */
     public function testGenerateId()
     {
+        $id = $this->UserAccountsTable->generateId(1, 3);
 
-		$id = $this->UserAccountsTable->generateId();
-
-		$this->assertTrue(is_int($id));
-
-		$this->assertTrue(($id>0));
-
+        $this->assertEquals($id, 3);
     }
 
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
-    {
-
-        $this->markTestIncomplete('Not implemented yet.');
-
-    }
 
     /**
      * Test findUsersCustomFields method
@@ -104,7 +81,11 @@ class UserAccountsTableTest extends TestCase
      */
     public function testFindUsersCustomFields()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $query = $this->UserAccountsTable->find("UsersCustomFields");
+        $sql = $query->sql();
+
+        $this->assertTrue(strpos($sql, "Gender")>0);
+        $this->assertFalse(strpos($sql, "Hidden"));
     }
 
     /**
@@ -114,11 +95,10 @@ class UserAccountsTableTest extends TestCase
      */
     public function testCustomFieldsSchema()
     {
+        $s = $this->UserAccountsTable->customFieldsSchema();
 
-		$schema = $this->UserAccountsTable->customFieldsSchema();
-
-		$this->assertTrue(in_array('Gender',$schema));
-
+        $this->assertTrue(in_array("Gender", $s));
+        $this->assertFalse(in_array("Hidden", $s));
     }
 
     /**
@@ -128,7 +108,55 @@ class UserAccountsTableTest extends TestCase
      */
     public function testHandleAccountRegistration()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $e = $this->UserAccountsTable->newEntity([
+            'first_name'=>'Johnny',
+            'last_name'=>'Five',
+            'email'=>'new@email.com'
+        ]);
+
+        $res = $this->UserAccountsTable->handleAccountRegistration($e, 'password');
+
+        $this->assertTrue($res->id>0);
+
+        $ua = $this->UserAccountsTable->find()
+            ->contain(['UserAccountGroups','UserAccountPasswds'])
+            ->where(['id'=>$res->id])
+            ->first();
+
+
+        $this->assertTrue(!empty($ua->user_account_passwds[0]->id));
+        $this->assertEquals('new@email.com', $ua->email);
+
+        // test with duplicate email
+        $e = $this->UserAccountsTable->newEntity([
+            'first_name'=>'Johnny',
+            'last_name'=>'Five',
+            'email'=>'jhardy@test.com'
+        ]);
+
+        $res = $this->UserAccountsTable->handleAccountRegistration($e, 'password');
+
+        $this->assertFalse($res);
+
+        $dg = $this->UserAccountsTable->UserAccountGroups->find()->where(['id'=>1])->first();
+
+        $dg->set('default_group', 0);
+
+        $dg = $this->UserAccountsTable->UserAccountGroups->save($dg);
+
+        $this->expectException(FatalErrorException::class);
+
+        // test with duplicate email
+        $e = $this->UserAccountsTable->newEntity([
+            'first_name'=>'Johnny',
+            'last_name'=>'Five',
+            'email'=>'exception@test.com'
+        ]);
+
+        $res = $this->UserAccountsTable->handleAccountRegistration($e, 'password');
+
+
     }
 
     /**
@@ -138,7 +166,34 @@ class UserAccountsTableTest extends TestCase
      */
     public function testCreateProfileUri()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $ua = $this->UserAccountsTable->find()
+                    ->where(['id'=>1])
+                    ->first();
+
+        $uri = $this->UserAccountsTable->createProfileUri($ua);
+
+        $this->assertEquals($uri, "john-hardy.html");
+
+        $ua = $this->UserAccountsTable->newEntity([
+            "first_name"=>'John',
+            "last_name"=>'Test',
+            "email"=>'backup@email.com'
+        ]);
+
+        $uri = $this->UserAccountsTable->createProfileUri($ua);
+
+        $this->assertEquals($uri, "backup.html");
+
+        $ua = $this->UserAccountsTable->newEntity([
+            "first_name"=>'John',
+            "last_name"=>'Test',
+            "email"=>'jtest@email.com'
+        ]);
+
+        $uri = $this->UserAccountsTable->createProfileUri($ua);
+
+        $this->assertEquals($uri, "jtest-2.html");
     }
 
     /**
@@ -148,7 +203,45 @@ class UserAccountsTableTest extends TestCase
      */
     public function testAuthenticateUser()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        // get first user
+        $cond = [
+            'UserAccounts.id'=>1
+        ];
+
+        $res = $this->UserAccountsTable->authenticateUser($cond, "password");
+
+        $this->assertEquals($res['email'], "jhardy@test.com");
+        $this->assertEquals($res['user_account_groups'][0]['name'], "Root");
+
+
+        // test bad password
+        $res = $this->UserAccountsTable->authenticateUser($cond, "aaaapassword");
+
+        $this->assertFalse($res);
+
+        $res = $this->UserAccountsTable->authenticateUser($cond);
+
+        $this->assertEquals($res['email'], "jhardy@test.com");
+        $this->assertEquals($res['user_account_groups'][0]['name'], "Root");
+
+        // test bad ID
+        $cond = [
+            'UserAccounts.id'=>99999
+        ];
+
+        $res = $this->UserAccountsTable->authenticateUser($cond);
+
+        $this->assertFalse($res);
+
+        $cond = [
+            'UserAccounts.id'=>2
+        ];
+
+        $res = $this->UserAccountsTable->authenticateUser($cond, "password");
+
+        $this->assertFalse($res);
+
+
     }
 
     /**
@@ -158,7 +251,22 @@ class UserAccountsTableTest extends TestCase
      */
     public function testAuthenticationUser()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $cond = [
+            'UserAccounts.id'=>1
+        ];
+
+        $res = $this->UserAccountsTable->authenticationUser($cond);
+
+        $this->assertEquals($res->email, "jhardy@test.com");
+
+
+        $cond = [
+            'UserAccounts.id'=>99999
+        ];
+
+        $res = $this->UserAccountsTable->authenticationUser($cond);
+
+        $this->assertTrue(is_null($res));
     }
 
     /**
@@ -168,7 +276,7 @@ class UserAccountsTableTest extends TestCase
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        //$this->markTestIncomplete('Not implemented yet.');
     }
 
     /**
@@ -178,7 +286,27 @@ class UserAccountsTableTest extends TestCase
      */
     public function testConfirmPassword()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $c = [
+            'data'=>[
+                'passwd'=>'test'
+            ]
+        ];
+
+        $pass = "test";
+
+        $res = $this->UserAccountsTable->confirmPassword($pass, $c);
+
+        $this->assertTrue($res);
+
+        $pass = "wrong";
+
+        $res = $this->UserAccountsTable->confirmPassword($pass, $c);
+
+        $this->assertFalse($res);
+
+        $res = $this->UserAccountsTable->confirmPassword($pass, []);
+
+        $this->assertFalse($res);
     }
 
     /**
@@ -188,7 +316,11 @@ class UserAccountsTableTest extends TestCase
      */
     public function testValidationPassword()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $v = new \Cake\Validation\Validator();
+
+        $res = $this->UserAccountsTable->validationPassword($v);
+
+        $this->assertEquals($res->field("passwd_confirm")->rules()['passwordConfirm']->get("rule"),"confirmPassword");
     }
 
     /**
@@ -198,7 +330,39 @@ class UserAccountsTableTest extends TestCase
      */
     public function testValidationRegistration()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $v = new \Cake\Validation\Validator();
+
+        $res = $this->UserAccountsTable->validationRegistration($v);
+
+        $this->assertEquals($res->field("first_name")->rules()['first_name']->get("rule"), "notBlank");
+
+        $this->assertEquals($res->field("last_name")->rules()['last_name']->get("rule"), "notBlank");
+    }
+
+    public function testConfirmEmailMatch()
+    {
+
+        $email = 'testme@test.com';
+
+        $c = [
+                'data'=>[
+                    'email'=>'testme@test.com'
+                ]
+            ];
+
+        $res = $this->UserAccountsTable->confirmEmailMatch($email, $c);
+
+        $this->assertTrue($res);
+
+        $email = 'mis@test.com';
+
+        $res = $this->UserAccountsTable->confirmEmailMatch($email, $c);
+
+        $this->assertFalse($res);
+
+        $res = $this->UserAccountsTable->confirmEmailMatch($email, []);
+
+        $this->assertFalse($res);
     }
 
     /**
@@ -208,7 +372,11 @@ class UserAccountsTableTest extends TestCase
      */
     public function testValidationAdminEdit()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $v = new \Cake\Validation\Validator();
+
+        $res = $this->UserAccountsTable->validationAdminEdit($v);
+
+        $this->assertEquals($res->field("profile_uri")->rules()['valid']->get("rule"),"confirmUniqueProfileUri");
     }
 
     /**
@@ -218,7 +386,26 @@ class UserAccountsTableTest extends TestCase
      */
     public function testConfirmUniqueProfileUri()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $uri = "john.html";
+        $c = [
+                'data'=>[
+                    'id'=>1
+                ]
+            ];
+
+        $res = $this->UserAccountsTable->confirmUniqueProfileUri($uri, $c);
+
+        $this->assertTrue($res);
+
+        $c = [
+                'data'=>[
+                    'id'=>9999999
+                ]
+            ];
+
+        $res = $this->UserAccountsTable->confirmUniqueProfileUri($uri, $c);
+
+        $this->assertFalse($res);
     }
 
     /**
@@ -228,27 +415,54 @@ class UserAccountsTableTest extends TestCase
      */
     public function testUpdatePassword()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+
+        $pass = 'testme';
+
+        $ua = $this->UserAccountsTable->newEntity([
+            'first_name'=>'TestPass',
+            'last_name'=>'TestPass',
+            'email'=>'test@pass.com'
+        ]);
+
+        $ua = $this->UserAccountsTable->save($ua);
+
+        $res = $this->UserAccountsTable->updatePassword($ua->id, $pass);
+
+        $chk = $this->UserAccountsTable->UserAccountPasswds->find()
+            ->where(['user_account_id'=>$ua->id])
+            ->first();
+
+        $this->assertTrue((new DefaultPasswordHasher)->check($pass, $chk->passwd));
+
     }
 
+
     /**
-     * Test locateForeignAccount method
+     * Test createLoginProviderAccount method
      *
      * @return void
      */
-    public function testLocateForeignAccount()
+    public function testCreateLoginProviderAccount()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 
-    /**
-     * Test createForeignLoginAccount method
-     *
-     * @return void
-     */
-    public function testCreateForeignLoginAccount()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $dg = $this->UserAccountsTable->UserAccountGroups->find()->where(['id'=>1])->first();
+
+        $dg->set('default_group', 1);
+
+        $this->UserAccountsTable->UserAccountGroups->save($dg);
+
+        $email = "test@newfor.com";
+
+        $ua = $this->UserAccountsTable->newEntity([
+            'first_name'=>'test_for',
+            'last_name'=>'test_for',
+            'email'=>$email
+        ]);
+
+        $res = $this->UserAccountsTable->createLoginProviderAccount($ua);
+
+        $this->assertEquals($res->email, $email);
     }
 
     /**
@@ -258,18 +472,26 @@ class UserAccountsTableTest extends TestCase
      */
     public function testLocateLoginProviderAccount()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $email = 'test@for2.com';
+
+        $ua = $this->UserAccountsTable->newEntity([
+            'first_name'=>'TestPass',
+            'last_name'=>'TestPass',
+            'email'=>$email
+        ]);
+
+        $res = $this->UserAccountsTable->locateLoginProviderAccount($email, $ua);
+
+        $this->assertEquals($res->email, $email);
+
+        $ua = $this->UserAccountsTable->find()->where(['id'=>1])->first();
+
+        $res = $this->UserAccountsTable->locateLoginProviderAccount($ua->email, $ua);
+
+        $this->assertEquals($res->email, $ua->email);
     }
 
-    /**
-     * Test createLoginProviderAccount method
-     *
-     * @return void
-     */
-    public function testCreateLoginProviderAccount()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 
     /**
      * Test delete method
@@ -278,6 +500,14 @@ class UserAccountsTableTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $ua = $this->UserAccountsTable->find()
+            ->where([
+                'id'=>10
+            ])
+            ->first();
+
+        $res = $this->UserAccountsTable->delete($ua);
+
+        $this->assertTrue($res);
     }
 }

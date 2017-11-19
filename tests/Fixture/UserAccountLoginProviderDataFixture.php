@@ -42,8 +42,8 @@ class UserAccountLoginProviderDataFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:42:05',
-            'modified' => '2017-08-05 05:42:05',
+            'created' => '2017-11-16 18:13:13',
+            'modified' => '2017-11-16 18:13:13',
             'provider' => 'Lorem ipsum dolor sit amet',
             'key_name' => 'Lorem ipsum dolor sit amet',
             'key_value' => 'Lorem ipsum dolor sit amet',

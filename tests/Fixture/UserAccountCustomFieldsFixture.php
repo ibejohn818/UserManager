@@ -45,16 +45,27 @@ class UserAccountCustomFieldsFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:42:20',
-            'modified' => '2017-08-05 05:42:20',
+            'created' => '2017-11-16 18:11:19',
+            'modified' => '2017-11-16 18:11:19',
             'name' => 'Gender',
-            'field_type' => 'checkbox',
-			'field_options' => 'male:Male
-								female:Female',
+            'field_type' => 'select',
+            'field_options' => 'male:Make\nfemale:Female',
             'active' => 1,
             'display_weight' => 1,
             'visible' => 1,
-            'slug' => 'gender'
-        ]
+            'slug' => 'GENDER'
+        ],
+        [
+            'id' => 2,
+            'created' => '2017-11-16 18:11:19',
+            'modified' => '2017-11-16 18:11:19',
+            'name' => 'Hidden',
+            'field_type' => 'text',
+            'field_options' => '',
+            'active' => 1,
+            'display_weight' => 2,
+            'visible' => 0,
+            'slug' => 'HIDDEN'
+        ],
     ];
 }

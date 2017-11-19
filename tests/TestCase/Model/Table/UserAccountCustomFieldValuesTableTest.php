@@ -3,20 +3,21 @@ namespace UserManager\Test\TestCase\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-use UserManager\Model\Table\UserCommentsTable;
+use Cake\ORM\RulesChecker;
+use UserManager\Model\Table\UserAccountCustomFieldValuesTable;
 
 /**
- * UserManager\Model\Table\UserCommentsTable Test Case
+ * UserManager\Model\Table\UserAccountCustomFieldValuesTable Test Case
  */
-class UserCommentsTableTest extends TestCase
+class UserAccountCustomFieldValuesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \UserManager\Model\Table\UserCommentsTable
+     * @var \UserManager\Model\Table\UserAccountCustomFieldValuesTable
      */
-    public $UserComments;
+    public $UserAccountCustomFieldValues;
 
     /**
      * Fixtures
@@ -24,16 +25,15 @@ class UserCommentsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.user_manager.user_comments',
-        'plugin.user_manager.user_accounts',
         'plugin.user_manager.user_account_custom_field_values',
-        'plugin.user_manager.user_account_custom_fields',
+        'plugin.user_manager.user_accounts',
         'plugin.user_manager.user_account_login_provider_data',
         'plugin.user_manager.user_account_groups',
         'plugin.user_manager.user_account_group_assignments',
         'plugin.user_manager.user_account_permissions',
         'plugin.user_manager.user_account_passwds',
         'plugin.user_manager.user_account_profile_images',
+        'plugin.user_manager.user_account_custom_fields',
     ];
 
     /**
@@ -44,8 +44,8 @@ class UserCommentsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('UserComments') ? [] : ['className' => UserCommentsTable::class];
-        $this->UserComments = TableRegistry::get('UserComments', $config);
+        $config = TableRegistry::exists('UserAccountCustomFieldValues') ? [] : ['className' => UserAccountCustomFieldValuesTable::class];
+        $this->UserAccountCustomFieldValues = TableRegistry::get('UserAccountCustomFieldValues', $config);
     }
 
     /**
@@ -55,30 +55,11 @@ class UserCommentsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->UserComments);
+        unset($this->UserAccountCustomFieldValues);
 
         parent::tearDown();
     }
 
-    /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test validationDefault method
-     *
-     * @return void
-     */
-    public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 
     /**
      * Test buildRules method
@@ -87,6 +68,12 @@ class UserCommentsTableTest extends TestCase
      */
     public function testBuildRules()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $r = new RulesChecker();
+
+        $r = $this->UserAccountCustomFieldValues->buildRules($r);
+
+        $this->assertTrue(($r instanceof RulesChecker));
+
     }
 }

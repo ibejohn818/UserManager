@@ -5,6 +5,7 @@ use Cake\Cache\Cache;
 use Cake\Core\Configure;
 
 //configuration
+//echo "CONFIG: ".CONFIG;
 
 $dir = realpath(__DIR__);
 

@@ -45,26 +45,39 @@ class UserAccountsFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:38:12',
-            'modified' => '2017-08-05 05:38:12',
-            'first_name' => 'Lorem ipsum dolor sit amet',
-            'last_name' => 'Lorem ipsum dolor sit amet',
-            'middle_name' => 'Lorem ipsum dolor sit amet',
+            'created' => '2017-11-16 02:47:40',
+            'modified' => '2017-11-16 02:47:40',
+            'first_name' => 'John',
+            'last_name' => 'Hardy',
+            'middle_name' => 'Christopher',
             'active' => 1,
-            'email' => 'Lorem ipsum dolor sit amet',
-            'profile_uri' => 'Lorem ipsum dolor sit amet',
-            'username' => 'Lorem ipsum dolor sit amet'
-        ],[
+            'email' => 'jhardy@test.com',
+            'profile_uri' => 'john.html',
+            'username' => 'none'
+        ],
+        [
             'id' => 2,
-            'created' => '2017-08-05 05:38:12',
-            'modified' => '2017-08-05 05:38:12',
-            'first_name' => 'Lorem ipsum dolor sit amet',
-            'last_name' => 'Lorem ipsum dolor sit amet',
-            'middle_name' => 'Lorem ipsum dolor sit amet',
+            'created' => '2017-11-16 02:47:40',
+            'modified' => '2017-11-16 02:47:40',
+            'first_name' => 'John',
+            'last_name' => 'Test',
+            'middle_name' => 'Tester',
             'active' => 1,
-            'email' => 'Lorem ipsum dolor sit amet',
-            'profile_uri' => 'Lorem ipsum dolor sit amet',
-            'username' => 'Lorem ipsum dolor sit amet'
+            'email' => 'jtest@test.com',
+            'profile_uri' => 'john-test.html',
+            'username' => 'none'
+        ],
+        [
+            'id' => 10,
+            'created' => '2017-11-16 02:47:40',
+            'modified' => '2017-11-16 02:47:40',
+            'first_name' => 'John',
+            'last_name' => 'Test10',
+            'middle_name' => 'Tester',
+            'active' => 1,
+            'email' => 'jtest@test.com',
+            'profile_uri' => 'jtest.html',
+            'username' => 'none'
         ],
     ];
 }

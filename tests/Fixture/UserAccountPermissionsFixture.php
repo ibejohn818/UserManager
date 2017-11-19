@@ -44,14 +44,36 @@ class UserAccountPermissionsFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'created' => '2017-08-05 05:43:19',
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 1,
+            'user_account_group_id' => 2,
+            'user_account_id' => null,
+            'prefix' => '*',
+            'plugin' => '*',
+            'controller' => '*',
+            'action' => '*'
+        ],
+        [
+            'id' => 2,
+            'created' => '2017-11-16 18:14:22',
             'allowed' => 1,
             'user_account_group_id' => 1,
-            'user_account_id' => 1,
-            'prefix' => 'Lorem ipsum dolor sit amet',
-            'plugin' => 'Lorem ipsum dolor sit amet',
-            'controller' => 'Lorem ipsum dolor sit amet',
-            'action' => 'Lorem ipsum dolor sit amet'
+            'user_account_id' => null,
+            'prefix' => '*',
+            'plugin' => '*',
+            'controller' => '*',
+            'action' => '*'
+        ],
+        [
+            'id' => 3,
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 1,
+            'user_account_group_id' => 1,
+            'user_account_id' => 10,
+            'prefix' => '*',
+            'plugin' => '*',
+            'controller' => '*',
+            'action' => '*'
         ],
     ];
 }

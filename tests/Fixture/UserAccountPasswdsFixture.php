@@ -2,7 +2,7 @@
 namespace UserManager\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
+use Cake\Auth\DefaultPasswordHasher;
 /**
  * UserAccountPasswdsFixture
  *
@@ -37,11 +37,30 @@ class UserAccountPasswdsFixture extends TestFixture
      * @var array
      */
     public $records = [
-        [
-            'id' => 1,
-            'created' => '2017-08-05 05:41:43',
-            'passwd' => 'Lorem ipsum dolor sit amet',
-            'user_account_id' => 1
-        ],
+        //[
+            //'id' => 1,
+            //'created' => '2017-11-16 18:13:01',
+            //'passwd' => 'Lorem ipsum dolor sit amet',
+            //'user_account_id' => 1
+        //],
     ];
+
+    public function init()
+    {
+
+        $this->records[] = [
+            'id' => 1,
+            'created' => '2017-11-16 18:13:01',
+            'passwd' => (new DefaultPasswordHasher)->hash("password"),
+            'user_account_id' => 1
+        ];
+
+        $this->records[] = [
+            'id' => 2,
+            'created' => '2017-11-16 18:13:01',
+            'passwd' => (new DefaultPasswordHasher)->hash("password"),
+            'user_account_id' => 10
+        ];
+        parent::init();
+    }
 }
