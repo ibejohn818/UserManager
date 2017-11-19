@@ -128,10 +128,6 @@ class Github extends ProviderBase
 			($args[0] instanceof \UserManager\Model\Entity\UserAccount)
 		) {
 
-		} elseif(
-			isset($args[0]) &&
-			($args[0] instanceof \UserManager\Model\Entity\UserAccountForiegnCredential)
-		) {
 
 		} elseif($args[0]) {
 			$self = new Self();

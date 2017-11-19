@@ -45,12 +45,21 @@ class UserAccountProfileImagesFixture extends TestFixture
             'created' => '2017-11-16 18:13:49',
             'modified' => '2017-11-16 18:13:49',
             'active' => 1,
-            'file_name' => 'Lorem ipsum dolor sit amet',
+            'file_name' => 'one.jpg',
             'image_source' => 'Lorem ipsum dolor sit amet',
             'user_account_id' => 1
         ],
         [
             'id' => 2,
+            'created' => '2017-11-16 18:13:49',
+            'modified' => '2017-11-16 18:13:49',
+            'active' => 0,
+            'file_name' => 'two.jpg',
+            'image_source' => 'Lorem ipsum dolor sit amet',
+            'user_account_id' => 1
+        ],
+        [
+            'id' => 3,
             'created' => '2017-11-16 18:13:49',
             'modified' => '2017-11-16 18:13:49',
             'active' => 1,

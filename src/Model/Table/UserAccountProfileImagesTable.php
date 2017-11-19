@@ -51,7 +51,7 @@ class UserAccountProfileImagesTable extends Table
 			->allowEmpty('id', 'create');
 
 		$validator
-			->allowEmpty('source');
+			->allowEmpty('image_source');
 
 		$validator
 			->allowEmpty('file_name');
@@ -83,11 +83,11 @@ class UserAccountProfileImagesTable extends Table
 
 		//set all images default_image = 0
 		$this->updateAll(
-			['display_image'=>false],
+			['active'=>false],
 			['user_account_id'=>$image->user_account_id]
 		);
 
-		$image->display_image = true;
+		$image->active = true;
 
 		return $this->save($image);
 
