@@ -23,7 +23,8 @@
         }
     }, 
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "mikey179/vfsStream": "*"
     }, 
     "description": "UserManager plugin for CakePHP"
 }
