@@ -28,9 +28,7 @@ class Google extends ProviderBase
 
     public function setClient(\Google_Client $client)
     {
-
         $this->_client = $client;
-
     }
 
 	public function client()
@@ -107,6 +105,12 @@ class Google extends ProviderBase
 			'key_value'=>$googleData['user']->picture
 		]);
 
+		$ld[] = $this->UserAccountLoginProviderData->newEntity([
+			'provider'=>'google',
+			'key_name'=>"oauth_token",
+			'key_value'=>$googleData['token']['access_token']
+		]);
+
 		$ua = $this->UserAccounts->newEntity([
 								'email'=>$googleData['user']->email,
 								'first_name'=>$googleData['user']->givenName,
@@ -115,7 +119,7 @@ class Google extends ProviderBase
 
 		$credentials = $this->UserAccountLoginProviderData
 								->locateAccount($conditions,$ua,$ld);
-		//die(pr($credentials));
+        //die(pr($credentials));
 
 		return $credentials;
 
