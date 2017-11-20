@@ -85,18 +85,6 @@ class UserAccountLoginProviderDataTable extends Table
         return $rules;
     }
 
-	public function refreshData($user_account_id, array $loginData)
-	{
-
-	}
-
-	public function findOrRegisterAccountId(array $conditions, UserAccount $userAccount)
-	{
-
-
-		return $account_id;
-
-	}
 
 	public function locateAccount(array $conditions, \UserManager\Model\Entity\UserAccount $userAccount, array $loginData)
 
