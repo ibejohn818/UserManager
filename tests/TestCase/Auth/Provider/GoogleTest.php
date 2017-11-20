@@ -151,7 +151,7 @@ class GoogleProviderTest extends TestCase
 
         $mockClient->expects($this->once())
                     ->method("getAccessToken")
-                    ->will($this->returnValue("token"));
+                    ->will($this->returnValue(["access_token"=>"token"]));
 
         $mockService = $this->getMockBuilder("\Google_Service_Oauth2")
                             ->setConstructorArgs([$mockClient])
