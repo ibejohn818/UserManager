@@ -3,6 +3,7 @@ namespace UserManager\Test\TestCase\Model\Table;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use Cake\Error\FatalErrorException;
 use UserManager\Model\Table\UserAccountLoginProviderDataTable;
 
 /**
@@ -99,6 +100,25 @@ class UserAccountLoginProviderDataTableTest extends TestCase
      */
     public function testLocateAccount()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+		$this->expectException(FatalErrorException::class);
+
+		$this->UserAccountLoginProviderData->locateAccount([], new \UserManager\Model\Entity\UserAccount(), []);
+
+		$this->expectException(FatalErrorException::class);
+
+		$this->UserAccountLoginProviderData->locateAccount([], new \UserManager\Model\Entity\UserAccount(), [[true],[true]]);
+
+		$loginData = [
+			$this->UserAccountLoginProviderData->newEntity(['key_name'=>'test']),
+			$this->UserAccountLoginProviderData->newEntity(['key_name'=>'test1']),
+		];
+
+		$cond = [
+			'UserAccounts.email'=>'error@email.com'
+		];
+
+		$this->expectException(FatalErrorException::class);
+
+		$this->UserAccountLoginProviderData->locateAccount($cond, new \UserManager\Model\Entity\UserAccount(), $loginData);
     }
 }
