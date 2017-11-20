@@ -72,6 +72,9 @@ class UserAccountLoginProviderDataTableTest extends TestCase
         $res = $this->UserAccountLoginProviderData->validationDefault($v);
 
         $this->assertTrue(($res->field("id") instanceof \Cake\Validation\ValidationSet));
+        $this->assertTrue(($res->field("provider") instanceof \Cake\Validation\ValidationSet));
+        $this->assertTrue(($res->field("key_name") instanceof \Cake\Validation\ValidationSet));
+        $this->assertTrue(($res->field("key_value") instanceof \Cake\Validation\ValidationSet));
 
     }
 
@@ -82,7 +85,11 @@ class UserAccountLoginProviderDataTableTest extends TestCase
      */
     public function testBuildRules()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $r = new \Cake\ORM\RulesChecker();
+
+        $r = $this->UserAccountLoginProviderData->buildRules($r);
+
+        $this->assertTrue(($r instanceof \Cake\ORM\RulesChecker));
     }
 
     /**
