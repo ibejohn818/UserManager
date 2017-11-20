@@ -35,6 +35,23 @@ class GoogleProviderTest extends TestCase
         parent::tearDown();
     }
 
+    public function testGetLoginUrl()
+    {
+
+        $mock = $this->getMockBuilder("\Google_Client")
+                        ->getMock();
+
+        $g = new Google();
+
+        $g->setClient($mock);
+
+        $mock->expects($this->once())
+            ->method("createAuthUrl")
+            ->will($this->returnValue("http://authurl.com"));
+
+        $this->assertEquals($g->getLoginUrl(), "http://authurl.com");
+
+    }
 
     public function testSetClient()
     {
@@ -66,20 +83,45 @@ class GoogleProviderTest extends TestCase
 
     }
 
+    private function mockLoginRedirect()
+    {
+
+
+    }
 
     public function testHandleLoginRedirect()
     {
 
-        $this->markTestIncomplete('Not implemented yet.');
-        $mock = $this->getMockBuilder("\Google_Client")
-                        ->getMock();
+        $mockClient = $this->getMockBuilder("\Google_Client")
+                            ->getMock();
+
+        $mockClient->expects($this->once())
+                    ->method("getAccessToken")
+                    ->will($this->returnValue("token"));
+
+        $mockService = $this->getMockBuilder("\Google_Service_Oauth2")
+                            ->setConstructorArgs([$mockClient])
+                            ->getMock();
+
+        $mockService->userinfo = new userinfo();
 
         $g = new Google();
 
-        $g->setClient($mock);
+        $g->setClient($mockClient);
+        $g->setOauthService($mockService);
 
-        $c = $g->client();
+        $res = $g->handleLoginRedirect(['code'=>'code']);
 
+        $this->assertEquals($res['user'], 'get');
+        $this->assertEquals($res['token'], 'token');
 
     }
 }
+class userinfo
+{
+    public function get()
+    {
+        return "get";
+    }
+}
+

@@ -12,6 +12,7 @@ class Google extends ProviderBase
 {
 
     private $_client = false;
+    private $_oauthService = false;
 	private $_token = false;
 
 	public function getLoginUrl()
@@ -52,9 +53,22 @@ class Google extends ProviderBase
         return $this->_client;
     }
 
+    public function setOauthService(\Google_Service_Oauth2 $service)
+    {
+        $this->_oauthService = $service;
+    }
+
+    public function oauthService()
+    {
+        if(!$this->_oauthService) {
+            $this->setOauthService(new \Google_Service_Oauth2($this->client()));
+        }
+
+        return $this->_oauthService;
+    }
+
 	public function handleLoginRedirect(array $params = [])
 	{
-
         $client = $this->client();
 
         $client->authenticate($params['code']);
@@ -63,9 +77,7 @@ class Google extends ProviderBase
 
         $client->setAccessToken($token);
 
-        $oauth = new \Google_Service_Oauth2($client);
-
-        $user = $oauth->userinfo->get();
+        $user = $this->oauthService()->userinfo->get();
 
         return ['user'=>$user,'token'=>$token];
     }
