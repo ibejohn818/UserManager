@@ -1,6 +1,6 @@
 <?php
 
-namespace UserManager\Test\TestCase\Auth;
+namespace UserManager\Test\TestCase\Auth\Provider;
 
 use UserManager\Auth\Provider\Google;
 use Cake\TestSuite\TestCase;
