@@ -178,6 +178,24 @@ class UserAccountPermissionsTableTest extends TestCase
 
         $this->assertFalse($res);
 
+        //test group deny user allowed
+        $user = [
+            'id'=>15,
+            'user_account_groups'=>[
+                [
+                    'id'=>4
+                ]
+            ]
+        ];
+
+
+        $res = $this->UserAccountPermissions->parseUserPermissionRequest(
+            $user,
+            $req
+        );
+
+        $this->assertTrue($res);
+
     }
 
     /**

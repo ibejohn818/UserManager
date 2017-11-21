@@ -75,8 +75,20 @@ class UserAccountsFixture extends TestFixture
             'last_name' => 'Test10',
             'middle_name' => 'Tester',
             'active' => 1,
-            'email' => 'jtest@test.com',
+            'email' => 'jtest@test1.com',
             'profile_uri' => 'jtest.html',
+            'username' => 'none'
+        ],
+        [
+            'id' => 15,
+            'created' => '2017-11-16 02:47:40',
+            'modified' => '2017-11-16 02:47:40',
+            'first_name' => 'GroupDenied',
+            'last_name' => 'UserAllowed',
+            'middle_name' => 'Tester',
+            'active' => 1,
+            'email' => 'denied@test.com',
+            'profile_uri' => 'denied.html',
             'username' => 'none'
         ],
     ];

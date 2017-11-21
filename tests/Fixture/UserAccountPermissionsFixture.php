@@ -119,5 +119,27 @@ class UserAccountPermissionsFixture extends TestFixture
             'controller' => 'UserAccounts',
             'action' => 'edit'
         ],
+        [ //denied group but allow user
+            'id' => 8,
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 1,
+            'user_account_group_id' => 4,
+            'user_account_id' => null,
+            'prefix' => null,
+            'plugin' => 'UserManager',
+            'controller' => 'NoController',
+            'action' => 'index'
+        ],
+        [ //denied group but allow user
+            'id' => 9,
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 1,
+            'user_account_group_id' => null,
+            'user_account_id' => 15,
+            'prefix' => 'Admin',
+            'plugin' => 'UserManager',
+            'controller' => 'UserAccounts',
+            'action' => 'edit'
+        ],
     ];
 }

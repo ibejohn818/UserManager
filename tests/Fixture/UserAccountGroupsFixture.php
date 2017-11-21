@@ -59,5 +59,12 @@ class UserAccountGroupsFixture extends TestFixture
             'default_group' => 0,
             'active' => 1
         ],
+        [
+            'id' => 4,
+            'created' => '2017-11-16 18:11:34',
+            'name' => 'DeniedGroup',
+            'default_group' => 0,
+            'active' => 1
+        ],
     ];
 }

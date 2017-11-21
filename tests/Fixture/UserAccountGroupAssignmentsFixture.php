@@ -51,5 +51,10 @@ class UserAccountGroupAssignmentsFixture extends TestFixture
             'user_account_id' => 10,
             'user_account_group_id' => 3
         ],
+        [
+            'id' => 4,
+            'user_account_id' => 15,
+            'user_account_group_id' => 4
+        ],
     ];
 }
