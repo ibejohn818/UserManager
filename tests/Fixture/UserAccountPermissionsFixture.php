@@ -81,7 +81,7 @@ class UserAccountPermissionsFixture extends TestFixture
             'allowed' => 0,
             'user_account_group_id' => null,
             'user_account_id' => 10,
-            'prefix' => 'admin',
+            'prefix' => 'Admin',
             'plugin' => 'UserManager',
             'controller' => 'UserAccounts',
             'action' => 'edit'
@@ -92,7 +92,29 @@ class UserAccountPermissionsFixture extends TestFixture
             'allowed' => 0,
             'user_account_group_id' => 1,
             'user_account_id' => null,
-            'prefix' => 'admin',
+            'prefix' => 'Admin',
+            'plugin' => 'UserManager',
+            'controller' => 'UserAccounts',
+            'action' => 'edit'
+        ],
+        [ //allow group 1
+            'id' => 6,
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 1,
+            'user_account_group_id' => 1,
+            'user_account_id' => null,
+            'prefix' => 'Admin',
+            'plugin' => 'UserManager',
+            'controller' => 'UserAccounts',
+            'action' => 'edit'
+        ],
+        [ //allow group 3 but user attached to 3 denied
+            'id' => 7,
+            'created' => '2017-11-16 18:14:22',
+            'allowed' => 1,
+            'user_account_group_id' => 3,
+            'user_account_id' => null,
+            'prefix' => 'Admin',
             'plugin' => 'UserManager',
             'controller' => 'UserAccounts',
             'action' => 'edit'

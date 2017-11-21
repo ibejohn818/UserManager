@@ -132,7 +132,7 @@ class UserAccountPermissionsTableTest extends TestCase
         $req->params['controller'] = "UserAccounts";
         $req->params['action'] = "edit";
         $req->params['plugin'] = "UserManager";
-        $req->params['prefix'] = "admin";
+        $req->params['prefix'] = "Admin";
 
         $res = $this->UserAccountPermissions->parseUserPermissionRequest(
             $user,
@@ -145,7 +145,9 @@ class UserAccountPermissionsTableTest extends TestCase
         $user = [
             'id'=>10,
             'user_account_groups'=>[
-                0
+                [
+                    'id'=>3
+                ]
             ]
         ];
 
@@ -191,7 +193,7 @@ class UserAccountPermissionsTableTest extends TestCase
             'id'=>10,
             'user_account_groups'=>[
                 [
-                    'id'=>0
+                    'id'=>3
                 ]
             ]
         ];
@@ -200,7 +202,7 @@ class UserAccountPermissionsTableTest extends TestCase
         $c = "UserAccounts";
         $a = "edit";
         $pl = "UserManager";
-        $pr = "admin";
+        $pr = "Admin";
 
         $res = $this->UserAccountPermissions->parseUserPermission(
             $user,
@@ -241,10 +243,31 @@ class UserAccountPermissionsTableTest extends TestCase
      *
      * @return void
      */
-    //public function testCheckUserPermission()
-    //{
-        //$this->markTestIncomplete('Not implemented yet.');
-    //}
+    public function testCheckUserPermission()
+    {
+
+        //$perms = $this->UserAccountPermissions->find()->all()->toArray();
+        //print_r($perms);
+
+        $uid = 10;
+
+        $c = "UserAccounts";
+        $a = "edit";
+        $pl = "UserManager";
+        $pr = "Admin";
+
+
+        $res = $this->UserAccountPermissions->checkUserPermission(
+                        $uid,
+                        $c,
+                        $a,
+                        $pl,
+                        $pr
+                    );
+
+
+        $this->assertFalse($res);
+    }
 
     /**
      * Test getPermissionRows method

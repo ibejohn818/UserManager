@@ -52,5 +52,12 @@ class UserAccountGroupsFixture extends TestFixture
             'default_group' => 0,
             'active' => 1
         ],
+        [
+            'id' => 3,
+            'created' => '2017-11-16 18:11:34',
+            'name' => 'Member',
+            'default_group' => 0,
+            'active' => 1
+        ],
     ];
 }
