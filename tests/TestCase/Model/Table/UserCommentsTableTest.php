@@ -102,7 +102,13 @@ class UserCommentsTableTest extends TestCase
      */
     public function testSetTreeScope()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->UserComments->setTreeScope("Test","999");
+
+        $scope = $this->UserComments->behaviors()->Tree->config("scope");
+
+
+        $this->assertEquals($scope['model'], "Test");
+        $this->assertEquals($scope['foreign_key'], "999");
     }
 
     /**
@@ -112,7 +118,13 @@ class UserCommentsTableTest extends TestCase
      */
     public function testReturnComments()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $comments = $this->UserComments->returnComments("model", "fk")->all()->toArray();
+
+        $this->assertEquals(count($comments), 1);
+
+        $this->assertEquals($comments[0]->model, "model");
+        $this->assertEquals($comments[0]->foreign_key, "fk");
+
     }
 
     /**

@@ -49,15 +49,15 @@ class UserCommentsFixture extends TestFixture
             'id' => 1,
             'created' => '2017-11-20 16:16:27',
             'modified' => '2017-11-20 16:16:27',
-            'model' => 'Lorem ipsum dolor sit amet',
-            'foreign_key' => 'Lorem ipsum dolor sit amet',
+            'model' => 'model',
+            'foreign_key' => 'fk',
             'user_account_id' => 1,
-            'title' => 'Lorem ipsum dolor sit amet',
-            'comment' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
+            'title' => 'Title',
+            'comment' => 'Comment 1',
             'active' => 1,
             'lft' => 1,
             'rght' => 1,
-            'parent_id' => 1
+            'parent_id' => null
         ],
     ];
 }
