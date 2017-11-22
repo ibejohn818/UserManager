@@ -11,7 +11,7 @@ $providers = [
                 'type'=>'bool'
             ],
             [
-                'help'=>''m
+                'help'=>'',
                 'key'=>'clientId',
                 'default'=>'',
                 'type'=>'string'
@@ -54,7 +54,7 @@ $providers = [
             [
                 'help'=>'',
                 'key'=>'apiScopes',
-                'default'=>'',
+                'default'=>'user:email',
                 'type'=>'string'
             ],
             [

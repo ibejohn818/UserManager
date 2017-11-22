@@ -23,5 +23,16 @@ class TesterShell extends Shell
 
 	}
 
+    public function testDef()
+    {
+
+        $c = new \UserManager\Lib\Conf();
+
+        $conf = \Cake\Core\Plugin::configPath("UserManager");
+
+        $c->loadDefaults(include "{$conf}/config.login.schema.php");
+
+    }
+
 
 }
