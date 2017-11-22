@@ -142,4 +142,13 @@ class UserAccountPermissionsFixture extends TestFixture
             'action' => 'edit'
         ],
     ];
+
+    public function init()
+    {
+
+
+        parent::init();
+
+    }
+
 }
