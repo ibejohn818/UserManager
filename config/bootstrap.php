@@ -13,13 +13,17 @@ require "{$dir}/functions.php";
 
 $http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST']:'';
 
+define("USER_MANAGER_LOGIN_SETTINGS_SCHEMA", "config.login.schema.php");
+define("USER_MANAGER_LOGIN_SETTINGS", "config.login.php");
+
 // $CacheEngine = "File";
 // $CacheEngine = "Memcached";
-$CacheEngine = "Memcached";
+$defConf = Cache::getConfig("default");
 
-$Port = 11211;
+$CacheEngine = $defConf['className'];
+$Port = (isset($defConf['port'])) ? $defConf['port']:'';
+$Servers = (isset($defConf['servers'])) ? $defConf['servers']:'';
 
-$Servers = ['memcache'];
 
 Cache::config('user-manager-1min',[
 	'className' => $CacheEngine,
@@ -31,13 +35,9 @@ Cache::config('user-manager-1min',[
 	'port'=>$Port
 ]);
 
+$conf = new \UserManager\Lib\Conf();
 
-if(!$settings = @include_once CONFIG."user-manager.conf.php") {
-
-	throw new \Cake\Error\FatalErrorException("UserManager Plugin: config\user-manager.conf.php NOT FOUND! Run shell command 'UserManager.config' to generate configuration");
-}
-
-Configure::write("UserManager",$settings);
+$conf->bootstrap();
 
 Configure::write("UserManager.bootstrap",true);
 

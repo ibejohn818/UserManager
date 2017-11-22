@@ -5,9 +5,9 @@ $providers = [
         'help'=>'',
         'settings'=>[
             [
-                'help'=>'',
+                'help'=>'Enable (1) or Disable (0) the Google Login Provider',
                 'key'=>'enabled',
-                'default'=>false,
+                'default'=>0,
                 'type'=>'bool'
             ],
             [
@@ -36,7 +36,7 @@ $providers = [
             [
                 'help'=>'',
                 'key'=>'enabled',
-                'default'=>false,
+                'default'=>0,
                 'type'=>'bool'
             ],
             [

@@ -157,7 +157,7 @@ class LoginController extends AppController {
 
 		$type = ucfirst($type);
 
-		$chk = Configure::read("UserManager.{$type}LoginEnable");
+		$chk = Configure::read("UserManager.LoginProviders.{$type}.enabled");
 
 		if(!$chk) {
 			throw new NotFoundException("Provider: {$type}. Not Enabled");

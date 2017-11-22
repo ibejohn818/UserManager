@@ -25,9 +25,9 @@ class LoginProviderAuthenticate extends BaseAuthenticate
 
 		foreach($providers as $p) {
 
-			$enabled = 	Configure::read("UserManager.{$p}LoginEnable");
+			$enabled = 	Configure::read("UserManager.LoginProviders.{$p}.enabled");
 
-			$linkMatch = (Configure::read("UserManager.{$p}AuthRedirectUrl") ==
+			$linkMatch = ("/user-manager/auth-callback/".strtolower($p) ==
 						$request->here);
 
 			if($enabled && $linkMatch) {
@@ -66,24 +66,11 @@ class LoginProviderAuthenticate extends BaseAuthenticate
 	private function providers()
 	{
 
-		$path = App::path("Auth/Provider","UserManager");
+        $p = [];
 
-		$p = [];
-
-		foreach(scandir($path[0]) as $v)
-		{
-			if(in_array($v,['.','..']) 
-				|| !preg_match('/\.php$/',$v) 
-				|| preg_match('/ProviderBase/',$v)
-			) {
-				continue;
-			}
-
-			$p[] = preg_replace('/(.*)(\.php$)/','$1',$v);
-
-		}
-
-		return $p;
-
+        foreach(Configure::read("UserManager.LoginProviders") as $k=>$v) {
+            $p[] = $k;
+        }
+        return $p;
 	}
 }

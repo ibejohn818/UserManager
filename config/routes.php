@@ -41,33 +41,17 @@ Router::prefix("admin",function($routes) {
 });
 
 
-$path = App::path("Auth/Provider","UserManager");
+foreach(Configure::read("UserManager.LoginProviders") as $k=>$v) {
 
-$providers = [];
+    if(!$v['enabled']) {
+        continue;
+    }
 
-foreach(scandir($path[0]) as $v)
-{
-	if(in_array($v,['.','..']) 
-		|| !preg_match('/\.php$/',$v) 
-		|| preg_match('/ProviderBase/',$v)
-	) {
-		continue;
-	}
-
-	$providers[] = preg_replace('/(.*)(\.php$)/','$1',$v);
-
-}
-
-foreach($providers as $v) {
-
-	if(Configure::read("UserManager.{$v}LoginEnable")) {
-
-		Router::connect(Configure::read("UserManager.{$v}AuthRedirectUrl"),[
-			"plugin"=>"UserManager",
-			"controller"=>"Login",
-			"action"=>"handleForeignLogin"
-		]);
-	}
+    Router::connect("/user-manager/auth-callback/".strtolower($k),[
+        "plugin"=>"UserManager",
+        "controller"=>"Login",
+        "action"=>"handleForeignLogin"
+    ]);
 
 }
 

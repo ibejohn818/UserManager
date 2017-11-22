@@ -90,7 +90,7 @@ class GoogleProviderTest extends TestCase
 
         $c = $g->client();
 
-        $this->assertEquals($c->getRedirectUri(), "https://test.com");
+        $this->assertEquals($c->getRedirectUri(), "https://test.com/user-manager/auth-callback/google");
 
     }
 

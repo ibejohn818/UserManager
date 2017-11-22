@@ -39,12 +39,12 @@ class Google extends ProviderBase
 			if(isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') {
 				$proto = "https";
 			}
-			$redirect = "{$proto}://{$_SERVER['HTTP_HOST']}".Configure::read("UserManager.GoogleAuthRedirectUrl");
+			$redirect = "{$proto}://{$_SERVER['HTTP_HOST']}/user-manager/auth-callback/google";
             $client = new \Google_Client();
-            $client->setClientId(Configure::read("UserManager.GoogleClientId"));
-            $client->setClientSecret(Configure::read("UserManager.GoogleClientSecret"));
+            $client->setClientId(Configure::read("UserManager.LoginProviders.Google.clientId"));
+            $client->setClientSecret(Configure::read("UserManager.LoginProviders.Google.clientSecret"));
             $client->setRedirectUri($redirect);
-            $client->setScopes(Configure::read("UserManager.GoogleClientScopes"));
+            $client->setScopes(Configure::read("UserManager.LoginProviders.Google.clientScopes"));
             $this->setClient($client);
         }
 
@@ -112,10 +112,10 @@ class Google extends ProviderBase
 		]);
 
 		$ua = $this->UserAccounts->newEntity([
-								'email'=>$googleData['user']->email,
-								'first_name'=>$googleData['user']->givenName,
-								'last_name'=>$googleData['user']->familyName
-							]);
+            'email'=>$googleData['user']->email,
+            'first_name'=>$googleData['user']->givenName,
+            'last_name'=>$googleData['user']->familyName
+        ]);
 
 		$credentials = $this->UserAccountLoginProviderData
 								->locateAccount($conditions,$ua,$ld);

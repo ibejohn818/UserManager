@@ -12,7 +12,21 @@ class ConfigShell extends Shell {
 
 	private $_template = false;
 
-	public function main() {
+    public $tasks = [
+        'UserManager.ConfigWizard'
+    ];
+
+
+    public function initialize()
+    {
+        $conf = new \UserManager\Lib\Conf();
+
+        $this->settings = $conf->files;
+
+        parent::initialize();
+    }
+
+	public function __main() {
 
 		$this->loadTemplate();
 
@@ -24,185 +38,47 @@ class ConfigShell extends Shell {
 
 	}
 
-	public function outputSettingsTemplate() {
+    public function main()
+    {
+        $this->hr();
+        $this->out("Select settings group");
+        $this->hr();
 
-		$this->out("Choose a settings groups to modify how the User Manager plugin functions");
-		$this->hr();
+        $conf = new \UserManager\Lib\Conf();
 
-		$template = $this->loadTemplate();
+        foreach($conf->files as $k=>$v)
+        {
 
-		$index = 1;
-		foreach($template as $groupName => $block) {
+            $this->out("{$k}) {$v['name']}");
 
-			$this->out("<info>{$index}) {$groupName}</info> ");
-			$this->out("<info>Description:</info> {$block['help']}");
-			$this->hr();
-			$choices[] = $index;
-			$index++;
-		}
+        }
 
-		$choices[] = "Q";
+        $this->out("Q) Quit");
 
-		$choice = $this->in("Select a setting group",implode("/",$choices));
+        $ans = $this->in("Select a group:", array_merge(array_keys($conf->files),['Q']));
 
-		$choice = strtolower($choice);
+        if(strtolower($ans) == 'q') {
+            $this->out("Exiting...");
+            return;
+        }
 
-		if($choice == "q") {
-			exit(0);
-		}
+        $schema = include \Cake\Core\Plugin::configPath("UserManager")."/{$conf->files[$ans]['schema']}";
+        $settings = include CONFIG."{$conf->files[$ans]['settings']}";
 
-		$index = 1;
-		foreach($template as $k=>$v) {
-			if($choice == $index) {
-				$this->outputSettingsBlock($k);
-				break;
-			}
+        $settings = $this->ConfigWizard->wizard($schema, $settings, "testing");
 
-			$index++;
-		}
+        $this->out("Saving settings....");
+        $this->out("", 2);
+        $conf->writeSettings($settings, CONFIG.$conf->files[$ans]['settings']);
 
-		return $this->outputSettingsTemplate();
-	}
+        return $this->main();
 
-	protected function getConfig($setting) {
+    }
 
-		if(!$this->_config) {
-			$this->loadConfig();
-		}
-		return $this->_config[$setting];
-
-	}
-
-	public function setConfig($setting,$value) {
-		$this->_config[$setting] = $value;
-	}
-
-	public function outputSettingsBlock($name) {
-
-		$template = $this->loadTemplate();
-
-		$block = $template[$name];
-
-		$this->out($block['help']);
-		$this->hr();
-
-		foreach($block['settings'] as $k=>$v) {
-
-			$currentValue = $this->getConfig($k); 
-
-			$this->out("<info>Setting:</info> {$k}");
-			$this->out("<info>Description:</info> {$v['help']}");
-			$this->out("<info>Default:</info> {$v['default']}");
-			$this->out("<info>Current:</info> {$currentValue}");
-			$this->hr();
-			$this->out("1 ) Keep Current Value");
-			$this->out("2 ) Use Default");
-			$this->out("3 ) New Value");
-			$this->hr();
-			$opt = $this->in("Select an Option",[1,2,3]);
-
-			switch($opt) {
-				case 1:
-					$value = $currentValue;
-					break;
-				case 2:
-					$value = $v['default'];
-					break;
-				case 3:
-					$value = $this->in("Declare new value");
-				break;
-			}
-
-			switch(strtolower($k)) {
-
-				case 'profileimagewwwpath':
-					$value = rtrim(trim($value,"/"),"/");
-					break;
-
-			}
-
-			$this->setConfig($k,$value);
-
-		}
+    public function patchSettings()
+    {
 
 
-		$this->saveConfig();
-	}
-
-	private function saveConfig() {
-
-		if(!$this->_config) {
-			return;
-		}
-
-		$path = CONFIG.'user-manager.conf.php';
-
-		file_put_contents($path,"<?php return ".var_export($this->_config,true).";");
-
-		$this->_config = false;
-
-		return $this->loadConfig();
-
-	}
-
-	protected function loadTemplate()
-	{
-
-		if(!$this->_template) {
-			$this->_template = require (realpath(__DIR__)."/../../config/config.template.php");
-		}
-
-		return $this->_template;
-
-	}
-
-	private function loadConfig()
-	{
-		$path = CONFIG.'user-manager.conf.php';
-
-		if(!file_exists($path)) {
-			$this->writeDefaults();
-			return $this->loadConfig();
-		}
-
-		if(!$this->_config) {
-			$this->_config = require $path;
-		}
-
-		$this->loadTemplate();
-
-		$defs = [];
-
-		foreach($this->_template as $set) {
-			foreach($set['settings'] as $k=>$v) {
-				$defs[$k] = $v['default'];
-			}
-		}
-
-		foreach($defs as $key=>$def) {
-			if(!array_key_exists($key,$this->_config)) {
-				$this->_config[$key] = $def;
-			}
-		}
-
-		return $this->_config;
-
-	}
-
-	private function writeDefaults() {
-
-		$template = $this->loadTemplate();
-
-		$settings = [];
-
-		foreach($template as $block) {
-			foreach($block['settings'] as $key=>$setting) {
-				$settings[$key] = $setting['default'];
-			}
-		}
-
-		file_put_contents(CONFIG."user-manager.conf.php","<?php return ".var_export($settings,true).";");
-
-	}
+    }
 
 }
