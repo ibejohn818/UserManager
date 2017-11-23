@@ -454,27 +454,6 @@ class UserAccountsTable extends Table
 
     }
 
-    //public function locateForeignAccount($email,UserAccount $userAccount)
-    //{
-
-        //$account = $this->findByEmail($email)->contain(false)->first();
-
-        //if(!$account) {
-            //$account = $this->createForeignLoginAccount($userAccount);
-        //}
-
-        //return $account;
-
-    //}
-
-    //public function createForeignLoginAccount(UserAccount $userAccount)
-    //{
-
-        //$userAccount = $this->handleAccountRegistration($userAccount);
-
-        //return $userAccount;
-
-    //}
 
 	public function locateLoginProviderAccount($email, UserAccount $userAccount)
 	{
@@ -521,14 +500,12 @@ class UserAccountsTable extends Table
 			$this->UserAccountPasswds->delete($pwd);
 		}
 
-		//$creds = $this->UserAccountForeignCredentials->find()
-					//->where([
-						//'user_account_id'=>$userAccount->id
-					//]);
+        $provs = $this->UserAccountLoginProviderData->find()
+                        ->where(['user_account_id'=>$userAccount->id]);
 
-		//foreach($creds as $cred) {
-			//$this->UserAccountForeignCredentials->delete($cred);
-		//}
+        foreach($provs as $prov) {
+            $this->UserAccountLoginProviderData->delete($prov);
+        }
 
 		$perms = $this->UserAccountPermissions->find()
 					->where([
