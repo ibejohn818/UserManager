@@ -26,18 +26,6 @@ class ConfigShell extends Shell {
         parent::initialize();
     }
 
-	public function __main() {
-
-		$this->loadTemplate();
-
-		$this->loadConfig();
-
-		$this->outputSettingsTemplate();
-
-
-
-	}
-
     public function main()
     {
         $this->hr();
@@ -69,6 +57,11 @@ class ConfigShell extends Shell {
 
         $this->out("Saving settings....");
         $this->out("", 2);
+
+        // patch defaults that are not present
+        $settings = $conf->settingsFillDefaults($settings, $conf->loadDefaults($schema));
+
+        // save file
         $conf->writeSettings($settings, CONFIG.$conf->files[$ans]['settings']);
 
         return $this->main();

@@ -27,6 +27,7 @@ User Permissions
         <thead>
             <tr>
                 <th><?= $this->Paginator->sort('id') ?></th>
+                <th><?= $this->Paginator->sort('weight') ?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
                 <th><?= $this->Paginator->sort('allowed') ?></th>
                 <th><?= $this->Paginator->sort('user_account_group_id') ?></th>
@@ -42,6 +43,7 @@ User Permissions
             <?php foreach ($userAccountPermissions as $userAccountPermission): ?>
             <tr>
                 <td><?= $this->Number->format($userAccountPermission->id) ?></td>
+                <td><?= $this->Number->format($userAccountPermission->weight) ?></td>
                 <td><?= h($userAccountPermission->created) ?></td>
 				<td>
 					<?php

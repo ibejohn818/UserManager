@@ -75,22 +75,25 @@ $this->Breadcrumbs->add("Edit Account ID: {$userAccount->id}");
 							}
 						?>
 						<?php foreach($providers as $k=>$v): ?>
-							<div class="well">
-								<div>
-									<strong>Provider Name:</strong>
-									<?= ucfirst($k) ?>
-								</div>
-								<?php foreach($v as $kk=>$vv): ?>
-								<div>
-								<strong><?= $vv->key_name ?>: </strong>
-								<?= $vv->key_value ?>
-								</div>
-								<div>
-									<strong>Created:</strong>
-									<?= $vv->created ?>
-								</div>
-								<?php endforeach; ?>
-							</div>
+                            <table with='100%' cellspacing='0' class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colspan='2' align='center'>
+                                            <h3><?= ucfirst($k) ?></h3>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <?php foreach($v as $kk=>$vv): ?>
+                                <tr>
+                                    <td align='right' width='1%'>
+                                        <strong><?= $vv->key_name ?>: </strong>
+                                    </td>
+                                    <td>
+                                        <?= $vv->key_value ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </table>
 						<?php endforeach; ?>
 					</div>
 				</div>

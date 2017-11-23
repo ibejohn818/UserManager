@@ -1,3 +1,12 @@
+<?php
+
+$weights = [];
+
+for($i=0; $i<=100; $i++) {
+    $weights[$i] = $i;
+}
+
+?>
 <?php $this->start("page_header"); ?>
 Edit Permission
 <?php $this->end("page_header"); ?>
@@ -23,6 +32,7 @@ Edit Permission
         echo $this->Form->input('allowed');
         echo $this->Form->input('user_account_group_id', ['options' => $userAccountGroups, 'empty' => true]);
         echo $this->Form->input('user_account_id', ['options' => $userAccounts, 'empty' => true]);
+        echo $this->Form->input('weight', ['options'=>$weights]);
         echo $this->Form->input('prefix');
         echo $this->Form->input('plugin');
         echo $this->Form->input('controller');

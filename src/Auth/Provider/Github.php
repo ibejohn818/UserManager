@@ -22,7 +22,7 @@ class Github extends ProviderBase
 
 	public function __construct()
 	{
-		$cacheConfig = Configure::read("UserManager.GithubApiCacheConfig");
+		$cacheConfig = Configure::read("UserManager.LoginProviders.Github.cacheConfig");
 
 		if(strlen($cacheConfig)>0) {
 			$this->cacheConfig = $cacheConfig;
@@ -35,10 +35,16 @@ class Github extends ProviderBase
 	public function getLoginUrl()
 	{
 
+        $proto = "http://";
+
+        if(isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') {
+            $proto = "https://";
+        }
+
 		$query = [
-			'client_id'=>Configure::read("UserManager.GithubClientId"),
-			'redirect_url'=>$_SERVER['HTTP_HOST'].Configure::read("UserManager.GithubRedirectUrl"),
-			'scope'=>Configure::read("UserManager.GithubApiScopes")
+			'client_id'=>Configure::read("UserManager.LoginProviders.Github.clientId"),
+			'redirect_url'=>"{$proto}{$_SERVER['HTTP_HOST']}/user-manager/auth-callback/github",
+			'scope'=>Configure::read("UserManager.LoginProviders.Github.apiScopes")
 		];
 
 		$query = http_build_query($query);
@@ -101,11 +107,17 @@ class Github extends ProviderBase
 				'key_value'=>$GithubUser['content']['login']
 			]);
 
+			$ld[] = $this->UserAccountLoginProviderData->newEntity([
+				'provider'=>'github',
+				'key_name'=>"oauth_token",
+				'key_value'=>$this->getAccessToken()
+			]);
+
 			$ua = $this->UserAccounts->newEntity([
-									'email'=>$GithubUser['content']['email'],
-									'first_name'=>$first_name,
-									'last_name'=>$last_name
-								]);
+                    'email'=>$GithubUser['content']['email'],
+                    'first_name'=>$first_name,
+                    'last_name'=>$last_name
+                ]);
 
 			$credentials = $this->UserAccountLoginProviderData
 									->locateAccount($conditions,$ua,$ld);
@@ -160,9 +172,9 @@ class Github extends ProviderBase
 		$code =  $request->query("code");
 
 		$query = [
-			'client_id'=>Configure::read("UserManager.GithubClientId"),
-			'client_secret'=>Configure::read("UserManager.GithubClientSecret"),
-			'scope'=>Configure::read("UserManager.GithubApiScopes"),
+			'client_id'=>Configure::read("UserManager.LoginProviders.Github.clientId"),
+			'client_secret'=>Configure::read("UserManager.LoginProviders.Github.clientSecret"),
+			'scope'=>Configure::read("UserManager.LoginProviders.Github.apiScopes"),
 			'code'=>$code,
 			'accept'=>'json'
 		];

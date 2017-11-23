@@ -75,7 +75,12 @@ class UserAccountCustomFieldsTable extends Table
 	{
 
 		$v->requirePresence("slug")
-			->notEmpty("slug","Slug cannot be left emtpy");
+            ->notEmpty("slug","Slug cannot be left emtpy")
+            ->add('slug','slug_unique',[
+                'rule' => 'uniqueSlug',
+                'message'=>'Slug much be unique',
+                'provider'=>'table'
+			]);
 
 		$v->requirePresence("name")
 			->notEmpty("name","Name cannot be left emtpy");
@@ -83,6 +88,27 @@ class UserAccountCustomFieldsTable extends Table
 		return $v;
 
 	}
+
+    public function uniqueSlug($value, array $context=[])
+    {
+
+        $conds = [
+            'slug'=>$value
+        ];
+
+        if(isset($context['data']['id'])) {
+            $conds['id !='] = $context['data']['id'];
+        }
+
+        $chk = $this->find()->where($conds)->count();
+
+        if($chk<=0) {
+            return true;
+        }
+
+        return false;
+
+    }
 
 	/**
      * Returns a rules checker object that will be used for validating

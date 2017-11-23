@@ -15,13 +15,7 @@ class UserAccountPermission extends Entity
      * @var array
      */
     protected $_accessible = [
-        'allowed' => true,
-        'user_account_group_id' => true,
-        'user_account_id' => true,
-        'plugin' => true,
-        'controller' => true,
-        'action' => true,
-        'user_account_group' => true,
-        'user_account' => true,
+        'id'=>false,
+        '*'=>true,
     ];
 }

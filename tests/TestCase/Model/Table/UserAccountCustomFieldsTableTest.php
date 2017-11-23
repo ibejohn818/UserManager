@@ -117,6 +117,33 @@ class UserAccountCustomFieldsTableTest extends TestCase
 
     }
 
+    public function testUniqueSlug()
+    {
+
+        $context = [
+            'data'=>[
+                'id'=>'5'
+            ]
+        ];
+
+        $value = "GENDER";
+
+        $chk = $this->UserAccountCustomFields->uniqueSlug($value, $context);
+
+        $this->assertFalse($chk);
+
+        $context = [
+            'data'=>['id'=>1]
+        ];
+
+        $chk = $this->UserAccountCustomFields->uniqueSlug($value, $context);
+
+        $this->assertTrue($chk);
+
+    }
+
+
+
     /**
      * Test delete method
      *

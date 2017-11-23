@@ -20,6 +20,7 @@ class UserAccountPermissionsFixture extends TestFixture
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'allowed' => ['type' => 'boolean', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        'weight' => ['type' => 'integer', 'length' => 3, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'user_account_group_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'user_account_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'prefix' => ['type' => 'string', 'length' => 64, 'null' => true, 'default' => null, 'collate' => 'utf8_unicode_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
@@ -51,7 +52,8 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => null,
             'plugin' => 'Test',
             'controller' => 'Test',
-            'action' => 'index'
+            'action' => 'index',
+            'weight'=>0
         ],
         [
             'id' => 2,
@@ -62,7 +64,8 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => '*',
             'plugin' => '*',
             'controller' => '*',
-            'action' => '*'
+            'action' => '*',
+            'weight'=>0
         ],
         [
             'id' => 3,
@@ -73,7 +76,9 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => '*',
             'plugin' => '*',
             'controller' => '*',
-            'action' => '*'
+            'action' => '*',
+            'weight'=>0
+
         ],
         [        //deny user 2 Admin::UserManager::UserAccounts::edit
             'id' => 4,
@@ -84,7 +89,9 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => 'Admin',
             'plugin' => 'UserManager',
             'controller' => 'UserAccounts',
-            'action' => 'edit'
+            'action' => 'edit',
+            'weight'=>0
+
         ],
         [         //deny usergroup 1 Admin:UserManager::UserAccounts::edit
             'id' => 5,
@@ -95,7 +102,8 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => 'Admin',
             'plugin' => 'UserManager',
             'controller' => 'UserAccounts',
-            'action' => 'edit'
+            'action' => 'edit',
+            'weight'=>0
         ],
         [ //allow group 1
             'id' => 6,
@@ -106,7 +114,8 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => 'Admin',
             'plugin' => 'UserManager',
             'controller' => 'UserAccounts',
-            'action' => 'edit'
+            'action' => 'edit',
+            'weight'=>0
         ],
         [ //allow group 3 but user attached to 3 denied
             'id' => 7,
@@ -128,7 +137,8 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => null,
             'plugin' => 'UserManager',
             'controller' => 'NoController',
-            'action' => 'index'
+            'action' => 'index',
+            'weight'=>0
         ],
         [ //denied group but allow user
             'id' => 9,
@@ -139,7 +149,8 @@ class UserAccountPermissionsFixture extends TestFixture
             'prefix' => 'Admin',
             'plugin' => 'UserManager',
             'controller' => 'UserAccounts',
-            'action' => 'edit'
+            'action' => 'edit',
+            'weight'=>0
         ],
     ];
 

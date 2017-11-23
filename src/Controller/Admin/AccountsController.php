@@ -123,9 +123,7 @@ class AccountsController extends AppController
             $userAccount->user_account_groups = [];
             $userAccount = $this->UserAccounts->patchEntity($userAccount, $this->request->data,[
                 'associated'=>[
-					'UserAccountCustomFieldValues'=>[
-						'validate'=>'AdminEdit'
-					],
+					'UserAccountCustomFieldValues',
                     'UserAccountGroups'
 				],
 				'validate'=>'AdminEdit'

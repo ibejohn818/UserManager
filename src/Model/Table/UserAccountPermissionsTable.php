@@ -210,7 +210,8 @@ class UserAccountPermissionsTable extends Table
       $query = $this->find()
                    ->where($conditions)
                    ->order([
-                       'allowed'=>'DESC'
+                       'allowed'=>'DESC',
+                       'weight'=>'DESC',
                    ]);
 
       if($cache) {
@@ -218,8 +219,6 @@ class UserAccountPermissionsTable extends Table
             return "user-account-permisions-row-".md5(serialize($q->clause('where')));
         },$cacheKey);
       }
-
-
 
       return $query->toArray();
 

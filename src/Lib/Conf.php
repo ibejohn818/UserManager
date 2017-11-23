@@ -12,6 +12,12 @@ class Conf
 
     public $files = [
         1=>[
+            'name'=>'General Settings',
+            'schema'=>'config.gen.schema.php',
+            'settings'=>'config.gen.php',
+            'key'=>'General'
+        ],
+        2=>[
             'name'=>'Login Providers',
             'schema'=>self::PROVIDERS_SCHEMA,
             'settings'=>self::PROVIDERS,
