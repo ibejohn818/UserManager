@@ -19,6 +19,7 @@ node {
 
         stage("Run Tests") {
             echo sh(script: 'env|sort', returnStdout: true)
+            sh "docker pull ibejohn818/php:php71w-build"
             currentBuild.result = "SUCCESS"
         }
 
