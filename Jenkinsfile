@@ -19,11 +19,11 @@ node {
 
         stage("Composer Build") {
             sh "docker pull ibejohn818/php:php71w-build"
-            sh "docker run --rm -it -v ${pwd}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c '/usr/bin/composer composer update --no-interaction && /usr/bin/composer composer install --no-interaction'" 
+            sh "docker run --rm -v ${pwd}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c '/usr/bin/composer composer update --no-interaction && /usr/bin/composer composer install --no-interaction'" 
         }
 
         stage("Run Tests") {
-            sh "docker run --rm -it -v ${pwd}:/code -w /code ibejohn818/php:php71w-build /bin/bach -c 'vendor/bin/phpunit tests'"
+            sh "docker run --rm -v ${pwd}:/code -w /code ibejohn818/php:php71w-build /bin/bach -c 'vendor/bin/phpunit tests'"
             currentBuild.result = "SUCCESS"
         }
 
