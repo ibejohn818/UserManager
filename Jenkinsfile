@@ -18,7 +18,7 @@ node {
         }
 
         stage("Build App") {
-            sh "docker build -f Dockerfile-jenkins -t ${env.BUILD_ID}/UserManager ."
+            sh "docker build -f Dockerfile-jenkins -t ${env.BUILD_ID}/user-manager ."
         }
 
         stage("Run Tests") {
