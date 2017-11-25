@@ -22,7 +22,7 @@ node {
         }
 
         stage("Run Tests") {
-            sh "docker run ${env.BUILD_ID}/UserManager"
+            sh "docker run ${env.BUILD_ID}/user-manager"
             currentBuild.result = "SUCCESS"
         }
 
