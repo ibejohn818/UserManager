@@ -17,13 +17,12 @@ node {
             checkout scm
         }
 
-        stage("Composer Build") {
-            sh "docker pull ibejohn818/php:php71w-build"
-            sh "docker run --rm -v ${pwd}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c '/usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction'" 
+        stage("Build App") {
+            sh "docker build -f Dockerfile-jenkins -t ${env.BUILD_ID}/UserManager ."
         }
 
         stage("Run Tests") {
-            sh "docker run --rm -v ${pwd}:/code -w /code ibejohn818/php:php71w-build /bin/bach -c 'vendor/bin/phpunit tests'"
+            sh "docker run ${env.BUILD_ID}/UserManager"
             currentBuild.result = "SUCCESS"
         }
 
