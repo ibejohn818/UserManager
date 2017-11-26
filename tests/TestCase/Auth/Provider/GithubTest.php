@@ -6,7 +6,7 @@ use UserManager\Auth\Provider\Github;
 use Cake\TestSuite\TestCase;
 use Cake\Core\Configure;
 
-class GithubProvderTest extends TestCase
+class GithubTest extends TestCase
 {
 
 
@@ -75,5 +75,62 @@ class GithubProvderTest extends TestCase
 
         $gh->httpClient("test");
 
+    }
+
+    public function testGetToken()
+    {
+
+        $req = new \Cake\Http\ServerRequest();
+
+        $req->query['code'] = "test";
+
+        $gh = new Github();
+
+        $mockClient = $this->getMockBuilder('\Cake\Network\Http\Client')
+						->disableOriginalConstructor()
+						->setMethods(['post'])
+                        ->getMock();
+
+        $mockClient->method('post')->willReturn(new getTokenBodyFalse());
+
+		$gh->httpClient($mockClient);
+
+		$res = $gh->getToken($req);
+
+		$this->assertFalse($res);
+
+        $gh = new Github();
+
+        $mockClient = $this->getMockBuilder('\Cake\Network\Http\Client')
+						->disableOriginalConstructor()
+						->setMethods(['post'])
+                        ->getMock();
+
+
+        $mockClient->method('post')->willReturn(new getTokenBodyTrue());
+
+		$gh->httpClient($mockClient);
+
+		$res = $gh->getToken($req);
+
+        $this->assertEquals($res, 'test-token');
+    }
+
+}
+
+class getTokenBodyFalse
+{
+    public function body()
+    {
+        return 'scope=test-scope&token_type=test-type';
+    }
+
+}
+
+class getTokenBodyTrue
+{
+    public function body()
+    {
+        return 'access_token=test-token&scope=test-scope&token_type=test-type';
     }
 }
