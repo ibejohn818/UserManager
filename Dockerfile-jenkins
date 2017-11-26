@@ -7,4 +7,4 @@ WORKDIR /code
 
 RUN /usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction
 
-CMD ['vendor/bin/phpunit', 'tests']
+CMD ['/bin/bash/', '-c', 'vendor/bin/phpunit', 'tests']
