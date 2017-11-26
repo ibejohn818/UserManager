@@ -19,6 +19,9 @@ class Github extends ProviderBase
 	protected $personalToken = null;
 
 	protected $cacheConfig = true;
+    /**
+     */
+    protected $_httpClient;
 
 	public function __construct()
 	{
@@ -32,6 +35,25 @@ class Github extends ProviderBase
 
 	}
 
+    /**
+     * HttpClient getter/setter
+     * @param \Cake\Network\Http\Client $client
+     * @return \Cake\Network\Http\Client
+     */
+    public function httpClient(Client $client = null)
+    {
+
+        if(!is_null($client)) {
+            $this->_httpClient = $client;
+        }
+
+        return $this->_httpClient;
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
 	public function getLoginUrl()
 	{
 
@@ -55,8 +77,9 @@ class Github extends ProviderBase
 
 	}
 
-
-
+    /**
+     * {@inheritdoc}
+     */
 	public function authenticate(ServerRequest $request, Response $res)
 	{
 

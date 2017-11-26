@@ -45,4 +45,18 @@ class GithubProvderTest extends TestCase
         $this->assertEquals(substr($url, 0, 5), "https");
     }
 
+    public function testHttpClient()
+    {
+
+        $gh = new Github();
+
+        $res = $gh->httpClient(new \Cake\Network\Http\Client());
+
+        $this->assertTrue(($res instanceof \Cake\Network\Http\Client));
+
+        $this->expectException(\TypeError::class);
+
+        $gh->httpClient("test");
+
+    }
 }
