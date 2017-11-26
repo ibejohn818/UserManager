@@ -27,6 +27,7 @@ node {
     } catch(Exception err) {
         currentBuild.result = "FAILURE"
     } finally {
+        def img_tag = "${env.BRANCH_NAME.toLowerCase()}${env.BUILD_ID}"
         sh "docker image rm ${img_tag}/user-manager -f"
     }
 }
