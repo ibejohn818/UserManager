@@ -1,8 +1,0 @@
-FROM ibejohn818/php:php71w-build
-
-VOLUME . /code
-
-RUN ls -l /code
-
-RUN cd /code && \
-        composer install
