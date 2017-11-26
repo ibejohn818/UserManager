@@ -1,0 +1,9 @@
+FROM ibejohn818/php:php71w-build
+
+RUN mkdir /code
+COPY . /code
+
+WORKDIR /code
+
+RUN /usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction
+
