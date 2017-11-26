@@ -45,9 +45,22 @@ class Github extends ProviderBase
 
         if(!is_null($client)) {
             $this->_httpClient = $client;
+        } elseif(is_null($this->_httpClient)) {
+            $this->_httpClient = new \Cake\Network\Http\Client();
         }
 
         return $this->_httpClient;
+
+    }
+
+    public function accessToken(string $token = null)
+    {
+
+        if(!is_null($token)) {
+            $this->accessToken = $token;
+        }
+
+        return $this->accessToken;
 
     }
 
@@ -133,7 +146,7 @@ class Github extends ProviderBase
 			$ld[] = $this->UserAccountLoginProviderData->newEntity([
 				'provider'=>'github',
 				'key_name'=>"oauth_token",
-				'key_value'=>$this->getAccessToken()
+				'key_value'=>$this->accessToken()
 			]);
 
 			$ua = $this->UserAccounts->newEntity([
@@ -166,7 +179,7 @@ class Github extends ProviderBase
 
 		} elseif($args[0]) {
 			$self = new Self();
-			$self->setAccessToken($args[0]);
+			$self->accessToken($args[0]);
 			return $self;
 		}
 
@@ -202,7 +215,7 @@ class Github extends ProviderBase
 			'accept'=>'json'
 		];
 
-		$client = new Client();
+		$client = $this->httpClient();
 
 		$res = $client->post(static::$token_url,$query);
 
@@ -216,9 +229,7 @@ class Github extends ProviderBase
 
 		$token = $vars['access_token'];
 
-		$this->setAccessToken($token);
-
-		return $this->getAccessToken();
+		return $this->accessToken($token);
 
 	}
 
@@ -234,7 +245,7 @@ class Github extends ProviderBase
 			$cached = false;
 		}
 
-		$client = new Client();
+		$client = $this->httpClient();
 
 		if($this->accessToken) {
 			$options['headers']['Authorization'] = "Bearer {$this->accessToken}";
@@ -293,19 +304,6 @@ class Github extends ProviderBase
 
 	}
 
-	public function setAccessToken($token)
-	{
-
-		$this->accessToken = $token;
-
-	}
-
-	public function getAccessToken()
-	{
-
-		return	$this->accessToken;
-
-	}
 
 
 	private function parsePaginationHeader($headers)

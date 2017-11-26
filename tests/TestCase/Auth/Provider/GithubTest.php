@@ -33,6 +33,20 @@ class GithubProvderTest extends TestCase
 
     }
 
+    public function testAccessToken()
+    {
+        $gh = new Github();
+
+        $res = $gh->accessToken();
+
+        $this->assertNull($res);
+
+        $res = $gh->accessToken("token");
+
+        $this->assertEquals($res, "token");
+
+    }
+
     public function testGetLoginUrl()
     {
         $_SERVER['HTTPS'] = 'on';
@@ -53,6 +67,10 @@ class GithubProvderTest extends TestCase
         $res = $gh->httpClient(new \Cake\Network\Http\Client());
 
         $this->assertTrue(($res instanceof \Cake\Network\Http\Client));
+
+        $gh = new Github();
+
+        $this->assertTrue(($gh->httpClient() instanceof \Cake\Network\Http\Client));
 
         $this->expectException(\TypeError::class);
 
