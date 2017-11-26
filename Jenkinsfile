@@ -22,7 +22,7 @@ node {
         }
 
         stage("Run Tests") {
-            sh "docker run ${env.BUILD_ID}/user-manager '/code/vendor/bin/phpunit tests'"
+            sh "docker run ${env.BUILD_ID}/user-manager /bin/bash -c '/code/vendor/bin/phpunit tests'"
             currentBuild.result = "SUCCESS"
         }
 
