@@ -27,6 +27,6 @@ node {
     } catch(Exception err) {
         currentBuild.result = "FAILURE"
     } finally {
-        sh "docker image rm ${img_tag} -f"
+        sh "docker image rm ${img_tag}/user-manager -f"
     }
 }
