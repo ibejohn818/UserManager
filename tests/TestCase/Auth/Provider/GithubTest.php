@@ -44,7 +44,6 @@ class GithubProvderTest extends TestCase
         $res = $gh->accessToken("token");
 
         $this->assertEquals($res, "token");
-
     }
 
     public function testGetLoginUrl()

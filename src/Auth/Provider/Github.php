@@ -162,28 +162,6 @@ class Github extends ProviderBase
 
 	}
 
-	/**
-	 * Return a github object using OAuth 
-	 * athentication
-	 * @return \UserManager\Lib\GithubSdk
-	 */
-	public static function oauth() {
-
-		$args = func_get_args();
-
-		if(
-			isset($args[0]) &&
-			($args[0] instanceof \UserManager\Model\Entity\UserAccount)
-		) {
-
-
-		} elseif($args[0]) {
-			$self = new Self();
-			$self->accessToken($args[0]);
-			return $self;
-		}
-
-	}
 
 	/**
 	 * Return a GithubSdk object using
