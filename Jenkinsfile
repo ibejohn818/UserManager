@@ -1,6 +1,5 @@
 #!/usr/bin/env groovy
 
-import groovy.json.JsonOutput
 import hudson.model.*
 import hudson.EnvVars
 
@@ -9,8 +8,7 @@ node {
 
     try {
 
-        def pwd = pwd()
-
+        def img_tag = "${env.BRANCH_NAME.toLowerCase()}${env.BUILD_ID}"
 
         stage("Stage Repo") {
             echo "Checkout repo"
@@ -18,17 +16,17 @@ node {
         }
 
         stage("Build App") {
-            sh "docker build -f Dockerfile-jenkins -t ${env.BUILD_ID}/user-manager ."
+            sh "docker build -f Dockerfile-jenkins -t ${img_tag}/user-manager ."
         }
 
         stage("Run Tests") {
-            sh "docker run ${env.BUILD_ID}/user-manager /bin/bash -c '/code/vendor/bin/phpunit tests'"
+            sh "docker run ${img_tag}/user-manager /bin/bash -c '/code/vendor/bin/phpunit tests'"
             currentBuild.result = "SUCCESS"
         }
 
     } catch(Exception err) {
         currentBuild.result = "FAILURE"
     } finally {
-
+        sh "docker image rm ${img_tag}"
     }
 }
