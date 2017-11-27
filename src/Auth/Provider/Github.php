@@ -4,13 +4,21 @@ namespace UserManager\Auth\Provider;
 
 use UserManager\Auth\Provider\ProviderBase;
 use Cake\Network\Http\Client;
-use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\Http\Response;
+use Cake\Core\InstanceConfigTrait;
 
 class Github extends ProviderBase
 {
+
+    use InstanceConfigTrait;
+
+    protected $_defaultConfig = [
+        'cacheAdapter'=>'\Cake\Cache\Cache'
+    ];
+
+    protected $cacheAdapter = null;
 
 	protected static $token_url = "https://github.com/login/oauth/access_token";
 	protected static $auth_url	= "https://github.com/login/oauth/authorize";
@@ -23,13 +31,17 @@ class Github extends ProviderBase
      */
     protected $_httpClient;
 
-	public function __construct()
+	public function __construct(array $config = [])
 	{
 		$cacheConfig = Configure::read("UserManager.LoginProviders.Github.cacheConfig");
 
 		if(strlen($cacheConfig)>0) {
 			$this->cacheConfig = $cacheConfig;
 		}
+
+        $this->setConfig($config);
+
+        $this->cacheAdapter = $this->getConfig("cacheAdapter");
 
 		parent::__construct();
 
@@ -217,7 +229,7 @@ class Github extends ProviderBase
 
 		if($this->cacheConfig && $cache) {
 			$token = md5(serialize(func_get_args()).$this->personalToken.$this->accessToken);
-			$cached = Cache::read($token,$this->cacheConfig);
+			$cached = $this->cacheAdapter::read($token,$this->cacheConfig);
 		} else {
 			$cache = false;
 			$cached = false;
@@ -275,7 +287,7 @@ class Github extends ProviderBase
 				$cached['modified'] = $res->headers['Last-Modified'];
 			}
 
-			Cache::write($token,$cached,$this->cacheConfig);
+			$this->cacheAdapter::write($token,$cached,$this->cacheConfig);
 		}
 
 		return $result;
