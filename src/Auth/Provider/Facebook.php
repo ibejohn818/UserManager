@@ -199,9 +199,9 @@ class Facebook extends ProviderBase
 	public function handleLoginRedirect()
 	{
 
-		$fb = $this->client();
+		//$fb = $this->client();
 
-		$helper = $fb->getRedirectLoginHelper();
+		//$helper = $fb->getRedirectLoginHelper();
 		//die(var_dump($helper));
 		//try {
 		//$accessToken = $helper->getAccessToken();
