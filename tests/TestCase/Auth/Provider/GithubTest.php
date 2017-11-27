@@ -239,6 +239,22 @@ class GithubTest extends TestCase
 
         $this->assertEquals($creds['id'], 1);
         $this->assertEquals($creds['email'], 'jhardy@test.com');
+
+        $mockClient = $this->getMockBuilder('\Cake\Network\Http\Client')
+						->disableOriginalConstructor()
+						->setMethods(['get', 'post'])
+                        ->getMock();
+
+        $mockClient->method('get')->willReturn(new getTestAuthenticateBody());
+        $mockClient->method('post')->willReturn(new postTestAuthenticateBodyTwo());
+
+        $gh = new Github();
+
+        $gh->httpClient($mockClient);
+
+        $creds = $gh->authenticate($req, $res);
+
+        $this->assertFalse($creds);
     }
 
 }
@@ -262,6 +278,19 @@ class getTestAuthenticateBodyTwo
     }
 
 }
+
+class postTestAuthenticateBodyTwo
+{
+
+    public $code= 200;
+
+    public function body()
+    {
+        return '';
+    }
+
+}
+
 class getTestAuthenticateBody
 {
 
