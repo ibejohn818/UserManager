@@ -116,10 +116,70 @@ class GithubTest extends TestCase
         $this->assertEquals($res, 'test-token');
     }
 
+    public function testGet()
+    {
+
+
+        $req = new \Cake\Http\ServerRequest();
+
+        $req->query['code'] = "test";
+
+        $conf = ["cacheAdapter"=> __NAMESPACE__."\\getTestCacheMock"];
+
+        $gh = new Github($conf);
+
+        $mockClient = $this->getMockBuilder('\Cake\Network\Http\Client')
+						->disableOriginalConstructor()
+						->setMethods(['get'])
+                        ->getMock();
+
+        $mockClient->method('get')->willReturn(new getTestGetBody());
+
+        $gh->httpClient($mockClient);
+        $gh->accessToken("test-token");
+
+        $res = $gh->get("/test", ['test'=>'test'], [], true);
+
+        $this->assertEquals($res['content']['test'], 'test');
+        $this->assertEquals(getTestCacheMock::$write['etag'], "Test-Tag");
+        $this->assertEquals(getTestCacheMock::$write['modified'], "Test-Modified");
+        $this->assertEquals(getTestCacheMock::$write['result']['content']['test'], "test");
+    }
+
+}
+
+class getTestCacheMock
+{
+    public static $write = null;
+    public static function read()
+    {
+        return false;
+    }
+    public static function write($token, $value, $conf)
+    {
+        static::$write = $value;
+    }
+}
+
+class getTestGetBody
+{
+    public $code = '200';
+    public $headers = [
+        'Etag'=>'Test-Tag',
+        'Last-Modified'=>'Test-Modified'
+    ];
+    public function body()
+    {
+        $a = [
+            'test'=>'test'
+        ];
+        return json_encode($a);
+    }
 }
 
 class getTokenBodyFalse
 {
+
     public function body()
     {
         return 'scope=test-scope&token_type=test-type';
