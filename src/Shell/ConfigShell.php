@@ -62,7 +62,7 @@ class ConfigShell extends Shell {
         $settings = $conf->settingsFillDefaults($settings, $conf->loadDefaults($schema));
 
         // save file
-        $conf->writeSettings($settings, CONFIG.$conf->files[$ans]['settings']);
+        $conf->writeSettings($settings, $conf->files[$ans]['settings']);
 
         return $this->main();
 
