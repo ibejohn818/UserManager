@@ -4,14 +4,19 @@ namespace UserManager\Test\TestCase\Lib;
 
 use Cake\TestSuite\TestCase;
 use UserManager\Lib\Conf;
-
+use org\bovigo\vfs\vfsStream;
 
 class ConfTest extends TestCase
 {
 
 
+    private $root;
+
     public function setUp()
     {
+
+        $this->root = vfsStream::setup();
+
         parent::setUp();
     }
 
@@ -68,5 +73,50 @@ class ConfTest extends TestCase
         $this->assertFalse(isset($defs['None']));
 
     }
+
+    public function testWriteSettings()
+    {
+
+        $conf = new Conf([
+            'configSavePath'=>$this->root->url()
+        ]);
+
+        $data = [
+            'test'=>'test'
+        ];
+
+        $filename = "test.conf.php";
+
+        $res = $conf->writeSettings($data,$filename);
+
+        $this->assertTrue($res);
+
+        # test fail
+        vfsStream::newFile($filename, 0000)
+                 ->withContent('notoverwritten')
+                 ->at($this->root);
+
+        $res = $conf->writeSettings($data,$filename);
+
+        $this->assertFalse($res);
+
+    }
+
+    public function testBootstrap()
+    {
+
+        $conf = new Conf([
+            'configSavePath'=>$this->root->url()
+        ]);
+
+        $conf->bootstrap();
+
+        foreach($conf->files as $f) {
+            $this->assertTrue(is_array(@include trim($conf->getConfig("configSavePath"))."/".$f['settings']));
+        }
+
+    }
+
+
 
 }

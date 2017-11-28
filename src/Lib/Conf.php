@@ -3,12 +3,19 @@
 namespace UserManager\Lib;
 
 use Cake\Core\Configure;
+use Cake\Core\InstanceConfigTrait;
 
 class Conf
 {
 
+    use InstanceConfigTrait;
+
     const PROVIDERS = "config.um.login-providers.php";
     const PROVIDERS_SCHEMA = "config.login-providers.schema.php";
+
+    protected $_defaultConfig = [
+        'configSavePath'=>CONFIG
+    ];
 
     public $files = [
         1=>[
@@ -25,15 +32,19 @@ class Conf
         ]
     ];
 
+    public function __construct(array $config = []) {
+        $this->setConfig($config);
+    }
+
     public function bootstrap()
     {
         $path = \Cake\Core\Plugin::configPath("UserManager");
         foreach($this->files as $k=>$v) {
-            $settings = @include CONFIG."/{$v['settings']}";
+            $settings = @include trim($this->getConfig("configSavePath"))."/{$v['settings']}";
             if(!is_array($settings)) {
                 $schema = include "{$path}/{$v['schema']}";
                 $settings = $this->loadDefaults($schema);
-                $this->writeSettings($settings, CONFIG.$v['settings']);
+                $this->writeSettings($settings, $v['settings']);
             }
             Configure::write("UserManager.{$v['key']}", $settings);
         }
@@ -85,20 +96,15 @@ class Conf
 
     }
 
-    public function writeSettings(array $settings, $saveToPath)
+    public function writeSettings(array $settings, $saveToFilename)
     {
 
-        $res = file_put_contents($saveToPath, "<?php return ".var_export($settings, true).";");
+        if(@file_put_contents(trim($this->getConfig("configSavePath"))."/".$saveToFilename, "<?php return ".var_export($settings, true).";")) {
+            return true;
+        }
 
-        return $res;
-
+        return false;
     }
 
-    public function patchSettings()
-    {
-
-
-
-    }
 
 }
