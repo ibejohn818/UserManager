@@ -17,6 +17,7 @@ node {
 
         stage("Build App") {
             sh "docker build -f Dockerfile-jenkins -t ${img_tag}/user-manager ."
+            sh "printenv"
         }
 
         stage("Run Tests") {
