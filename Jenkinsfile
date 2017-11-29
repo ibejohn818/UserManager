@@ -8,7 +8,7 @@ node {
 
     try {
 
-        def $WDIR = "${env.PWD}"
+        def WDIR = "${env.PWD}"
 
         stage("Stage Repo") {
             echo "Checkout repo"
