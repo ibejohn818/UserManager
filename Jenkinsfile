@@ -8,26 +8,27 @@ node {
 
     try {
 
-        def img_tag = "${env.BRANCH_NAME.toLowerCase()}${env.BUILD_ID}"
-
         stage("Stage Repo") {
             echo "Checkout repo"
             checkout scm
         }
 
+        stage("Pull Docker Image") {
+            sh "docker pull ibejohn818/php:php71w-build"
+        }
+
         stage("Build App") {
-            sh "docker build -f Dockerfile-jenkins -t ${img_tag}/user-manager ."
+            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c '/usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction'"
         }
 
         stage("Run Tests") {
-            sh "docker run ${img_tag}/user-manager /bin/bash -c '/code/vendor/bin/phpunit tests'"
+            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c './vendor/bin/phpunit tests'"
             currentBuild.result = "SUCCESS"
         }
 
     } catch(Exception err) {
         currentBuild.result = "FAILURE"
     } finally {
-        def img_tag = "${env.BRANCH_NAME.toLowerCase()}${env.BUILD_ID}"
-        sh "docker image rm ${img_tag}/user-manager -f"
+
     }
 }
