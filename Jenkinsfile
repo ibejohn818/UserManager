@@ -15,20 +15,22 @@ node {
             checkout scm
         }
 
+        stage("Pull Docker Image") {
+            sh "docker pull ibejohn818/php:php71w-build"
+        }
+
         stage("Build App") {
-            sh "docker build -f Dockerfile-jenkins -t ${img_tag}/user-manager ."
-            sh "printenv"
+            sh "docker run -it --rm -v ${env.PWD}:/code -w /code /bin/bash -c '/usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction'"
         }
 
         stage("Run Tests") {
-            sh "docker run ${img_tag}/user-manager /bin/bash -c '/code/vendor/bin/phpunit tests'"
+            sh "docker run -it --rm -v ${env.PWD}:/code -w /code /bin/bash -c './vendor/bin/phpunit test'"
             currentBuild.result = "SUCCESS"
         }
 
     } catch(Exception err) {
         currentBuild.result = "FAILURE"
     } finally {
-        def img_tag = "${env.BRANCH_NAME.toLowerCase()}${env.BUILD_ID}"
-        sh "docker image rm ${img_tag}/user-manager -f"
+
     }
 }
