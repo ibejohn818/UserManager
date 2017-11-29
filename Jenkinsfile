@@ -8,8 +8,6 @@ node {
 
     try {
 
-        def WDIR = "${env.PWD}"
-
         stage("Stage Repo") {
             echo "Checkout repo"
             checkout scm
@@ -20,11 +18,11 @@ node {
         }
 
         stage("Build App") {
-            sh "docker run --rm -v ${WDIR}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c '/usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction'"
+            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c '/usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction'"
         }
 
         stage("Run Tests") {
-            sh "docker run --rm -v ${WDIR}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c './vendor/bin/phpunit test'"
+            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c './vendor/bin/phpunit test'"
             currentBuild.result = "SUCCESS"
         }
 
