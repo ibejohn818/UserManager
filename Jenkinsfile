@@ -22,7 +22,7 @@ node {
         }
 
         stage("Run Tests") {
-            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c './vendor/bin/phpunit test'"
+            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c './vendor/bin/phpunit tests'"
             currentBuild.result = "SUCCESS"
         }
 
