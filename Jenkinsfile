@@ -8,7 +8,7 @@ node {
 
     try {
 
-        def img_tag = "${env.BRANCH_NAME.toLowerCase()}${env.BUILD_ID}"
+        def $WDIR = "${env.PWD}"
 
         stage("Stage Repo") {
             echo "Checkout repo"
@@ -20,11 +20,11 @@ node {
         }
 
         stage("Build App") {
-            sh "docker run -it --rm -v ${env.PWD}:/code -w /code /bin/bash -c '/usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction'"
+            sh "docker run -it --rm -v ${WDIR}:/code -w /code /bin/bash -c '/usr/bin/composer update --no-interaction && /usr/bin/composer install --no-interaction'"
         }
 
         stage("Run Tests") {
-            sh "docker run -it --rm -v ${env.PWD}:/code -w /code /bin/bash -c './vendor/bin/phpunit test'"
+            sh "docker run -it --rm -v ${WDIR}:/code -w /code /bin/bash -c './vendor/bin/phpunit test'"
             currentBuild.result = "SUCCESS"
         }
 
