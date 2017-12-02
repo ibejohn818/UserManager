@@ -29,8 +29,9 @@ node {
             if (currentBuild.result == "SUCCESS") {
                 echo "Sending Coverage Report..."
                 withCredentials([string(credentialsId: 'CodecovJenkinsHome', usernameVariable: 'CODECOV')]) {
+                    echo $CODECOV
                     sh '''
-                       curl -s https://codecov.io/bash | /bin/bash -s - -t ${CODECOV} 
+                       curl -s https://codecov.io/bash 
                     '''
                 }
             } else {
