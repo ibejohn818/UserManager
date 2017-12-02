@@ -28,7 +28,7 @@ node {
         stage("Send Code Coverage") {
             if (currentBuild.result == "SUCCESS") {
                 echo "Sending Coverage Report..."
-                withCredentials([string(credentialsId: 'CodecovJenkinsHome', secretVariable: 'CODECOV')]) {
+                withCredentials([[$class: 'StringBinding', credentialsId: 'CodecovJenkinsHome', variable: 'CODECOV']]) {
                     echo $CODECOV
                     sh '''
                        curl -s https://codecov.io/bash 
