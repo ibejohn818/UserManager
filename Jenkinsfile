@@ -31,7 +31,7 @@ node {
                 withCredentials([[$class: 'StringBinding', credentialsId: 'CodecovJenkinsHome', variable: 'CODECOV']]) {
                     echo "KEY: ${env.CODECOV}"
                     sh '''
-                       curl -s https://codecov.io/bash 
+                       curl -s https://codecov.io/bash | /bin/bash -s - -t ${env.CODECOV}
                     '''
                 }
             } else {
