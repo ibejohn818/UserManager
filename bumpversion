@@ -3,6 +3,7 @@
 import json
 import sys
 import subprocess
+from github import Github
 
 
 def git_check():
@@ -15,6 +16,7 @@ def git_check():
     return True
 
 def git_tag(version):
+
 
     cmd = 'git commit -a -m "Bump Version: {0}"'.format(version)
 
