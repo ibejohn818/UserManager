@@ -30,9 +30,7 @@ node {
                 echo "Sending Coverage Report..."
                 withCredentials([[$class: 'StringBinding', credentialsId: 'CodecovJenkinsHome', variable: 'CODECOV']]) {
                     echo "KEY: ${env.CODECOV}"
-                    sh '''
-                       curl -s https://codecov.io/bash | bash -s - -t ${env.CODECOV}
-                    '''
+                    sh "curl -s https://codecov.io/bash | bash -s - -t ${env.CODECOV}"
                 }
             } else {
                 echo "Skipping coverage report..."
