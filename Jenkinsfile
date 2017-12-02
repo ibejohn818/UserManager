@@ -29,7 +29,7 @@ node {
             if (currentBuild.result == "SUCCESS") {
                 echo "Sending Coverage Report..."
                 withCredentials([[$class: 'StringBinding', credentialsId: 'CodecovJenkinsHome', variable: 'CODECOV']]) {
-                    echo $CODECOV
+                    echo "KEY: ${env.CODECOV}"
                     sh '''
                        curl -s https://codecov.io/bash 
                     '''
