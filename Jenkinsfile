@@ -22,8 +22,20 @@ node {
         }
 
         stage("Run Tests") {
-            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c './vendor/bin/phpunit tests'"
+            sh "docker run --rm -v ${env.WORKSPACE}:/code -w /code ibejohn818/php:php71w-build /bin/bash -c './vendor/bin/phpunit tests --coverage-clover=clover.xml'"
             currentBuild.result = "SUCCESS"
+        }
+        stage("Send Code Coverage") {
+            if (currentBuild.result == "SUCCESS") {
+                echo "Sending Coverage Report..."
+                withCredentials([usernamePassword(credentialsId: 'CodecovJenkinsHome', usernameVariable: 'CODECOV')]) {
+                    sh '''
+                       curl -s https://codecov.io/bash | /bin/bash -s - -t ${CODECOV} 
+                    '''
+                }
+            } else {
+                echo "Skipping coverage report..."
+            }
         }
 
     } catch(Exception err) {
