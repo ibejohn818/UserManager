@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ibejohn818/UserManager.svg?branch=master)](https://travis-ci.org/ibejohn818/UserManager)
+[![Build Status](http://jenkins.homeops.johnchardy.com/buildStatus/icon?job=UserManager-Cakephp/master)](http://jenkins.homeops.johnchardy.com/job/UserManager-Cakephp/job/master/)
 [![codecov](https://codecov.io/gh/ibejohn818/UserManager/branch/master/graph/badge.svg)](https://codecov.io/gh/ibejohn818/UserManager)
 
 # UserManager plugin for CakePHP
