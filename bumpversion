@@ -3,8 +3,52 @@
 import json
 import sys
 import subprocess
+import os
 from github import Github
 
+
+def github_api_client():
+    # get credentials
+    credsFile = "{0}/.github-bumpversion".format(os.environ['HOME'])
+
+    with open(credsFile, "r") as ghc:
+        creds = ghc.read().strip()
+
+    api = Github(login_or_token=creds)
+
+    return api
+
+
+def github_create_pull(client, repo_name, branch, version):
+
+    user = api.get_user()
+    repo = user.get_repo(repo_name)
+
+    pr_title = "Bump Version: {0}".format(version)
+
+    pr = repo.create_pull(pr_title, pr_title, "master", branch)
+    print(pr)
+    return pr
+
+def  git_get_repo_name():
+
+    cmd = ['git', 'config', '--get', 'remote.origin.url']
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    out, err = proc.communicate()
+
+    if err:
+        return False
+
+    cmd = ['basename', out]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    out, err = proc.communicate()
+
+    if err:
+        return False
+
+    out = out.split('.')[0]
+
+    return out
 
 def git_check():
 
@@ -15,11 +59,20 @@ def git_check():
 
     return True
 
-def git_tag(version):
 
+def git_create_branch(version):
+
+    branch_name = "tag-{0}".format(version)
+
+    cmd = "git checkout -b {0}".format(branch_name)
+    e = subprocess.call(cmd, shell=True)
+
+    if e > 0:
+        print("ERROR: Create branch failed ({0})".format(branch_name))
+        print(cmd)
+        exit(1)
 
     cmd = 'git commit -a -m "Bump Version: {0}"'.format(version)
-
     e = subprocess.call(cmd, shell=True)
 
     if e > 0:
@@ -27,23 +80,23 @@ def git_tag(version):
         print(cmd)
         exit(1)
 
-    cmd  = 'git tag {0}'.format(version)
+    # cmd  = 'git tag {0}'.format(version)
+    # e = subprocess.call(cmd, shell=True)
 
+    # if e > 0:
+        # print("ERROR: Command failed")
+        # print(cmd)
+        # exit(1)
+
+    cmd = 'git push origin {0}'.format(branch_name)
     e = subprocess.call(cmd, shell=True)
 
     if e > 0:
-        print("ERROR: Command failed")
+        print("ERROR: Push Branch Failed ({0})".format(branch_name))
         print(cmd)
         exit(1)
 
-    cmd = 'git push origin {0}'.format(version)
-
-    e = subprocess.call(cmd, shell=True)
-
-    if e > 0:
-        print("ERROR: Command failed")
-        print(cmd)
-        exit(1)
+    return branch_name
 
 def bump(level='rev'):
 
@@ -82,8 +135,19 @@ def bump(level='rev'):
 
 if __name__ == '__main__':
 
+
+    gapi = github_api_client()
+    exit(1)
+
     if not git_check():
         exit("ERROR: Uncommited git changes!")
+
+    repo_name = git_get_repo_name()
+    if not repo_name:
+        print("Unable to get repos name")
+        exit(1)
+
+    print(repo_name)
 
     levels = ['major', 'minor', 'rev']
 
@@ -92,6 +156,9 @@ if __name__ == '__main__':
     else:
         level = sys.argv[1]
 
-    ver = bump(level)
+    version = bump(level)
+    branch = git_create_branch(version)
 
-    git_tag(ver)
+    api = github_api_client()
+
+
