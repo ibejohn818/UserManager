@@ -1,9 +1,6 @@
 {
     "name": "ibejohn818/user-manager", 
-    "require-dev": {
-        "mikey179/vfsStream": "*", 
-        "phpunit/phpunit": "*"
-    }, 
+    "type": "cakephp-plugin", 
     "require": {
         "cakephp/cakephp": "~3.0", 
         "facebook/graph-sdk": "~5", 
@@ -17,7 +14,7 @@
             "UserManager\\": "src"
         }
     }, 
-    "version": "0.1.23", 
+    "version": "0.1.24", 
     "autoload-dev": {
         "psr-4": {
             "UserManager\\Test\\Fixture\\": "./tests/Fixture", 
@@ -25,6 +22,9 @@
             "UserManager\\Test\\": "./tests"
         }
     }, 
-    "type": "cakephp-plugin", 
+    "require-dev": {
+        "mikey179/vfsStream": "*", 
+        "phpunit/phpunit": "*"
+    }, 
     "description": "UserManager plugin for CakePHP"
 }
