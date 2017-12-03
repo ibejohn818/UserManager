@@ -73,7 +73,7 @@ def github_merge_pr(pull_request):
             print(res.message)
             print(res.merged)
         except Exception as e:
-            attempt += 1
+            attempts += 1
             if attempts >= 60:
                 print("ERROR: Too many PR Merge attempts ({0})".format(attempts))
                 exit(1)
