@@ -47,14 +47,25 @@ foreach(Configure::read("UserManager.LoginProviders") as $k=>$v) {
         continue;
     }
 
-    Router::connect("/user-manager/auth-callback/".strtolower($k),[
-        "plugin"=>"UserManager",
-        "controller"=>"Login",
-        "action"=>"handleForeignLogin"
-    ]);
+    if(!isset($v['callbackUrl'])) {
+
+        Router::connect("/user-manager/auth-callback/".strtolower($k), [
+            "plugin"=>"UserManager",
+            "controller"=>"Login",
+            "action"=>"handleForeignLogin"
+        ]);
+
+    } else {
+
+        Router::connect($v['callbackUrl'], [
+            "plugin"=>"UserManager",
+            "controller"=>"Login",
+            "action"=>"handleForeignLogin"
+        ]);
+
+    }
 
 }
-
 
 #Profile
 Router::connect("/profile/:uri",

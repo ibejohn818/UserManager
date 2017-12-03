@@ -28,6 +28,12 @@ $providers = [
                 'default'=>'email profile',
                 'type'=>'string'
             ],
+            [
+                'help'=>'Callback URL: URL that the OAUTH Provider sends the user back to. Route will be bound to the LoginController::oauth_callback',
+                'key'=>'clientScopes',
+                'default'=>'email profile',
+                'type'=>'string'
+            ],
         ]
     ],
     'Github'=>[

@@ -20,32 +20,32 @@ class Github extends ProviderBase
 
     protected $cacheAdapter = null;
 
-	protected static $token_url = "https://github.com/login/oauth/access_token";
-	protected static $auth_url	= "https://github.com/login/oauth/authorize";
+    protected static $token_url = "https://github.com/login/oauth/access_token";
+    protected static $auth_url  = "https://github.com/login/oauth/authorize";
 
-	protected $accessToken = null;
-	protected $personalToken = null;
+    protected $accessToken = null;
+    protected $personalToken = null;
 
-	protected $cacheConfig = true;
+    protected $cacheConfig = true;
     /**
      */
     protected $_httpClient;
 
-	public function __construct(array $config = [])
-	{
-		$cacheConfig = Configure::read("UserManager.LoginProviders.Github.cacheConfig");
+    public function __construct(array $config = [])
+    {
+        $cacheConfig = Configure::read("UserManager.LoginProviders.Github.cacheConfig");
 
-		if(strlen($cacheConfig)>0) {
-			$this->cacheConfig = $cacheConfig;
-		}
+        if(strlen($cacheConfig)>0) {
+            $this->cacheConfig = $cacheConfig;
+        }
 
         $this->setConfig($config);
 
         $this->cacheAdapter = $this->getConfig("cacheAdapter");
 
-		parent::__construct();
+        parent::__construct();
 
-	}
+    }
 
     /**
      * HttpClient getter/setter
@@ -79,8 +79,8 @@ class Github extends ProviderBase
     /**
      * {@inheritdoc}
      */
-	public function getLoginUrl()
-	{
+    public function getLoginUrl()
+    {
 
         $proto = "http://";
 
@@ -88,246 +88,247 @@ class Github extends ProviderBase
             $proto = "https://";
         }
 
-		$query = [
-			'client_id'=>Configure::read("UserManager.LoginProviders.Github.clientId"),
-			'redirect_url'=>"{$proto}{$_SERVER['HTTP_HOST']}/user-manager/auth-callback/github",
-			'scope'=>Configure::read("UserManager.LoginProviders.Github.apiScopes")
-		];
+        $query = [
+            'client_id'=>Configure::read("UserManager.LoginProviders.Github.clientId"),
+            'redirect_url'=>"{$proto}{$_SERVER['HTTP_HOST']}/user-manager/auth-callback/github",
+            'scope'=>Configure::read("UserManager.LoginProviders.Github.apiScopes")
+        ];
 
-		$query = http_build_query($query);
+        $query = http_build_query($query);
 
-		$url = static::$auth_url."?{$query}";
+        $url = static::$auth_url."?{$query}";
 
-		return $url;
+        return $url;
 
-	}
+    }
 
     /**
      * {@inheritdoc}
      */
-	public function authenticate(ServerRequest $request, Response $res)
-	{
+    public function authenticate(ServerRequest $request, Response $res)
+    {
 
-			$token = $this->getToken($request);
+        $token = $this->getToken($request);
 
-			if(!$token) {
-				return false;
-			}
+        if(!$token) {
+            return false;
+        }
 
-			$GithubUser = $this->get("/user",[],[],false);
+        $GithubUser = $this->get("/user",[],[],false);
 
-			$nameArr = explode(" ",$GithubUser['content']['name']);
+        $nameArr = explode(" ",$GithubUser['content']['name']);
 
-			$first_name = "";
-			$last_name = "";
-			if(count($nameArr)<=0) {
-				$first_name = $GithubUser['content']['name'];
-			} else {
-				foreach($nameArr as $k=>$v) {
-					if($k==0) {
-						$first_name = $v;
-					} else {
-						$last_name = $v." ";
-					}
-				}
+        $first_name = "";
+        $last_name = "";
 
-				$last_name = rtrim($last_name);
-			}
+        if(count($nameArr)<=0) {
+            $first_name = $GithubUser['content']['name'];
+        } else {
+            foreach($nameArr as $k=>$v) {
+                if($k==0) {
+                    $first_name = $v;
+                } else {
+                    $last_name = $v." ";
+                }
+            }
 
+            $last_name = rtrim($last_name);
+        }
 
-			$conditions = [
-				'provider'=>'github',
-				'key_name'=>"id",
-				'key_value'=>$GithubUser['content']['id']
-			];
 
-			$ld = [];
+        $conditions = [
+            'provider'=>'github',
+            'key_name'=>"id",
+            'key_value'=>$GithubUser['content']['id']
+        ];
 
-			$ld[] = $this->UserAccountLoginProviderData->newEntity([
-				'provider'=>'github',
-				'key_name'=>"id",
-				'key_value'=>$GithubUser['content']['id']
-			]);
+        $ld = [];
 
-			$ld[] = $this->UserAccountLoginProviderData->newEntity([
-				'provider'=>'github',
-				'key_name'=>"username",
-				'key_value'=>$GithubUser['content']['login']
-			]);
+        $ld[] = $this->UserAccountLoginProviderData->newEntity([
+            'provider'=>'github',
+            'key_name'=>"id",
+            'key_value'=>$GithubUser['content']['id']
+        ]);
 
-			$ld[] = $this->UserAccountLoginProviderData->newEntity([
-				'provider'=>'github',
-				'key_name'=>"oauth_token",
-				'key_value'=>$this->accessToken()
-			]);
+        $ld[] = $this->UserAccountLoginProviderData->newEntity([
+            'provider'=>'github',
+            'key_name'=>"username",
+            'key_value'=>$GithubUser['content']['login']
+        ]);
 
-			$ua = $this->UserAccounts->newEntity([
-                    'email'=>$GithubUser['content']['email'],
-                    'first_name'=>$first_name,
-                    'last_name'=>$last_name
-                ]);
+        $ld[] = $this->UserAccountLoginProviderData->newEntity([
+            'provider'=>'github',
+            'key_name'=>"oauth_token",
+            'key_value'=>$this->accessToken()
+        ]);
 
-			$credentials = $this->UserAccountLoginProviderData
-									->locateAccount($conditions,$ua,$ld);
+        $ua = $this->UserAccounts->newEntity([
+            'email'=>$GithubUser['content']['email'],
+            'first_name'=>$first_name,
+            'last_name'=>$last_name
+        ]);
 
-			return $credentials;
+        $credentials = $this->UserAccountLoginProviderData
+                                ->locateAccount($conditions,$ua,$ld);
 
-	}
+        return $credentials;
 
+    }
 
-	/**
-	 * Return a GithubSdk object using
-	 * Personal Auth token authentication
-	 * @return \UserManager\Lib\GithubSdk
-	 */
-	public static function personalToken($token)
-	{
 
-		$sdk = new self();
+    /**
+     * Return a GithubSdk object using
+     * Personal Auth token authentication
+     * @return \UserManager\Lib\GithubSdk
+     */
+    public static function personalToken($token)
+    {
 
-		$sdk->personalToken = $token;
+        $sdk = new self();
 
-		return $sdk;
+        $sdk->personalToken = $token;
 
-	}
+        return $sdk;
 
+    }
 
-	public function getToken(\Cake\Network\Request $request)
-	{
 
-		$code =  $request->query("code");
+    public function getToken(\Cake\Network\Request $request)
+    {
 
-		$query = [
-			'client_id'=>Configure::read("UserManager.LoginProviders.Github.clientId"),
-			'client_secret'=>Configure::read("UserManager.LoginProviders.Github.clientSecret"),
-			'scope'=>Configure::read("UserManager.LoginProviders.Github.apiScopes"),
-			'code'=>$code,
-			'accept'=>'json'
-		];
+        $code =  $request->query("code");
 
-		$client = $this->httpClient();
+        $query = [
+            'client_id'=>Configure::read("UserManager.LoginProviders.Github.clientId"),
+            'client_secret'=>Configure::read("UserManager.LoginProviders.Github.clientSecret"),
+            'scope'=>Configure::read("UserManager.LoginProviders.Github.apiScopes"),
+            'code'=>$code,
+            'accept'=>'json'
+        ];
 
-		$res = $client->post(static::$token_url,$query);
+        $client = $this->httpClient();
 
-		$query = $res->body();
+        $res = $client->post(static::$token_url, $query);
 
-		parse_str($query,$vars);
+        $query = $res->body();
 
-		if(!isset($vars['access_token'])) {
-			return false;
-		}
+        parse_str($query,$vars);
 
-		$token = $vars['access_token'];
+        if(!isset($vars['access_token'])) {
+            return false;
+        }
 
-		return $this->accessToken($token);
+        $token = $vars['access_token'];
 
-	}
+        return $this->accessToken($token);
 
+    }
 
-	public function get($endpoint,$data = [],$options = [],$cache = true)
-	{
 
-		if($this->cacheConfig && $cache) {
-			$token = md5(serialize(func_get_args()).$this->personalToken.$this->accessToken);
-			$cached = $this->cacheAdapter::read($token,$this->cacheConfig);
-		} else {
-			$cache = false;
-			$cached = false;
-		}
+    public function get($endpoint,$data = [],$options = [],$cache = true)
+    {
 
-		$client = $this->httpClient();
+        if($this->cacheConfig && $cache) {
+            $token = md5(serialize(func_get_args()).$this->personalToken.$this->accessToken);
+            $cached = $this->cacheAdapter::read($token,$this->cacheConfig);
+        } else {
+            $cache = false;
+            $cached = false;
+        }
 
-		if($this->accessToken) {
-			$options['headers']['Authorization'] = "Bearer {$this->accessToken}";
-		} elseif($this->personalToken) {
-			$options['headers']['Authorization'] = "token {$this->personalToken}";
-		}
+        $client = $this->httpClient();
 
-		if($this->cacheConfig && $cache && $cached) {
-			$options['headers']['If-None-Match'] = $cached['etag'];
-			if(isset($cached['modified'])) {
-				$options['headers']['If-Modified-Since'] = $cached['modified'];
-			}
-		}
+        if($this->accessToken) {
+            $options['headers']['Authorization'] = "Bearer {$this->accessToken}";
+        } elseif($this->personalToken) {
+            $options['headers']['Authorization'] = "token {$this->personalToken}";
+        }
 
-		$qs = "";
+        if($this->cacheConfig && $cache && $cached) {
+            $options['headers']['If-None-Match'] = $cached['etag'];
+            if(isset($cached['modified'])) {
+                $options['headers']['If-Modified-Since'] = $cached['modified'];
+            }
+        }
 
-		if(count($data)>0) {
-			$qs = "?".http_build_query($data);
-		}
+        $qs = "";
 
+        if(count($data)>0) {
+            $qs = "?".http_build_query($data);
+        }
 
-		$res = $client->get("https://api.github.com{$endpoint}{$qs}",[],$options);
 
-		if($res->code == 304) {
-			return $cached['result'];
-		}
+        $res = $client->get("https://api.github.com{$endpoint}{$qs}",[],$options);
 
-		$result = [];
+        if($res->code == 304) {
+            return $cached['result'];
+        }
 
-		$body = $res->body();
+        $result = [];
 
-		$json = json_decode($body,true);
+        $body = $res->body();
 
-		$result['content'] = $json;
+        $json = json_decode($body,true);
 
-		$result['headers'] = $res->headers;
+        $result['content'] = $json;
 
-		if(($pagination = $this->parsePaginationHeader($result['headers'])) !== false) {
-			$result['pagination'] = $pagination;
-		}
+        $result['headers'] = $res->headers;
 
-		if($this->cacheConfig && $cache) {
-			$cached = [
-				'etag'=>$res->headers['Etag'],
-				'result'=>$result
-			];
+        if(($pagination = $this->parsePaginationHeader($result['headers'])) !== false) {
+            $result['pagination'] = $pagination;
+        }
 
-			if(isset($res->headers['Last-Modified'])) {
-				$cached['modified'] = $res->headers['Last-Modified'];
-			}
+        if($this->cacheConfig && $cache) {
+            $cached = [
+                'etag'=>$res->headers['Etag'],
+                'result'=>$result
+            ];
 
-			$this->cacheAdapter::write($token,$cached,$this->cacheConfig);
-		}
+            if(isset($res->headers['Last-Modified'])) {
+                $cached['modified'] = $res->headers['Last-Modified'];
+            }
 
-		return $result;
+            $this->cacheAdapter::write($token,$cached,$this->cacheConfig);
+        }
 
-	}
+        return $result;
 
+    }
 
 
-	private function parsePaginationHeader($headers)
-	{
 
-		if(!isset($headers['Link'])) {
-			return false;
-		}
+    private function parsePaginationHeader($headers)
+    {
 
-		$linkParts = explode(",",$headers['Link']);
+        if(!isset($headers['Link'])) {
+            return false;
+        }
 
-		$links = [];
+        $linkParts = explode(",",$headers['Link']);
 
-		foreach($linkParts as $k=>$v) {
+        $links = [];
 
-			preg_match('/(rel=)(")(.*)(")/',$v,$key);
-			preg_match('/(<)(.*)(>)/',$v,$link);
-			$links[$key[3]] = $link[2];
+        foreach($linkParts as $k=>$v) {
 
-		}
+            preg_match('/(rel=)(")(.*)(")/',$v,$key);
+            preg_match('/(<)(.*)(>)/',$v,$link);
+            $links[$key[3]] = $link[2];
 
-		if(isset($links['last'])) {
+        }
 
-			preg_match('/(&|\?)(page=)([0-9]{1,})/',$links['last'],$page);
-			$links['total_pages'] = $page[3];
+        if(isset($links['last'])) {
 
-		} elseif(isset($links['first']) && isset($links['prev']) && !isset($links['last'])) {
+            preg_match('/(&|\?)(page=)([0-9]{1,})/',$links['last'],$page);
+            $links['total_pages'] = $page[3];
 
-			preg_match('/(&|\?)(page=)([0-9]{1,})/',$links['prev'],$page);
-			$links['total_pages'] = $page[3]+1;
+        } elseif(isset($links['first']) && isset($links['prev']) && !isset($links['last'])) {
 
-		}
+            preg_match('/(&|\?)(page=)([0-9]{1,})/',$links['prev'],$page);
+            $links['total_pages'] = $page[3]+1;
 
-		return $links;
+        }
 
-	}
+        return $links;
+
+    }
 }
