@@ -172,33 +172,6 @@ class LoginController extends AppController {
 		$this->redirect($provider->getLoginUrl());
 	}
 
-    public function google() {
-
-        $sdk = new GoogleSdk();
-
-        $goBackUrl = false;
-
-        $this->redirect($sdk->returnLoginUrl());
-
-    }
-
-	public function facebook() {
-
-		$sdk = new FacebookSdk();
-
-		$this->redirect($sdk->getLoginUrl());
-
-	}
-
-	public function github() {
-
-		$sdk = new GithubSdk();
-
-
-		$this->redirect($sdk->authUrl());
-
-	}
-
 	public function twitter() {
 
 		$sdk = new TwitterSdk($this->request);

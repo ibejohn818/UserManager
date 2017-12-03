@@ -49,5 +49,14 @@ class UserAccountLoginProviderDataFixture extends TestFixture
             'key_value' => 'Lorem ipsum dolor sit amet',
             'user_account_id' => 1
         ],
+        [
+            'id' => 2,
+            'created' => '2017-11-16 18:13:13',
+            'modified' => '2017-11-16 18:13:13',
+            'provider' => 'provider',
+            'key_name' => 'id',
+            'key_value' => '10',
+            'user_account_id' => 10
+        ],
     ];
 }

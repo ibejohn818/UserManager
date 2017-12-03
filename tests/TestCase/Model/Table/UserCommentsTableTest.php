@@ -134,6 +134,17 @@ class UserCommentsTableTest extends TestCase
      */
     public function testCreateComment()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $c = $this->UserComments->newEntity([
+            'model'=>'Testing',
+            'foreign_key'=>'10',
+            'user_account_id'=>1,
+            'comment'=>'testing'
+        ]);
+
+        $res = $this->UserComments->createComment($c);
+
+        $this->assertTrue(($res instanceof \UserManager\Model\Entity\UserComment));
+
     }
 }
