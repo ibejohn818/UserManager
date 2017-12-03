@@ -183,3 +183,4 @@ if __name__ == '__main__':
 
     pr = github_create_pull(api, repo_name, branch, version)
     print(pr)
+    pr_res = github_merge_pr(pr)
