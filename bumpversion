@@ -64,22 +64,24 @@ def git_check():
 def github_merge_pr(pull_request):
 
     attempts = 0
-    res = pull_request.merge()
-    print(res)
-    print(res.message)
-    print(res.merged)
-    while not res.merged:
-        attempts += 1
-        print("Not Merged Waiting...")
-        time.sleep(10)
-        res = pull_request.merge()
-        print(res)
-        print(res.message)
-        print(res.merged)
+    result = False
 
-        if attempts >= 60:
-            print("ERROR: Too many PR Merge attempts ({0})".format(attempts))
-            exit(1)
+    while not result:
+        try:
+            res = pull_request.merge()
+            print(res)
+            print(res.message)
+            print(res.merged)
+        except Exception e:
+            attempt += 1
+            if attempts >= 60:
+                print("ERROR: Too many PR Merge attempts ({0})".format(attempts))
+                exit(1)
+
+        if res.merged:
+            result = True
+
+        time.sleep(10)
 
     return res
 
