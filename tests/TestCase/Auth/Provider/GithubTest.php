@@ -146,7 +146,7 @@ class GithubTest extends TestCase
         $gh->httpClient($mockClient);
         $gh->accessToken("test-token");
 
-        $res = $gh->get("/test", ['test'=>'test'], [], true);
+        $res = $gh->api("/test", ['test'=>'test'], [], 'get', true);
 
         $this->assertEquals($res['content']['test'], 'test');
         $this->assertEquals(getTestCacheMock::$write['etag'], "Test-Tag");
@@ -168,7 +168,7 @@ class GithubTest extends TestCase
         $gh->httpClient($mockClient);
         $gh->accessToken("test-token");
 
-        $res = $gh->get("/cached", ['cached'=>'cached'], [], true);
+        $res = $gh->api("/cached", ['cached'=>'cached'], [], 'get', true);
 
         $this->assertEquals($res['content']['test-cached'], 'cached-result');
 
@@ -184,7 +184,7 @@ class GithubTest extends TestCase
 
         $gh->httpClient($mockClient);
 
-        $res = $gh->get("/test-result", [], [], false);
+        $res = $gh->api("/test-result", [], [], 'get', false);
 
         $this->assertEquals($res['content']['test'], 'test-result');
         $this->assertEquals($res['pagination']['total_pages'], 34);
@@ -204,7 +204,7 @@ class GithubTest extends TestCase
 
         $gh->httpClient($mockClient);
 
-        $res = $gh->get("/test-result", [], [], false);
+        $res = $gh->api("/test-result", [], [], 'get', false);
 
         $this->assertEquals($res['content']['test'], 'test-forth');
         $this->assertEquals($res['pagination']['total_pages'], 21);

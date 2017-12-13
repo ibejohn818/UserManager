@@ -114,7 +114,7 @@ class Github extends ProviderBase
             return false;
         }
 
-        $GithubUser = $this->get("/user",[],[],false);
+        $GithubUser = $this->api("/user", [], [], 'get', false);
 
         $nameArr = explode(" ",$GithubUser['content']['name']);
 
@@ -224,8 +224,18 @@ class Github extends ProviderBase
 
     }
 
-
-    public function get($endpoint,$data = [],$options = [],$cache = true)
+    /**
+     * API call to Github
+     * Will use the accessToken if instantiated with OAUTH or personalToken is 
+     * instantiated with github personal token
+     * @param string $endpoint The URI to call
+     * @param array[] $data The data body Key:Value to send
+     * @param array[] $options The options to send to the httpClient
+     * @param string $type The HTTP method  (get/post/put/delete) the httpClient will use
+     * @param string/bool $cache The cache group to use or false to disable caching
+     * @return array $result content/headers of the response (content is JSON Decoded)
+     */
+    public function api($endpoint,$data = [],$options = [],$type='get', $cache = true)
     {
 
         if($this->cacheConfig && $cache) {
@@ -258,7 +268,7 @@ class Github extends ProviderBase
         }
 
 
-        $res = $client->get("https://api.github.com{$endpoint}{$qs}",[],$options);
+        $res = $client->{$type}("https://api.github.com{$endpoint}{$qs}",[],$options);
 
         if($res->code == 304) {
             return $cached['result'];

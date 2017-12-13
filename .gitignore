@@ -4,3 +4,4 @@ coverage
 coverage.xml
 config.gen.php
 config.login-providers.php
+tags
