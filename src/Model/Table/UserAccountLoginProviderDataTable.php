@@ -94,15 +94,13 @@ class UserAccountLoginProviderDataTable extends Table
 			throw new FatalErrorException("you must provide loginData entities");
 		}
 
-		$loginData = new \Cake\Collection\Collection($loginData);
+        foreach($loginData as $k=>$v) {
+            if(!($v instanceof \UserManager\Model\Entity\UserAccountLoginProviderData)) {
+                throw new FatalErrorException("loginData must be UserDataLoginProviderData entities");
+            }
+        }
 
-		$loginData->each(function($v,$k) {
-			if(!($v instanceof \UserManager\Model\Entity\UserAccountLoginProviderData)) {
-				throw new FatalErrorException("loginData must be UserDataLoginProviderData entities");
-			}
-		});
-
-		if(!isset($userAccount->email)) {
+		if(empty($userAccount->email)) {
 			throw new FatalErrorException("userAccount->email must be set!");
 		}
 
@@ -120,13 +118,13 @@ class UserAccountLoginProviderDataTable extends Table
 			)->id;
 		}
 
-		$loginData->each(function($v, $k) use($account_id) {
-			$v->user_account_id = $account_id;
-		});
+        foreach($loginData as $k=>$v) {
+            $loginData[$k]->user_account_id = $account_id;
+        }
 
 		$this->deleteAll([
 			'user_account_id'=>$account_id,
-			'provider'=>$loginData->first()['provider']
+			'provider'=>$loginData[0]['provider']
 		]);
 
 		$this->saveMany($loginData);

@@ -100,14 +100,23 @@ class UserAccountLoginProviderDataTableTest extends TestCase
      */
     public function testLocateAccount()
     {
-		$this->expectException(FatalErrorException::class);
+        $this->expectException(FatalErrorException::class);
 
-		$this->UserAccountLoginProviderData->locateAccount([], new \UserManager\Model\Entity\UserAccount(), []);
+        $this->UserAccountLoginProviderData->locateAccount([], new \UserManager\Model\Entity\UserAccount(), []);
+
+    }
+
+    public function testLocationAccount1()
+    {
 
 		$this->expectException(FatalErrorException::class);
 
 		$this->UserAccountLoginProviderData->locateAccount([], new \UserManager\Model\Entity\UserAccount(), [[true],[true]]);
 
+    }
+
+    public function testLocationAccount2()
+    {
 		$loginData = [
 			$this->UserAccountLoginProviderData->newEntity(['key_name'=>'test']),
 			$this->UserAccountLoginProviderData->newEntity(['key_name'=>'test1']),
@@ -120,5 +129,6 @@ class UserAccountLoginProviderDataTableTest extends TestCase
 		$this->expectException(FatalErrorException::class);
 
 		$this->UserAccountLoginProviderData->locateAccount($cond, new \UserManager\Model\Entity\UserAccount(), $loginData);
+
     }
 }
