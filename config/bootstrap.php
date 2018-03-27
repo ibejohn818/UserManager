@@ -30,7 +30,7 @@ Cache::config('user-manager-1min',[
 	'prefix' => 'um-1min-',
 	'path' => CACHE . 'misc/',
 	'serialize' => 'php',
-	'duration' => '+1 minutes',
+	'duration' => '+10 minutes',
 	'servers'=>$Servers,
 	'port'=>$Port
 ]);

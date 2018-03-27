@@ -3,8 +3,11 @@ use Cake\Routing\Router;
 use App\Routing\Route;
 use Cake\Core\Configure;
 use Cake\Core\App;
+use Cake\Routing\Route\DashedRoute;
 
 Router::plugin('UserManager',["path"=>"/user-manager"], function ($routes) {
+
+    $routes->setRouteClass(DashedRoute::class);
 
     $routes->connect("/",[
         "controller"=>"Accounts",
@@ -20,8 +23,9 @@ Router::plugin('UserManager',["path"=>"/user-manager"], function ($routes) {
 });
 
 
-Router::prefix("admin",function($routes) {
+Router::prefix("admin", ["path"=>"/admin"], function($routes) {
 
+    $routes->setRouteClass(DashedRoute::class);
 
     $routes->plugin("UserManager",["path"=>"/user-manager"],function($routes) {
 

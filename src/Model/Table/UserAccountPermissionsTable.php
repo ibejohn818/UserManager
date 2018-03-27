@@ -210,8 +210,7 @@ class UserAccountPermissionsTable extends Table
       $query = $this->find()
                    ->where($conditions)
                    ->order([
-                       'allowed'=>'DESC',
-                       'weight'=>'DESC',
+                       'weight'=>'ASC',
                    ]);
 
       if($cache) {

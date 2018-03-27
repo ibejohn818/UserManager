@@ -22,7 +22,7 @@ class UserAccountCustomField extends Entity
     protected static $_fieldTypes = [
         'text'=>'Text Field',
         'textarea'=>'Text Area',
-        'select'=>'Select Field',
+        'select'=>'Select List',
         'checkbox'=>'Checkbox',
         'radiogroup'=>'Radio Group'
     ];

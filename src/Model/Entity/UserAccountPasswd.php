@@ -15,8 +15,7 @@ class UserAccountPasswd extends Entity
      * @var array
      */
     protected $_accessible = [
-        'passwd' => true,
-        'user_account_id' => true,
-        'user_account' => true,
+        '*'=>true,
+        'id'=>false
     ];
 }

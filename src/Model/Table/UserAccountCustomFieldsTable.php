@@ -57,10 +57,6 @@ class UserAccountCustomFieldsTable extends Table
             ->allowEmpty('field_options');
 
         $validator
-            ->add('active', 'valid', ['rule' => 'boolean'])
-            ->allowEmpty('active');
-
-        $validator
             ->add('display_weight', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('display_weight');
 
@@ -78,12 +74,24 @@ class UserAccountCustomFieldsTable extends Table
             ->notEmpty("slug","Slug cannot be left emtpy")
             ->add('slug','slug_unique',[
                 'rule' => 'uniqueSlug',
-                'message'=>'Slug much be unique',
+                'message'=>'Slug is already in use. Choose another.',
                 'provider'=>'table'
 			]);
 
 		$v->requirePresence("name")
 			->notEmpty("name","Name cannot be left emtpy");
+
+		$v->requirePresence("field_type")
+			->notEmpty("field_type","Field Type cannot be left emtpy");
+
+		return $v;
+
+	}
+
+	public function validationUpdate(Validator $v)
+	{
+
+        $v = $this->validationCreate($v);
 
 		return $v;
 
