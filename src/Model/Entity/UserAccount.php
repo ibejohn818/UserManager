@@ -51,7 +51,10 @@ class UserAccount extends Entity
 
         foreach ($fields as $k => $v) {
             if(!($v->user_value instanceof \UserManager\Model\Entity\UserAccountCustomFieldValue)) {
-                $v->user_value = new \UserManager\Model\Entity\UserAccountCustomFieldValue(['user_account_id'=>$this->id]);
+                $v->user_value = new \UserManager\Model\Entity\UserAccountCustomFieldValue([
+                    'user_account_id'=>$this->id,
+                    'user_account_custom_field_id'=>$v->id
+                ]);
             }
         }
 

@@ -40,7 +40,8 @@ class UserAccountsTable extends Table
         $this->addBehavior('Timestamp');
         $this->hasMany('UserAccountCustomFieldValues', [
             'foreignKey' => 'user_account_id',
-            'className' => 'UserManager.UserAccountCustomFieldValues'
+            'className' => 'UserManager.UserAccountCustomFieldValues',
+            'saveStrategy'=>'replace'
         ]);
         $this->hasMany('UserAccountLoginProviderData', [
             'foreignKey' => 'user_account_id',
@@ -480,6 +481,10 @@ class UserAccountsTable extends Table
 
     }
 
+
+	//public function beforeMarshal(\Cake\Event\Event $event, \ArrayObject $data, \ArrayObject $options)
+    //{
+    //}
 
 	public function delete(\Cake\Datasource\EntityInterface $userAccount, $options = [])
 	{

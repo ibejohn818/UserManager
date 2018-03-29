@@ -61,6 +61,13 @@ class UserAccountPasswdsTable extends Table
         return $validator;
     }
 
+    public function validationUpdate(Validator $v)
+    {
+
+        $v->requirePresence('passwd');
+        return $v;
+    }
+
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.

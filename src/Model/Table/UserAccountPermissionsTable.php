@@ -66,6 +66,25 @@ class UserAccountPermissionsTable extends Table
         return $validator;
     }
 
+    public function validationCreate(Validator $v)
+    {
+
+        $v->requirePresence('controller')
+            ->notEmpty('controller','Cannot be left empty');
+
+        $v->requirePresence('action')
+            ->notEmpty('action','Cannot be left empty');
+
+        return $v;
+    }
+
+    public function validationUpdate(Validator $v)
+    {
+        $v = $this->validationCreate($v);
+
+        return $v;
+    }
+
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.

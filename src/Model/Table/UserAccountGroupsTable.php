@@ -60,6 +60,13 @@ class UserAccountGroupsTable extends Table
             'provider'=>'table'
         ]);
 
+        $v->add('group_id', 'custom', [
+            'rule'=>'validateCustomID',
+            'provider'=>'table',
+            'message'=>'Custom'
+        ]);
+
+
         $v->requirePresence('name')
             ->notEmpty('name', 'Cannot be left empty')
         ->add('name', 'validate', [
@@ -98,6 +105,11 @@ class UserAccountGroupsTable extends Table
         ]);
 
         return $v;
+    }
+
+    public function validateCustomID($check, $ctx = [])
+    {
+        die(print_r(func_get_args()));
     }
 
     public function validateDupe($check, array $c=[])
