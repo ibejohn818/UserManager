@@ -195,6 +195,10 @@ class LoginController extends AppController {
 				$url = $this->Auth->redirectUrl();
 			}
 
+            if ($this->request->session()->read('login_redirect')) {
+                $url = $this->request->session()->read('login_redirect');
+            }
+
             $this->redirect($url);
 
         }

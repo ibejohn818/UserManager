@@ -162,8 +162,11 @@ class LoginController extends AppController {
 		if(!$chk) {
 			throw new NotFoundException("Provider: {$type}. Not Enabled");
 		}
-
 		//$cls = '\UserManager\Lib'.'\\'.ucfirst($type).'Sdk';
+
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $this->request->session()->write('login_redirect', $_SERVER['HTTP_REFERER']);
+        }
 
 		$cls = "\UserManager\Auth\Provider\\".$type;
 

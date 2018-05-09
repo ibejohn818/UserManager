@@ -61,4 +61,14 @@ class UserAccount extends Entity
         $this->custom_fields = $fields;
     }
 
+    public function gravatar($size = 200)
+    {
+
+        $hash = md5($this->email);
+
+        $uri = "https://www.gravatar.com/avatar/{$hash}?s={$size}";
+
+        return $uri;
+    }
+
 }
