@@ -4,12 +4,12 @@ namespace UserManager\Auth;
 
 use Cake\Auth\BaseAuthenticate;
 use UserManager\Model\Entity\UserAccount;
-use Cake\Network\Request;
-use Cake\Network\Response;
+use Cake\Http\Response;
 use Cake\Event\EventManager;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 
 class FormAuthenticate extends BaseAuthenticate {
 
@@ -32,7 +32,7 @@ class FormAuthenticate extends BaseAuthenticate {
 
     public $user = null;
 
-   public function authenticate(Request $request,Response $response) 
+    public function authenticate(ServerRequest $request, Response $response)
    {
         
         if(!isset($request->data[$this->config('fields')['username']]) || !isset($request->data[$this->config('fields')['password']])) {
@@ -57,14 +57,14 @@ class FormAuthenticate extends BaseAuthenticate {
         
         if($this->user) {
 
-			//check to see if we are expiring passwords
-			$pwExpire = Configure::read("UserManager.passwordExpireDays");
+            //check to see if we are expiring passwords
+            $pwExpire = Configure::read("UserManager.passwordExpireDays");
 
-			//if($pwExpireDays>0 && (new DateTime("-{$pwExpire} Days"))) {
+            //if($pwExpireDays>0 && (new DateTime("-{$pwExpire} Days"))) {
 
-				
+                
 
-			//}
+            //}
 
 
 

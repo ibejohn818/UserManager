@@ -25,7 +25,7 @@ $Port = (isset($defConf['port'])) ? $defConf['port']:'';
 $Servers = (isset($defConf['servers'])) ? $defConf['servers']:'';
 
 
-Cache::config('user-manager-1min',[
+Cache::setConfig('user-manager-1min',[
 	'className' => $CacheEngine,
 	'prefix' => 'um-1min-',
 	'path' => CACHE . 'misc/',
