@@ -38,4 +38,16 @@ class UserComment extends Entity
         '*' => true,
         'id' => false
     ];
+
+    protected $_virtual = [
+        'created_nice'
+    ];
+
+    protected function _getCreatedNice()
+    {
+        if ($this->_properties['created']) {
+            return $this->_properties['created']->nice();
+        }
+    }
+
 }

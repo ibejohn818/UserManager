@@ -145,7 +145,34 @@ class UserCommentsTable extends Table
 
 	}
 
+	public function createCommentTop(\UserManager\Model\Entity\UserComment $UserComment)
+    {
 
+		$this->setTreeScope($UserComment->model, $UserComment->foreign_key);
 
+		$result = $this->save($UserComment);
 
+        if ($result->parent_id<=0) {
+            $count = $this->find()->where([
+                'model'=>$result->model,
+                'foreign_key'=>$result->foreign_key,
+                'parent_id'=>null
+            ])->count();
+            $res = $this->moveUp($result, ($count-1));
+        }
+
+        return $result->id;
+
+    }
+
+    public function handleDelete($model, $fk, \UserManager\Model\Entity\UserComment $entity)
+    {
+        $this->setTreeScope($model, $fk);
+        if (count($entity->children) > 0) {
+            $entity->set('is_deleted', true);
+            return $this->save($entity);
+        } else {
+            return $this->delete($entity);
+        }
+    }
 }

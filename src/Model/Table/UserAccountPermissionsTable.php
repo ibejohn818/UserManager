@@ -231,7 +231,7 @@ class UserAccountPermissionsTable extends Table
                    ->order([
                        'weight'=>'ASC',
                    ]);
-
+      \Cake\Log\Log::debug($conditions);
       if($cache) {
         $query->cache(function ($q) {
             return "user-account-permisions-row-".md5(serialize($q->clause('where')));

@@ -31,6 +31,10 @@ class UserAccount extends Entity
 		'custom_fields'=>true
     ];
 
+    protected $_virtual = [
+        'gravatar',
+        'display_name'
+    ];
 
     public function loadCustomFields(array $conditions = []) {
 
@@ -69,6 +73,20 @@ class UserAccount extends Entity
         $uri = "https://www.gravatar.com/avatar/{$hash}?s={$size}";
 
         return $uri;
+    }
+
+    protected function _getGravatar()
+    {
+        return $this->gravatar();
+    }
+
+    protected function _getDisplayName()
+    {
+        if ($this->_properties['display_username']) {
+            return $this->_properties['username'];
+        }
+
+        return "{$this->_properties['first_name']} {$this->_properties['last_name']}";
     }
 
 }
