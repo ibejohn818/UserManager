@@ -158,6 +158,10 @@ class UserAccountPermissionsTable extends Table
 
     public function checkGroupPermission($UserGroupID, $Controller, $Action, $Plugin = false, $Prefix = false) {
 
+        if (!is_array($UserGroupID)) {
+            $UserGroupID = [$UserGroupID];
+        }
+
         $groupConditions = [
             "user_account_group_id IN"=>$UserGroupID,
             "controller IN"=>["*",$Controller],
@@ -231,7 +235,7 @@ class UserAccountPermissionsTable extends Table
                    ->order([
                        'weight'=>'ASC',
                    ]);
-      \Cake\Log\Log::debug($conditions);
+      //\Cake\Log\Log::debug($conditions);
       if($cache) {
         $query->cache(function ($q) {
             return "user-account-permisions-row-".md5(serialize($q->clause('where')));
